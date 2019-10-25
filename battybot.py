@@ -6,6 +6,7 @@ import aiohttp
 import discord
 from discord.ext import commands
 from discord.ext.commands import CommandInvokeError
+from discord.ext.commands import CommandNotFound
 from discord.utils import get
 
 OWNER_ID = "97153790897045504"  # Hehe, that's me!
@@ -28,6 +29,15 @@ async def on_ready():
     await gamers_role_message.add_reaction(emoji="🎮")
     await socialists_role_message.add_reaction(emoji="🗣")
     await bot.change_presence(status=discord.Status.online, activity=discord.Game("w/ batty friends! | .help"))
+
+
+@bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, CommandNotFound):
+        error = "Command not found. View `.help` for valid commands."
+    elif isinstance(error, CommandInvokeError):
+        error = "Incorrect invocation. Please re-examine the command in `.help`."
+    await ctx.message.channel.send(f"Error: {error}")
 
 
 @bot.event
@@ -143,7 +153,6 @@ async def on_raw_reaction_add(event):
     greetings_emoji = "👋"
     gamers_emoji = "🎮"
     socialists_emoji = "🗣"
-    # role_channel = "348897378062827520"
     greetings_role_message = await bot.get_channel(636366607626666014).fetch_message(636367012372676609)
     gamers_role_message = await bot.get_channel(636366607626666014).fetch_message(636367012372676609)
     socialists_role_message = await bot.get_channel(636366607626666014).fetch_message(636367012372676609)
@@ -217,9 +226,9 @@ async def on_message(message):
         await ctx.send("__***FULLMETAL ALCHEMIST.***__")
     # if message.content.startswith("fullmetal alchemist") and ctx.author.id != 635484274023465000:
         # await ctx.send("__***FULLMETAL ALCHEMIST.***__")
-    # elif message.content.contains("Fullmetal Alchemist") and ctx.author.id != 635484274023465000:
+    # elif message.content.startswith("Fullmetal Alchemist") and ctx.author.id != 635484274023465000:
         # await ctx.send("__***FULLMETAL ALCHEMIST.***__")
-    # elif message.content.contains("FULLMETAL ALCHEMIST") and ctx.author.id != 635484274023465000:
+    # elif message.content.startswith("FULLMETAL ALCHEMIST") and ctx.author.id != 635484274023465000:
         # await ctx.send("__***FULLMETAL ALCHEMIST.***__")
     await bot.process_commands(message)
 

@@ -1,5 +1,14 @@
 # Changelog
 
+## Batty Bot v1.0.7
+`+` Added error handling. The bot might just plain yell at you if you start a sentence with `.`, ever. I will have to work on that.
+
+`-` Removed some comments that I didn't need anymore.
+
+`?` Screwed with Fullmetal Alchemist code, it shouldn't be broken, but I think it's a bit different.
+
+(Notes: The error handling issue brings up an interesting question, if I should keep the prefix as `.`, because if you start ANY message with a `.` it will now yell that you're not using a real command. It'll yell at people for sending `...`, or any variant, as well. Might experiment with other prefixes, idk.)
+
 ## Batty Bot v1.0.6
 `+` Added "Key Phrases" section to `.help`, so that `fullmetal alchemist` and co.'s existence is documented *somewhere*.
 
