@@ -206,7 +206,11 @@ async def emoji(ctx):
 @bot.event
 async def on_message(message):
     ctx = await bot.get_context(message)
-    if message.content.startswith("fullmetal alchemist") and ctx.author.id != 635484274023465000:
+    # if message.content.startswith("fullmetal alchemist") and ctx.author.id != 635484274023465000:
+        # await ctx.send("__***FULLMETAL ALCHEMIST.***__")
+    if message.content.startswith("Fullmetal Alchemist") and ctx.author.id != 635484274023465000:
+        await ctx.send("__***FULLMETAL ALCHEMIST.***__")
+    elif message.content.startswith("FULLMETAL ALCHEMIST") and ctx.author.id != 635484274023465000:
         await ctx.send("__***FULLMETAL ALCHEMIST.***__")
     await bot.process_commands(message)
 
