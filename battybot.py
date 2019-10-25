@@ -129,8 +129,10 @@ async def pikachu(ctx):
 @bot.command(pass_context=True)
 async def de(ctx, message: str):
     cmd = ctx.message
+    bad = ctx.message.author
     if ctx.author.id != 97153790897045504:
-        pass
+        await bad.send(f"You do not have permission to use that command! Context: `.de`.")
+        await cmd.delete()
     else:
         await ctx.send(message)
         await cmd.delete()
@@ -183,6 +185,7 @@ async def help(ctx):
         embed.add_field(name="General", value="`.help` \n Shows this help. \n `.test` \n Sends a test message to check if the bot's online.", inline=True)
         embed.add_field(name="Roles", value="`.role [subcommand]` `*` \n Assign yourself a specific role via command.", inline=True)
         embed.add_field(name="Emojis", value="`.emoji [subcommand]` `*` \n Have the bot print out a specific emoji.", inline=True)
+        embed.add_field(name="Key Phrases", value="`fullmetal alchemist`/`Fullmetal Alchemist`/`FULLMETAL ALCHEMIST` \n Causes the bot to repeat the phrase, but louder.", inline=True)
         embed.set_footer(text="Commands denoted with a `*` have subcommands. Do `.help [command name]` for further help. Made by Dusk-Argentum#6530!")
         await ctx.send(embed=embed)
     else:
@@ -206,12 +209,18 @@ async def emoji(ctx):
 @bot.event
 async def on_message(message):
     ctx = await bot.get_context(message)
+    if "fullmetal alchemist" in message.content and ctx.author.id != 635484274023465000:
+        await ctx.send("__***FULLMETAL ALCHEMIST.***__")
+    elif "Fullmetal Alchemist" in message.content and ctx.author.id != 635484274023465000:
+        await ctx.send("__***FULLMETAL ALCHEMIST.***__")
+    elif "FULLMETAL ALCHEMIST" in message.content and ctx.author.id != 635484274023465000:
+        await ctx.send("__***FULLMETAL ALCHEMIST.***__")
     # if message.content.startswith("fullmetal alchemist") and ctx.author.id != 635484274023465000:
         # await ctx.send("__***FULLMETAL ALCHEMIST.***__")
-    if message.content.startswith("Fullmetal Alchemist") and ctx.author.id != 635484274023465000:
-        await ctx.send("__***FULLMETAL ALCHEMIST.***__")
-    elif message.content.startswith("FULLMETAL ALCHEMIST") and ctx.author.id != 635484274023465000:
-        await ctx.send("__***FULLMETAL ALCHEMIST.***__")
+    # elif message.content.contains("Fullmetal Alchemist") and ctx.author.id != 635484274023465000:
+        # await ctx.send("__***FULLMETAL ALCHEMIST.***__")
+    # elif message.content.contains("FULLMETAL ALCHEMIST") and ctx.author.id != 635484274023465000:
+        # await ctx.send("__***FULLMETAL ALCHEMIST.***__")
     await bot.process_commands(message)
 
 

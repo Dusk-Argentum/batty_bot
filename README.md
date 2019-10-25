@@ -1,5 +1,14 @@
 # Changelog
 
+## Batty Bot v1.0.6
+`+` Added "Key Phrases" section to `.help`, so that `fullmetal alchemist` and co.'s existence is documented *somewhere*.
+
+`~` Added an error handler to `.de` now that it's public knowledge. Only **I** get to pretend the bot's sentient >:(
+
+`~` Changed the invokation context for `fullmetal alchemist` and co., so that it triggers whenever the phrase is any where in any message, as opposed to the message starting with it.
+
+(Notes: So soon after the last one, just some housekeeping and a tweak. Pushed on 10/24/19 @ 9:37 PM EST.)
+
 ## Batty Bot v1.0.5
 `+` Added the ability to echo "__***`FULLMETAL ALCHEMIST`***__" when anyone says "fullmetal alchemist"/"Fullmetal Alchemist"/"FULLMETAL ALCHEMIST", based off of that one tumblr post where the person wanted to add this self-same feature but forgot to make an exit condition.
 
