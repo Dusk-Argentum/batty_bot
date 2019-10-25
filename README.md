@@ -7,7 +7,7 @@
 
 `?` Screwed with Fullmetal Alchemist code, it shouldn't be broken, but I think it's a bit different.
 
-(Notes: The error handling issue brings up an interesting question, if I should keep the prefix as `.`, because if you start ANY message with a `.` it will now yell that you're not using a real command. It'll yell at people for sending `...`, or any variant, as well. Might experiment with other prefixes, idk.)
+(Notes: The error handling issue brings up an interesting question, if I should keep the prefix as `.`, because if you start ANY message with a `.` it will now yell that you're not using a real command. It'll yell at people for sending `...`, or any variant, as well. Might experiment with other prefixes, idk. Pushed on 10/25/19 @ 3:14 PM EST.)
 
 ## Batty Bot v1.0.6
 `+` Added "Key Phrases" section to `.help`, so that `fullmetal alchemist` and co.'s existence is documented *somewhere*.
