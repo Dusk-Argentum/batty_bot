@@ -1,7 +1,7 @@
 # Changelog
 
 ## Batty Bot v1.0.1
-+ Implemented Batty Bot!
+`+` Implemented Batty Bot!
 + Added `.test`, `.help`, and `.role` commands.
 + Added ability to grant Greetings, Gamers, and Socialists through reactions in #role-call.
 + Added ability to grant roles via `.role`.
