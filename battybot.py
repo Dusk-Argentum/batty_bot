@@ -215,6 +215,11 @@ async def emoji(ctx):
     await ctx.send(embed=embed)
 
 
+@bot.command(pass_context=True, name="dotdot", aliases=[".."])
+async def dotdot(ctx):
+    print(f"Disaster narrowly avoided. Context: `...`.")
+
+
 @bot.event
 async def on_message(message):
     ctx = await bot.get_context(message)

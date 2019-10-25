@@ -1,5 +1,11 @@
 # Changelog
 
+## Batty Bot v1.0.7b
+
+`+` Added(?) `...`. It does nothing, but it prevents the bot from yelling at people who say `...`.
+
+(Notes: An ingenious fix for the problem of... uh... ellipses.)
+
 ## Batty Bot v1.0.7
 `+` Added error handling. The bot might just plain yell at you if you start a sentence with `.`, ever. I will have to work on that.
 
