@@ -7,7 +7,7 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import CommandInvokeError
 from discord.ext.commands import CommandNotFound
-from discord.utils import get
+# from discord.utils import get
 
 OWNER_ID = "97153790897045504"  # Hehe, that's me!
 
@@ -215,10 +215,20 @@ async def emoji(ctx):
     await ctx.send(embed=embed)
 
 
+@bot.command(pass_context=True, name="wig", aliases=["w"])
+async def wig(ctx):
+    image = "wig.jpg"
+    await ctx.send(file=discord.File(image))
+
 @bot.command(pass_context=True, name="dotdot", aliases=[".."])
 async def dotdot(ctx):
-    print(f"Disaster narrowly avoided. Context: `...`.")
+    return
 
+
+# TODO: Roll command (randomly generate one number between one and arg, nothing too fancy, nothing on Avrae's level)
+# TODO: Rock paper scissors command?
+# TODO: Think of other cool commands for fun.
+# TODO: Figure out how to store numbers that are linked to userid in a text doc or smth to recall at any time, ex. cookies
 
 @bot.event
 async def on_message(message):
@@ -229,6 +239,8 @@ async def on_message(message):
         await ctx.send("__***FULLMETAL ALCHEMIST.***__")
     elif "FULLMETAL ALCHEMIST" in message.content and ctx.author.id != 635484274023465000:
         await ctx.send("__***FULLMETAL ALCHEMIST.***__")
+    elif message.content.startswith("...") and ctx.author.id != 635484274023465000:
+        return
     # if message.content.startswith("fullmetal alchemist") and ctx.author.id != 635484274023465000:
         # await ctx.send("__***FULLMETAL ALCHEMIST.***__")
     # elif message.content.startswith("Fullmetal Alchemist") and ctx.author.id != 635484274023465000:

@@ -1,5 +1,17 @@
 # Changelog
 
+## Batty Bot v1.0.8
+
+`+` Added `.wig`, by request of Chem#8601. Uploads the meme.
+
+`+` Added full ellipsis error handling. Ellipsis lovers, unite...!
+
+`~` Changed some `pass`es to `return`s.
+
+`-` Removed an unnecessary `print` function. I don't really *need* to know every time someone uses an ellipsis and we avoid disaster.
+
+(Notes: Thanks, Naric, for the idea for `.wig`, and for revealing the "critical" [/s] vulnerability with the way I handled ellipses. Are you tired of reading the words "ellipses" and "ellipsis" yet? Pushed on 10/26/19 @ 5:23 PM EST.)
+
 ## Batty Bot v1.0.7b
 
 `+` Added(?) `...`. It does nothing, but it prevents the bot from yelling at people who say `...`.
