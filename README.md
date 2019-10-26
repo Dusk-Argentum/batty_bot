@@ -8,6 +8,8 @@
 
 `+` Added a new invocation to Fullmetal Alchemist (henceforth referred to as "FMA").
 
+`~` Changed FMA's section of `.help` to not be as long, I think.
+
 `~` Changed the "Emojis" section of `.help` to "Fun", so I don't have to add any more fields.
 
 `~` Changed the way the FMA thing works again, so I don't have to type the bot's id every time, nor the actual FMA text.
