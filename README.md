@@ -1,5 +1,19 @@
 # Changelog
 
+## Batty Bot v1.0.9
+
+`+` Added `.wig` to `.help`.
+
+`+` Added a single word to `.emoji` help as a shorthanded way to get fields to interact properly.
+
+`+` Added a new invocation to Fullmetal Alchemist (henceforth referred to as "FMA").
+
+`~` Changed the "Emojis" section of `.help` to "Fun", so I don't have to add any more fields.
+
+`~` Changed the way the FMA thing works again, so I don't have to type the bot's id every time, nor the actual FMA text.
+
+(Notes: I can't believe I forgot to add something to the `.help`. Again. Pushed on 10/26/19 @ 5:35 PM EST.)
+
 ## Batty Bot v1.0.8
 
 `+` Added `.wig`, by request of Chem#8601. Uploads the meme.

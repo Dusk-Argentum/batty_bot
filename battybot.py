@@ -193,7 +193,7 @@ async def help(ctx):
         embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A))
         embed.add_field(name="General", value="`.help` \n Shows this help. \n `.test` \n Sends a test message to check if the bot's online.", inline=True)
         embed.add_field(name="Roles", value="`.role [subcommand]` `*` \n Assign yourself a specific role via command.", inline=True)
-        embed.add_field(name="Emojis", value="`.emoji [subcommand]` `*` \n Have the bot print out a specific emoji.", inline=True)
+        embed.add_field(name="Fun", value="`.emoji [subcommand]` `*` \n Have the bot print out a very specific emoji. \n `.wig` \n Sends the meme.", inline=True)
         embed.add_field(name="Key Phrases", value="`fullmetal alchemist`/`Fullmetal Alchemist`/`FULLMETAL ALCHEMIST` \n Causes the bot to repeat the phrase, but louder.", inline=True)
         embed.set_footer(text="Commands denoted with a `*` have subcommands. Do `.help [command name]` for further help. Made by Dusk-Argentum#6530!")
         await ctx.send(embed=embed)
@@ -233,13 +233,17 @@ async def dotdot(ctx):
 @bot.event
 async def on_message(message):
     ctx = await bot.get_context(message)
-    if "fullmetal alchemist" in message.content and ctx.author.id != 635484274023465000:
-        await ctx.send("__***FULLMETAL ALCHEMIST.***__")
-    elif "Fullmetal Alchemist" in message.content and ctx.author.id != 635484274023465000:
-        await ctx.send("__***FULLMETAL ALCHEMIST.***__")
-    elif "FULLMETAL ALCHEMIST" in message.content and ctx.author.id != 635484274023465000:
-        await ctx.send("__***FULLMETAL ALCHEMIST.***__")
-    elif message.content.startswith("...") and ctx.author.id != 635484274023465000:
+    batty = 635484274023465000
+    fma = "__***FULLMETAL ALCHEMIST.***__"
+    if "fullmetal alchemist" in message.content and ctx.author.id != batty:
+        await ctx.send(fma)
+    elif "Fullmetal Alchemist" in message.content and ctx.author.id != batty:
+        await ctx.send(fma)
+    elif "FULLMETAL ALCHEMIST" in message.content and ctx.author.id != batty:
+        await ctx.send(fma)
+    elif "Fullmetal alchemist" in message.content and ctx.author.id != batty:
+        await ctx.send(fma)
+    elif message.content.startswith("...") and ctx.author.id != batty:
         return
     # if message.content.startswith("fullmetal alchemist") and ctx.author.id != 635484274023465000:
         # await ctx.send("__***FULLMETAL ALCHEMIST.***__")
