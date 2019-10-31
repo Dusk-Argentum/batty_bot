@@ -1,5 +1,17 @@
 # Changelog
 
+## Batty Bot v1.0.10
+
+`+` Added an official of declaration of war against known committer of crimes against humanity, Todd Bot. Batty Bot will automatically delete any messages from Todd Bot to protect you and yours from Todd Bot's sweet little lies.
+
+`+` Added `/shrug`, which invokes the Shrug [kaomoji](http://kaomoji.ru/en/), different from Discord's builtin, which has to be at the beginning, this can be anywhere.
+
+`+` Added more helpful error text for `.emoji`.
+
+`~` Changed the ellipsis handling to instead catch on `..` (compared to `...`), to handle expressions like `..?` and `..!`.
+
+(Notes: Happy Halloween! The version numbers will keep ticking up in the third place until a major update, think like Minecraft's version numbers.)
+
 ## Batty Bot v1.0.9
 
 `+` Added `.wig` to `.help`.

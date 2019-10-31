@@ -119,7 +119,7 @@ async def socialists(ctx):
 @bot.group(pass_context=True, name="emoji", aliases=["e", "emote"])
 async def emoji(ctx):
     if ctx.invoked_subcommand is None:
-        await ctx.send("Please enter a valid emoji. Valid emojis: [placeholder]")
+        await ctx.send("Please enter a valid emoji. Valid emojis: `pogchamp`, `pikachu`.")
     else:
         pass
 
@@ -243,8 +243,12 @@ async def on_message(message):
         await ctx.send(fma)
     elif "Fullmetal alchemist" in message.content and ctx.author.id != batty:
         await ctx.send(fma)
-    elif message.content.startswith("...") and ctx.author.id != batty:
+    elif "/shrug" in message.content and ctx.author.id != batty:
+        await ctx.send("¯\_(ツ)_/¯")
+    elif message.content.startswith("..") and ctx.author.id != batty:
         return
+    elif message.author.id == 461265486655520788:
+        await message.delete()
     # if message.content.startswith("fullmetal alchemist") and ctx.author.id != 635484274023465000:
         # await ctx.send("__***FULLMETAL ALCHEMIST.***__")
     # elif message.content.startswith("Fullmetal Alchemist") and ctx.author.id != 635484274023465000:
