@@ -193,7 +193,7 @@ async def help(ctx):
         embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A))
         embed.add_field(name="General", value="`.help` \n Shows this help. \n `.test` \n Sends a test message to check if the bot's online.", inline=True)
         embed.add_field(name="Roles", value="`.role [subcommand]` `*` \n Assign yourself a specific role via command.", inline=True)
-        embed.add_field(name="Fun", value="`.emoji [subcommand]` `*` \n Have the bot print out a very specific emoji. \n `.wig` \n Sends the meme.", inline=True)
+        embed.add_field(name="Fun", value="`.emoji [subcommand]` `*` \n Have the bot print out a very specific emoji. \n `.wig` \n Sends the 'wig' meme. \n `.typo` \n Sends the 'TYPO! In the groupchat meme.", inline=True)
         embed.add_field(name="Key Phrases", value="`Fullmetal Alchemist` \n Causes the bot to repeat the phrase, but louder. Invokation includes all sensical cases.", inline=True)
         embed.set_footer(text="Commands denoted with a `*` have subcommands. Do `.help [command name]` for further help. Made by Dusk-Argentum#6530!")
         await ctx.send(embed=embed)
@@ -220,6 +220,12 @@ async def wig(ctx):
     image = "wig.jpg"
     await ctx.send(file=discord.File(image))
 
+
+@bot.command(pass_context=True, name="typo")
+async def typo(ctx):
+    image = "typo.jpg"
+    await ctx.send(file=discord.File(image))
+
 @bot.command(pass_context=True, name="dotdot", aliases=[".."])
 async def dotdot(ctx):
     return
@@ -229,6 +235,7 @@ async def dotdot(ctx):
 # TODO: Rock paper scissors command?
 # TODO: Think of other cool commands for fun.
 # TODO: Figure out how to store numbers that are linked to userid in a text doc or smth to recall at any time, ex. cookies
+# TODO: Overhaul help, remove `*` bits
 
 @bot.event
 async def on_message(message):

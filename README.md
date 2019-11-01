@@ -1,5 +1,11 @@
 # Changelog
 
+## Batty Bot v1.0.11
+
+`+` Added `.typo`, which sends the "TYPO! In the groupchat" meme.
+
+(Notes: Hats are not mv0, even in windy conditions. You can't change my mind. Pushed on 11/1/19 @ 1:56 PM.)
+
 ## Batty Bot v1.0.10
 
 `+` Added an official of declaration of war against known committer of crimes against humanity, Todd Bot. Batty Bot will automatically delete any messages from Todd Bot to protect you and yours from Todd Bot's sweet little lies.
@@ -10,7 +16,7 @@
 
 `~` Changed the ellipsis handling to instead catch on `..` (compared to `...`), to handle expressions like `..?` and `..!`.
 
-(Notes: Happy Halloween! The version numbers will keep ticking up in the third place until a major update, think like Minecraft's version numbers.)
+(Notes: Happy Halloween! The version numbers will keep ticking up in the third place until a major update, think like Minecraft's version numbers. Pushed on 10/31/19 @ 4:36 PM EST.)
 
 ## Batty Bot v1.0.9
 
