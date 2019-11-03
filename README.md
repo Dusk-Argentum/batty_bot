@@ -1,5 +1,37 @@
 # Changelog
 
+## Batty Bot v1.1.0
+
+`+` Added `.eightball`, which gives a very vague and cryptic answer to any questions you may have.
+
+`+` Added `.rockpaperscissors`, a fun little game you can play with the bot.
+
+`+` Added `.roll`, which rolls `x`d`y` and outputs the result(s). There's a maximum, I won't say, but it exists.
+
+`+` Added `.simpleroll`, which simply rolls between 1 and whichever number you input.
+
+`+` Added (tenative) compatability with another server. They begged. Blame Phylus.
+
+`+` Added `/shrug` to `.help`. Was added in an earlier build, forgot to add to `.help`.
+
+`+` Added a thumbnail to `.help`, just to make it look prettier. :)
+
+`+` Added `TODO` section to the code. If you're looking for what's happening in the future, keep an eye on that space.
+
+`~` Reorganized `.help`, everything should be in alphabetical order now. Should be.
+
+`~` Changed some words in `.help`.
+
+`~` Changed the footer of `.help` to be... I think a bit more clear?
+
+`~` Reorganized the code, everything is in an order that makes sense now, mostly.
+
+`~` The code is now PEP-8 compliant! Now my IDE will stop putting so many fucking colors in the scroll bar.
+
+`-` Removed `.dotdot`. It was added to catch `...`, `..!`, `..?`, etc., but I ended up with a redundancy from something that made more sense in the `on_message` event.
+
+(Notes: At long last, here's Batty Bot v1.1.0. I worked many hard on this, listened to many music compilations, consulted for much advice [shoutout to the lads over on AvraeDev!], and ate many pretzels. This's been a couple of days in the making, and I'm planning on adding so much more and continuing work on this project. Thank you very much for continuing to use the bot! Every time someone uses a command, literally, every single time, I feel a bit more proud of myself for managing to cobble this all together. I look forward to your continued use and support! Pushed on 11/3/19 @ 2:57 EDT.)
+
 ## Batty Bot v1.0.11
 
 `+` Added `.typo`, which sends the "TYPO! In the groupchat" meme.
