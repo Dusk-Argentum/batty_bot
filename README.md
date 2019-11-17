@@ -1,5 +1,41 @@
 # Changelog
 
+## Batty Bot v1.2!.0
+
+`+` Added `.bug`, which allows you to submit bug reports directly to me.
+
+`+` Added `.suggestion`, which allows you to submit suggestions directly to me.
+
+`+` Added `.meme`, which is now what `.typo` and `.wig` are.
+
+`+` Added `monkaS` to `.emoji`, for those tense moments.
+
+`+` Added `.help` for every single command, which goes into more detail about aliases and invocation on every command.
+
+`+` Added `-pm` argument to every help, which PMs the help to you, instead of posting it in the channel.
+
+`-` Removed previously mentioned compatability with another server.
+
+`-` *Technically* removed `.typo` and `.wig`, but they're in `.meme` now, so it's OK.
+
+`~` Renamed `.rockpaperscissors` to `.rps`. Who the hell is gonna type `.rockpaperscissors`?
+
+`~` Made `.rps`'s output look prettier, I think.
+
+`~` TOTALLY overhauled `.help`. Formatting changes and the like.
+
+`~` Added a maximum to `.simpleroll`. Too big numbers hurts my computer.
+
+`~` Added a maximum for `howmuch` on `.roll`. No more rolling 1d200000, Gage.
+
+`~` Changed the backend of how `fullmetal alchemist` works. Now, ANY case works.
+
+`~` Reorganized the role names in `.role`'s "no arguments" error. They were out of alphabetical order.
+
+`~` Organized file structure a bit more.
+
+(Notes: There's a bit more in the works, yet, so stay tuned! Pushed on 11/16/19 @ 8:55 EDT.)
+
 ## Batty Bot v1.1.0
 
 `+` Added `.eightball`, which gives a very vague and cryptic answer to any questions you may have.
