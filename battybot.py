@@ -123,7 +123,8 @@ async def help2(ctx):
         `.suggestion [name] [description]` \n Submit a suggestion to the dev.""", inline=True)
         embed.add_field(name="Key Phrases", value="""`Fullmetal Alchemist`
         Causes the bot to repeat the phrase, but louder.
-        `/shrug` \n Prints "¯\\_(ツ)_/¯", no matter where `/shrug` is in your message.""", inline=True)
+        `/shrug` \n Prints "¯\\_(ツ)_/¯", no matter where `/shrug` is in your message.
+        `2!` at the end \n Sends the "Peggle! 2!" gif.""", inline=True)
         embed.set_footer(text="""If a command has subcommands,
         do `.help [command name]` for further help. Made by Dusk-Argentum#6530!""")
         embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
@@ -149,7 +150,8 @@ async def pm(ctx):
             `.suggestion [name] [description]` \n Submit a suggestion to the dev.""", inline=True)
     embed.add_field(name="Key Phrases", value="""`Fullmetal Alchemist`
     Causes the bot to repeat the phrase, but louder.
-    `/shrug` \n Prints "¯\\_(ツ)_/¯", no matter where `/shrug` is in your message.""", inline=True)
+    `/shrug` \n Prints "¯\\_(ツ)_/¯", no matter where `/shrug` is in your message.
+    `2!` at the end \n Sends the "Peggle! 2!" gif.""", inline=True)
     embed.set_footer(text="""If a command has subcommands,
     do `.help [command name]` for further help. Made by Dusk-Argentum#6530!""")
     embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
@@ -538,7 +540,7 @@ async def pikachu(ctx):
 @emoji.command(pass_context=True, name="monkas", aliases=["m", "monkaS"])
 async def monkas(ctx):
     # await ctx.send(f"{ctx.author.mention} says: <:monkas:645002369091764284>") ### Do not delete this.
-    await ctx.send("<:monkas:645002369091764284>")
+    await ctx.send("<:monkas:636575202217689099>")
 
 
 @bot.group(pass_context=True, name="meme", aliases=["m"])
@@ -708,7 +710,7 @@ async def doomsday(ctx):
         await server.leave()
 
 
-# Unfinished or for testing
+# Unfinished or For Testing
 
 
 # On Message
@@ -718,29 +720,30 @@ async def doomsday(ctx):
 async def on_message(message):
     ctx = await bot.get_context(message)
     batty = 635484274023465000
-    repeat = "__***FULLMETAL ALCHEMIST.***__"
-    two = re.search(r"2!$", message.content)
-    two2 = re.search(r"two!$", message.content.lower())
-    if "fullmetal alchemist" in message.content.lower() and message.author.id != batty:
-        await ctx.send(repeat)
-    elif "/shrug" in message.content and message.author.id != batty:
-        await ctx.send("¯\\_(ツ)_/¯")
-    elif message.content.startswith("..") and message.author.id != batty:
-        return
-    elif message.author.id == 461265486655520788 and message.channel.id != 414890945243512842:
-        await message.delete()
-    elif two or two2 and message.author.id != batty:
-        image = "assets/2.gif"
-        await ctx.send(file=discord.File(image))
-    await bot.process_commands(message)
+    repeat = "__***FULLMETAL ALCHEMIST.***__\n"
+    two = re.search(r"(2|two)!$", message.content.lower())
+    if message.author.id != batty:
+        out = ""
+        if "fullmetal alchemist" in message.content.lower():
+            out += repeat
+        if "/shrug" in message.content:
+            out += "¯\\_(ツ)_/¯\n"
+        if message.content.startswith(".."):
+            return
+        if message.author.id == 461265486655520788 and message.channel.id != 414890945243512842:
+            await message.delete()
+        if two:
+            image = "assets/2.gif"
+            await ctx.send(file=discord.File(image))
+        if out:
+            await ctx.send(out)
+        await bot.process_commands(message)
 
 
 # TODO: Completed in current build:
-# Removed support for Blue Flames, renamed `.rockpaperscissors` to `.rps`, added monkaS, implement max on simpleroll,
-# Turned wig and typo into meme, added aliases to help, TOTALLY overhauled help, every command has a subhelp now which
-# lists aliases, accepted arguments, etc., added -pm argument to every help, embedified rps, lower on fma, absorb 2
-# better error handling on roll, finished doomsday, made .de not require quotes, implement max on how much for roll,
-# added bug and suggestion, added them to help, organized file structure, reorganized role names in role error
+
+# TODO: v1.2.+
+# TODO: Challenge RPS
 
 
 # TODO: Undefined

@@ -1,5 +1,15 @@
 # Changelog
 
+## Batty Bot v1.2.1
+
+`~` Fixed `.e monkas`. It wasn't working for a bit there monkaS
+
+`~` Made some adjustments to the way the bot responds to prompts that are in `on_message`, like `2!` and `Fullmetal Alchemist`. Everything should work now.
+
+`~` Changed the `.help` a bit, and added `2!` to it.
+
+(Notes: Just some small bugfixes this time around. Please don't hesitate to use `.b "bug name" [description]` if you ever find a bug! Pushed on 11/18/19 @ 6:45 PM EDT.)
+
 ## Batty Bot v1.2!.0
 
 `+` Added `.bug`, which allows you to submit bug reports directly to me.
