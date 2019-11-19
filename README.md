@@ -1,5 +1,13 @@
 # Changelog
 
+## Batty Bot v1.2.2
+
+`+` Added `-pm` argument to `.help`. I had it commented out before, but forgot to add it. Whoops.
+
+`!` Fixed critical error in Reaction Role and `.role`, caused by Discord updating its API in the middle of the night without warning.
+
+(Note: Discord boutta catch some hands over this. Pushed on 11/19/19 @ 11:09 AM EDT.)
+
 ## Batty Bot v1.2.1
 
 `~` Fixed `.e monkas`. It wasn't working for a bit there monkaS

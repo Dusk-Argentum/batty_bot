@@ -164,8 +164,8 @@ async def help3(ctx):  # Wish everything named help didn't "shadow builtin comma
         embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE9B52A), description="""Aliases: 
     `.cmds`, `.commands`, `.h`, `.h-hewp!!!`.""")
         embed.add_field(name="`.help`", value="Shows the help for Batty Bot.", inline=True)
-        # embed.add_field(name="Possible Arguments", value="""`-pm` \n PMs the help to you,
-        # instead of posting it in the invoking channel.""", inline=True)
+        embed.add_field(name="Possible Arguments", value="""`-pm` \n PMs the help to you,
+        instead of posting it in the invoking channel.""", inline=True)
         embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
         await ctx.send(embed=embed)
     else:
@@ -177,8 +177,8 @@ async def pm(ctx):
     embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE9B52A), description="""Aliases: 
         `.cmds`, `.commands`, `.h`, `.h-hewp!!!`.""")
     embed.add_field(name="`.help`", value="Shows the help for Batty Bot.", inline=True)
-    # embed.add_field(name="Possible Arguments", value="""`pm` \n PMs the help to you,
-    # instead of posting it in the invoking channel.""", inline=True)
+    embed.add_field(name="Possible Arguments", value="""`pm` \n PMs the help to you,
+    instead of posting it in the invoking channel.""", inline=True)
     embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
     await ctx.author.send(embed=embed)
 
