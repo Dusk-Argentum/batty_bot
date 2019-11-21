@@ -1,5 +1,11 @@
 # Changelog
 
+## Batty Bot v1.2.3
+
+`+` Added `wig2`, a new argument to `.meme`, which sends a video clip of two people saying "wig" to each other, and added this to `.help`/`.help meme`.
+
+(Note: Wig. Wig. I'm ready. Pushed on 11/21/19 @ 2:58 PM EDT.)
+
 ## Batty Bot v1.2.2
 
 `+` Added `-pm` argument to `.help`. I had it commented out before, but forgot to add it. Whoops.

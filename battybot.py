@@ -281,7 +281,7 @@ async def meme(ctx):
         `.m`.""")
         embed.add_field(name="`.meme`", value="Send a specific meme.", inline=True)
         embed.add_field(name="Accepted Arguments", value="""`typo` \n Sends the "TYPO! In the Groupchat" meme.
-        `wig` \n Sends the "Wig" meme.""")
+        `wig` \n Sends the "Wig" meme. \n `wig2` \n Sends a "Wig" video clip.""")
         embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
         await ctx.send(embed=embed)
     else:
@@ -294,7 +294,7 @@ async def pm(ctx):
             `.m`.""")
     embed.add_field(name="`.meme`", value="Send a specific meme.", inline=True)
     embed.add_field(name="Accepted Arguments", value="""`typo` \n Sends the "TYPO! In the Groupchat" meme.
-            `wig` \n Sends the "Wig" meme.""")
+    `wig` \n Sends the "Wig" meme. \n `wig2` \n Sends a "Wig" video clip.""")
     embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
     await ctx.author.send(embed=embed)
 
@@ -565,6 +565,12 @@ async def wig(ctx):
     image = "assets/wig.jpg"
     await ctx.send(file=discord.File(image))
 
+
+@meme.command(pass_context=True, name="wig2", aliases=["w2"])
+async def wig2(ctx):
+    """Y'all ready?"""
+    video = "assets/wig.mp4"
+    await ctx.send(file=discord.File(video))
 
 @bot.command(pass_context=True, name="rps", aliases=["rockpaperscissors"])
 async def rps(ctx, move):
