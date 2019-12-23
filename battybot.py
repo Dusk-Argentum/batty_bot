@@ -1,4 +1,3 @@
-# import asyncio ### It SAYS this is unused, but I use it... a lot... so I'm leaving it here, commented, just in case.
 import os
 
 import discord
@@ -10,8 +9,13 @@ from discord.ext.commands import CommandNotFound
 import random
 import re
 
+import datetime
+from datetime import date
+import schedule
+
 
 OWNER_ID = "97153790897045504"  # Hehe, that's me!
+BATDEN_ID = "290304276381564928"
 
 
 PREFIX = "."
@@ -124,7 +128,9 @@ async def help2(ctx):
         embed.add_field(name="Key Phrases", value="""`Fullmetal Alchemist`
         Causes the bot to repeat the phrase, but louder.
         `/shrug` \n Prints "¯\\_(ツ)_/¯", no matter where `/shrug` is in your message.
-        `2!` at the end \n Sends the "Peggle! 2!" gif.""", inline=True)
+        `2!` at the end \n Sends the "Peggle! 2!" gif.
+        `monkas` \n Prints the monkaS emoji.
+        `pog`/`pogchamp` \n Prints the pogchamp emoji.""", inline=True)
         embed.set_footer(text="""If a command has subcommands,
         do `.help [command name]` for further help. Made by Dusk-Argentum#6530!""")
         embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
@@ -147,11 +153,13 @@ async def pm(ctx):
     Play Rock, Paper, Scissors with the bot. \n `.roll` \n Rolls dice. Format: `x`d`y`, ex. 2d6.
     `.simpleroll` \n Simply chooses a random number between 1 and your input.""", inline=True)
     embed.add_field(name="Meta", value="""`.bug [name] [description]` \n Submit a bug report to the dev.
-            `.suggestion [name] [description]` \n Submit a suggestion to the dev.""", inline=True)
+    `.suggestion [name] [description]` \n Submit a suggestion to the dev.""", inline=True)
     embed.add_field(name="Key Phrases", value="""`Fullmetal Alchemist`
     Causes the bot to repeat the phrase, but louder.
     `/shrug` \n Prints "¯\\_(ツ)_/¯", no matter where `/shrug` is in your message.
-    `2!` at the end \n Sends the "Peggle! 2!" gif.""", inline=True)
+    `2!` at the end \n Sends the "Peggle! 2!" gif.
+    `monkas` \n Prints the monkaS emoji.
+    `pog`/`pogchamp` \n Prints the pogchamp emoji.""", inline=True)
     embed.set_footer(text="""If a command has subcommands,
     do `.help [command name]` for further help. Made by Dusk-Argentum#6530!""")
     embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
@@ -547,7 +555,7 @@ async def monkas(ctx):
 async def meme(ctx):
     """Prints a specific meme."""
     if ctx.invoked_subcommand is None:
-        await ctx.send("Please enter a valid meme. Valid memes: `typo`, `wig`.")
+        await ctx.send("Please enter a valid meme. Valid memes: `typo`, `wig`, `wig2`.")
     else:
         return
 
@@ -571,6 +579,7 @@ async def wig2(ctx):
     """Y'all ready?"""
     video = "assets/wig.mp4"
     await ctx.send(file=discord.File(video))
+
 
 @bot.command(pass_context=True, name="rps", aliases=["rockpaperscissors"])
 async def rps(ctx, move):
@@ -614,6 +623,42 @@ async def rps(ctx, move):
         elif player_move == "scissors" and bot_move == "scissors":
             embed = discord.Embed(title=title, color=draw_color, description=f"I got Scissors... {draw_desc}")
             await ctx.send(embed)
+
+
+@bot.command(pass_context=True, name="testroll", aliases=["tr"])
+async def testroll(ctx, *args):
+    """Rolls dice. Format: `x`d`y`, ex. 2d6."""
+    a = " ".join(args)
+    c = ", "
+    setup = re.fullmatch(r"(?P<howmany>[0-9]+)d(?P<howmuch>[0-9]+)", a)
+    result = []
+    hma = int(setup.group("howmany"))
+    hmu = int(setup.group("howmuch"))
+    if setup:
+        if hma >= 100:
+            await ctx.send("Do you... really need to roll so many dice..?")
+            return
+        elif hmu >= 100:
+            await ctx.send("Do you... really need to roll dice with so many sides..?")
+        elif hma == 0:
+            await ctx.send("Please provide one or more dice to roll.")
+            return
+        elif hmu == 0:
+            await ctx.send("Please provide the amount of sides you wish your dice to have.")
+            return
+        else:
+            pass
+        for x in range(hma):
+            result.append(str(random.randint(1, hmu)))
+        if 100 >= hma > 1:
+            total = sum([result.append(str(random.randint(1, hmu))) for x in range(hma)])
+        embed = discord.Embed(title=f"Rolling {hma}d{hmu}...", color=discord.Color(0xE8B52A))
+        embed.add_field(name="Result:", value=f"{c.join(result)} = **{total}**")
+        await ctx.send(embed=embed)
+        print("test")
+        await ctx.send(f"{ctx.author.mention}: {hma}d{hmu} = {c.join(result)}.")
+    else:
+        await ctx.send("Please use a valid dice format. Example: `2d10`.")
 
 
 @bot.command(pass_context=True, name="roll", aliases=["r"])
@@ -716,7 +761,41 @@ async def doomsday(ctx):
         await server.leave()
 
 
+@bot.command(pass_context=True)
+async def purge(ctx, amount):
+    """Purges bot messages, looking back `amount` amount of messages (including invocation)."""
+    cmd = ctx.message
+    bad = ctx.message.author
+    if ctx.author.id != 97153790897045504:
+        await bad.send(f"You do not have permission to run that command! Context: `.purge`.")
+        await cmd.delete()
+    else:
+        def is_batty(message):
+            return message.author.id == 635484274023465000
+        await ctx.channel.purge(limit=int(amount), check=is_batty)
+        await ctx.message.add_reaction("👍")
+
+
 # Unfinished or For Testing
+
+
+# @bot.command(pass_context=True, name="writetest", aliases=["wt"])
+# async def writetest(ctx, *args):
+    # fo = open("test.txt", "rw+")
+    # string = str(args)
+    # fo.seek(0, 2)
+    # fo.write(string)
+    # fo.close()
+
+
+@bot.command(pass_context=True, name="timetest", aliases=["tt"])
+async def timetest(ctx):
+    today = date.today()
+    my_birthday = date(today.year, 8, 14)
+    if my_birthday < today:
+        my_birthday = my_birthday.replace(year=today.year + 1)
+    time_to_birthday = abs(my_birthday - today)
+    await ctx.send(f"{time_to_birthday}")
 
 
 # On Message
@@ -728,12 +807,17 @@ async def on_message(message):
     batty = 635484274023465000
     repeat = "__***FULLMETAL ALCHEMIST.***__\n"
     two = re.search(r"(2|two)!$", message.content.lower())
+    cnt = message.content.lower()
     if message.author.id != batty:
         out = ""
-        if "fullmetal alchemist" in message.content.lower():
+        if "fullmetal alchemist" in cnt:
             out += repeat
-        if "/shrug" in message.content:
+        if "/shrug" in cnt:
             out += "¯\\_(ツ)_/¯\n"
+        if "monkas" in cnt:
+            await ctx.send("<:monkas:636575202217689099>")
+        if "pog" in cnt:
+            await ctx.send("<:pogchamp:636572402054201368>")
         if message.content.startswith(".."):
             return
         if message.author.id == 461265486655520788 and message.channel.id != 414890945243512842:
@@ -747,10 +831,18 @@ async def on_message(message):
 
 
 # TODO: Completed in current build:
+# Added wig2 to `.meme` error, made "pog" and "monkas" user messages print the emoji, changed help to reflect that,
+# added purge
 
-# TODO: v1.2.+
+
+# TODO: v1.3
+# TODO: Birthday calender?
+# TODO: Schedule tasks for specific days
+# TODO: Birthday calender print is formatted table, reactions to navigate months
+# TODO: Voice??? Maybe???? Make Patreon exclusive
 # TODO: Challenge RPS
-
+# TODO: Modifiers on roll?
+# TODO: Embedify roll
 
 # TODO: Undefined
 # TODO: Figure out how to store numbers that are linked to userid in a text doc or smth to recall at any time, cookies

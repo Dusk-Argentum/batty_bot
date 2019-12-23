@@ -1,5 +1,15 @@
 # Changelog
 
+## Batty Bot v1.2.4
+
+`+` Added the ability to print the `monkas` and `pogchamp` emojis by simply saying `monkas` or `pog`/`pogchamp`, without the need for the command.
+
+`+` Added `wig2` to `.meme`'s error message. Did this a LONG time ago, just didn't feel like making a changelog entry just for it.
+
+`+` Added `.purge`, a command only usable by the bot's creator (hehe, that's me!) to delete a bunch of the bot's messages, in case something goes wrong and a lot need to be deleted at once.
+
+(Note: Just a small update for now. I'm working on some bigger stuff, but will be pushing that later. Sorry about nothing for a month! Hoping to get the bigger one out before the end of the year. Pushed on 12/22/19 @ 8:56 PM EDT.)
+
 ## Batty Bot v1.2.3
 
 `+` Added `wig2`, a new argument to `.meme`, which sends a video clip of two people saying "wig" to each other, and added this to `.help`/`.help meme`.
