@@ -13,6 +13,8 @@ import datetime
 from datetime import date
 import schedule
 
+import numexpr
+
 
 OWNER_ID = "97153790897045504"  # Hehe, that's me!
 BATDEN_ID = "290304276381564928"
@@ -630,6 +632,7 @@ async def testroll(ctx, *args):
     """Rolls dice. Format: `x`d`y`, ex. 2d6."""
     a = " ".join(args)
     c = ", "
+    p = "+"
     setup = re.fullmatch(r"(?P<howmany>[0-9]+)d(?P<howmuch>[0-9]+)", a)
     result = []
     hma = int(setup.group("howmany"))
@@ -648,15 +651,21 @@ async def testroll(ctx, *args):
             return
         else:
             pass
-        for x in range(hma):
-            result.append(str(random.randint(1, hmu)))
+        # for x in range(hma):
+            # result.append(str(random.randint(1, hmu)))
         if 100 >= hma > 1:
-            total = sum([result.append(str(random.randint(1, hmu))) for x in range(hma)])
-        embed = discord.Embed(title=f"Rolling {hma}d{hmu}...", color=discord.Color(0xE8B52A))
-        embed.add_field(name="Result:", value=f"{c.join(result)} = **{total}**")
-        await ctx.send(embed=embed)
-        print("test")
-        await ctx.send(f"{ctx.author.mention}: {hma}d{hmu} = {c.join(result)}.")
+            for x in range(hma):
+                result.append(str(random.randint(1, hmu)))
+            print(f"{result}")
+            aaa = tuple(result)
+            numbers_sum = sum(aaa)
+            print(numbers_sum)
+            # total = sum([result.append(str(random.randint(1, hmu))) for x in range(hma)])
+            embed = discord.Embed(title=f"Rolling {hma}d{hmu}...", color=discord.Color(0xE8B52A))
+            embed.add_field(name="Result:", value=f"{c.join(result)} = **{total}**")
+            await ctx.send(embed=embed)
+            print("test")
+            await ctx.send(f"{ctx.author.mention}: {hma}d{hmu} = {c.join(result)}.")
     else:
         await ctx.send("Please use a valid dice format. Example: `2d10`.")
 
@@ -676,6 +685,7 @@ async def roll(ctx, *args):
             return
         elif hmu >= 100:
             await ctx.send("Do you... really need to roll dice with so many sides..?")
+            return
         elif hma == 0:
             await ctx.send("Please provide one or more dice to roll.")
             return
@@ -776,6 +786,21 @@ async def purge(ctx, amount):
         await ctx.message.add_reaction("👍")
 
 
+@bot.command(pass_context=True, name="changepresence", aliases=["chp"])
+async def changepresence(ctx, *args):
+    """Changes presence."""
+    cmd = ctx.message
+    bad = ctx.message.author
+    if ctx.author.id != 97153790897045504:
+        await bad.send(f"You do not have permission to run that command! Context: `.changepresence`.")
+        await cmd.delete()
+    else:
+        if args == " ":
+            await bot.change_presence(status=discord.Status.online, activity=discord.Game("w/ batty friends! | .help"))
+        else:
+            await bot.change_presence(status=discord.Status.online, activity=discord.Game(f"{' '.join(args)} | .help"))
+
+
 # Unfinished or For Testing
 
 
@@ -807,6 +832,8 @@ async def on_message(message):
     batty = 635484274023465000
     repeat = "__***FULLMETAL ALCHEMIST.***__\n"
     two = re.search(r"(2|two)!$", message.content.lower())
+    # when = re.search(r"(?P<w>[w+h+e+n^])(?P<q>[?]$)", message.content.lower())
+    # setup = re.fullmatch(r"(?P<howmany>[0-9]+)d(?P<howmuch>[0-9]+)", a)
     cnt = message.content.lower()
     if message.author.id != batty:
         out = ""
@@ -825,14 +852,17 @@ async def on_message(message):
         if two:
             image = "assets/2.gif"
             await ctx.send(file=discord.File(image))
+        # if when:
+            # await ctx.send("test")
         if out:
             await ctx.send(out)
+        if message.author.id == 97153790897045504 and message.content.startswith("Batty!"):
+            await ctx.message.add_reaction("👍")
         await bot.process_commands(message)
 
 
 # TODO: Completed in current build:
-# Added wig2 to `.meme` error, made "pog" and "monkas" user messages print the emoji, changed help to reflect that,
-# added purge
+# Added changepresence command
 
 
 # TODO: v1.3
