@@ -1,5 +1,11 @@
 # Changelog
 
+## Batty Bot v1.2.5
+
+`+`/`-`/`~` Added, removed, and changed various things.
+
+(Note: Just some miscellaneous small changes over the course of the past 3 months that weren't committed. Pushed on 3/12/20 @ 8:04 EDT.)
+
 ## Batty Bot v1.2.4
 
 `+` Added the ability to print the `monkas` and `pogchamp` emojis by simply saying `monkas` or `pog`/`pogchamp`, without the need for the command.
