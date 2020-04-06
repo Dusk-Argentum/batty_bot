@@ -41,9 +41,11 @@ async def on_ready():
     # greetings_role_message = await bot.get_channel(636366607626666014).fetch_message(636367012372676609)
     # gamers_role_message = await bot.get_channel(636366607626666014).fetch_message(636367012372676609)
     # socialists_role_message = await bot.get_channel(636366607626666014).fetch_message(636367012372676609)
+    # turnipchamps_role_message = await bot.get_channel(636366607626666014).fetch_message(636367012372676609)
     # await greetings_role_message.add_reaction(emoji="👋")
     # await gamers_role_message.add_reaction(emoji="🎮")
     # await socialists_role_message.add_reaction(emoji="🗣") ### Leave these in, in case of emergency, I guess.
+    # await turnipchamps_role_message.add_reaction(emoji="<:turnipchamp:696791106653913148>")
     await bot.change_presence(status=discord.Status.online, activity=discord.Game("w/ batty friends! | .help"))
 
 
@@ -73,9 +75,11 @@ async def on_raw_reaction_add(event):
     greetings_emoji = "👋"
     gamers_emoji = "🎮"
     socialists_emoji = "🗣"
+    turnipchamps_emoji = "<:turnipchamp:696791106653913148>"
     greetings_role_message = await bot.get_channel(636366607626666014).fetch_message(636367012372676609)
     gamers_role_message = await bot.get_channel(636366607626666014).fetch_message(636367012372676609)
     socialists_role_message = await bot.get_channel(636366607626666014).fetch_message(636367012372676609)
+    turnipchamps_role_message = await bot.get_channel(636366607626666014).fetch_message(636367012372676609)
     server = bot.get_guild(event.guild_id)
     member = server.get_member(event.user_id)
     if event.message_id == 636367012372676609 and str(event.emoji) == greetings_emoji:
@@ -105,6 +109,15 @@ async def on_raw_reaction_add(event):
             await member.add_roles(socialists_role)
             await member.send(f"Here's your {str(socialists_role)} role!")
         await socialists_role_message.remove_reaction(emoji=socialists_emoji, member=member)
+    elif event.message_id == 636367012372676609 and str(event.emoji) == turnipchamps_emoji:
+        turnipchamps_role = discord.utils.get(server.roles, name="Turnipchamps")
+        if turnipchamps_role in member.roles:
+            await member.remove_roles(turnipchamps_role)
+            await member.send(f"Redacted the {str(turnipchamps_role)} role from you.")
+        else:
+            await member.add_roles(turnipchamps_role)
+            await member.send(f"Here's your {str(turnipchamps_role)} role!")
+        await turnipchamps_role_message.remove_reaction(emoji=turnipchamps_emoji, member=member)
 
 
 # Help

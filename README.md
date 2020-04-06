@@ -1,5 +1,11 @@
 # Changelog
 
+## Batty Bot v1.2.6
+
+`+` Added the `Turnipchamps` role react! Now, simply react to the message in <#636366607626666014> with the turnip emoji to be notified when peoples' turnip prices are looking good.
+
+(Note: This should be good for all of our amazing ACNH players on the server. Pushed on 4/06/20 @ 2:52 EST.)
+
 ## Batty Bot v1.2.5
 
 `+`/`-`/`~` Added, removed, and changed various things.
