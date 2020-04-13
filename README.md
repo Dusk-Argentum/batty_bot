@@ -1,5 +1,17 @@
 # Changelog
 
+## Batty Bot v1.2.7
+
+`+` Added `.m chime`, which sends the "Oh? You're a chime?" meme.
+
+`+` Added `.m chime` to `.help`.
+
+`~` Fixed `.rps`, which threw an unhelpful error due to some absentminded programming on my part.
+
+`~` Changed `.help` to accurately reflect the change to my Discord tag.
+
+(Note: `.m chime` requested by Jakpatch#5840. I can't believe it took me months to fix the `.rps` error... To be fair, I didn't know about it until today, and fixed it immediately. Also, just noticed the past few changelogs don't have AM or PM to denote what times they were pushed. Whoops. Pushed on 4/13/20 @ 8:26 AM EST.)
+
 ## Batty Bot v1.2.6
 
 `+` Added the `Turnipchamps` role react! Now, simply react to the message in <#636366607626666014> with the turnip emoji to be notified when peoples' turnip prices are looking good.

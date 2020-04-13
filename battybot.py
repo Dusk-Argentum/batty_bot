@@ -147,7 +147,7 @@ async def help2(ctx):
         `monkas` \n Prints the monkaS emoji.
         `pog`/`pogchamp` \n Prints the pogchamp emoji.""", inline=True)
         embed.set_footer(text="""If a command has subcommands,
-        do `.help [command name]` for further help. Made by Dusk-Argentum#6530!""")
+        do `.help [command name]` for further help. Made by Dusk Argentum#6530!""")
         embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
         await ctx.send(embed=embed)
     else:
@@ -176,7 +176,7 @@ async def pm(ctx):
     `monkas` \n Prints the monkaS emoji.
     `pog`/`pogchamp` \n Prints the pogchamp emoji.""", inline=True)
     embed.set_footer(text="""If a command has subcommands,
-    do `.help [command name]` for further help. Made by Dusk-Argentum#6530!""")
+    do `.help [command name]` for further help. Made by Dusk Argentum#6530!""")
     embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
     await ctx.author.send(embed=embed)
 
@@ -303,7 +303,8 @@ async def meme(ctx):
         embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A), description="""Aliases:
         `.m`.""")
         embed.add_field(name="`.meme`", value="Send a specific meme.", inline=True)
-        embed.add_field(name="Accepted Arguments", value="""`typo` \n Sends the "TYPO! In the Groupchat" meme.
+        embed.add_field(name="Accepted Arguments", value="""`chime` \n Sends the "Oh? You're a chime?" meme. \n `typo`
+         \n Sends the "TYPO! In the Groupchat" meme. \n
         `wig` \n Sends the "Wig" meme. \n `wig2` \n Sends a "Wig" video clip.""")
         embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
         await ctx.send(embed=embed)
@@ -316,7 +317,8 @@ async def pm(ctx):
     embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A), description="""Aliases:
             `.m`.""")
     embed.add_field(name="`.meme`", value="Send a specific meme.", inline=True)
-    embed.add_field(name="Accepted Arguments", value="""`typo` \n Sends the "TYPO! In the Groupchat" meme.
+    embed.add_field(name="Accepted Arguments", value="""`chime` \n Sends the "Oh? You're a chime?" meme. \n `typo`
+     \n Sends the "TYPO! In the Groupchat" meme. \n
     `wig` \n Sends the "Wig" meme. \n `wig2` \n Sends a "Wig" video clip.""")
     embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
     await ctx.author.send(embed=embed)
@@ -575,6 +577,13 @@ async def meme(ctx):
         return
 
 
+@meme.command(pass_context=True, name="chime", aliases=["c"])
+async def chime(ctx):
+    """Sends the "Oh? You're a chime?" meme."""
+    image = "assets/chime.jpeg"
+    await ctx.send(file=discord.File(image))
+
+
 @meme.command(pass_context=True, name="typo", aliases=["t"])
 async def typo(ctx):
     """Sends the "TYPO! In the Groupchat" meme."""
@@ -625,19 +634,19 @@ async def rps(ctx, move):
             await ctx.send(embed=embed)
         elif player_move == "paper" and bot_move == "paper":
             embed = discord.Embed(title=title, color=draw_color, description=f"I got Paper... {draw_desc}")
-            await ctx.send(embed)
+            await ctx.send(embed=embed)
         elif player_move == "paper" and bot_move == "scissors":
             embed = discord.Embed(title=title, color=lose_color, description=f"I got Scissors... {lose_desc}")
-            await ctx.send(embed)
+            await ctx.send(embed=embed)
         elif player_move == "scissors" and bot_move == "rock":
             embed = discord.Embed(title=title, color=lose_color, description=f"I got Rock... {lose_desc}")
-            await ctx.send(embed)
+            await ctx.send(embed=embed)
         elif player_move == "scissors" and bot_move == "paper":
             embed = discord.Embed(title=title, color=win_color, description=f"I got Paper... {win_desc}")
-            await ctx.send(embed)
+            await ctx.send(embed=embed)
         elif player_move == "scissors" and bot_move == "scissors":
             embed = discord.Embed(title=title, color=draw_color, description=f"I got Scissors... {draw_desc}")
-            await ctx.send(embed)
+            await ctx.send(embed=embed)
 
 
 @bot.command(pass_context=True, name="testroll", aliases=["tr"])
