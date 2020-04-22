@@ -1,5 +1,13 @@
 # Changelog
 
+## Batty Bot v1.2.8
+
+`~` TOTALLY overhauled `.roll`. Check it out! It can add the result of multiple numbers now. This took me months to figure out. Please clap.
+
+`~` Other minor changes throughout program.
+
+(Note: Happy 6 month anniversary! Pushed on 4/21/20 @ 10:27 PM EST.)
+
 ## Batty Bot v1.2.7
 
 `+` Added `.m chime`, which sends the "Oh? You're a chime?" meme.

@@ -21,7 +21,7 @@ BATDEN_ID = "290304276381564928"
 
 
 PREFIX = "."
-DESCRIPTION = "A bot made custom for Gazia's Bat Den. Just your typical chat bot! Made by Dusk-Argentum#6530."
+DESCRIPTION = "A bot made custom for Gazia's Bat Den. Just your typical chat bot! Made by Dusk Argentum#6530."
 TOKEN = os.environ.get("BBR")
 
 
@@ -67,7 +67,8 @@ async def on_member_join(ctx):  # Welcomes a new user when they join.
         await welcome_channel.send(f"""<@&636374013731667969>, {ctx.mention}!
         Welcome to Gazia's Bat Den! Please read <#413876271865528320>, and enjoy your stay!""")
     else:
-        print("Unexpected.")
+        unexpectedserverjoin = bot.get_guild(ctx)  # This doesn't quite work..?
+        print(f"Unexpected. Join caught in {str(unexpectedserverjoin)}.")
 
 
 @bot.event
@@ -649,14 +650,14 @@ async def rps(ctx, move):
             await ctx.send(embed=embed)
 
 
-@bot.command(pass_context=True, name="testroll", aliases=["tr"])
+@bot.command(pass_context=True, name="roll", aliases=["r"])
 async def testroll(ctx, *args):
     """Rolls dice. Format: `x`d`y`, ex. 2d6."""
     a = " ".join(args)
-    c = ", "
-    p = "+"
+    p = " + "
     setup = re.fullmatch(r"(?P<howmany>[0-9]+)d(?P<howmuch>[0-9]+)", a)
     result = []
+    resultstr = []
     hma = int(setup.group("howmany"))
     hmu = int(setup.group("howmuch"))
     if setup:
@@ -665,6 +666,7 @@ async def testroll(ctx, *args):
             return
         elif hmu >= 100:
             await ctx.send("Do you... really need to roll dice with so many sides..?")
+            return
         elif hma == 0:
             await ctx.send("Please provide one or more dice to roll.")
             return
@@ -673,57 +675,32 @@ async def testroll(ctx, *args):
             return
         else:
             pass
-        # for x in range(hma):
-            # result.append(str(random.randint(1, hmu)))
         if 100 >= hma > 1:
             for x in range(hma):
-                result.append(str(random.randint(1, hmu)))
-            print(f"{result}")
-            aaa = tuple(result)
-            numbers_sum = sum(aaa)
-            print(numbers_sum)
-            # total = sum([result.append(str(random.randint(1, hmu))) for x in range(hma)])
+                value = random.randint(1, hmu)
+                result.append(int(value))
+                resultstr.append(str(value))
+            total = sum(result)
             embed = discord.Embed(title=f"Rolling {hma}d{hmu}...", color=discord.Color(0xE8B52A))
-            embed.add_field(name="Result:", value=f"{c.join(result)} = **{total}**")
+            embed.add_field(name="Result:", value=f"{p.join(resultstr)} = **{str(total)}**")
+            embed.set_thumbnail(
+                url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
             await ctx.send(embed=embed)
-            print("test")
-            await ctx.send(f"{ctx.author.mention}: {hma}d{hmu} = {c.join(result)}.")
+        elif hma == 1:
+            for x in range(hma):
+                value = random.randint(1, hmu)
+                result.append(int(value))
+                resultstr.append(str(value))
+            embed = discord.Embed(title=f"Rolling {hma}d{hmu}...", color=discord.Color(0xE8B52A))
+            embed.set_thumbnail(
+                url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+            embed.add_field(name="Result:", value=f"{a.join(resultstr)}")
+            await ctx.send(embed=embed)
     else:
         await ctx.send("Please use a valid dice format. Example: `2d10`.")
 
 
-@bot.command(pass_context=True, name="roll", aliases=["r"])
-async def roll(ctx, *args):
-    """Rolls dice. Format: `x`d`y`, ex. 2d6."""
-    a = " ".join(args)
-    s = ", "
-    setup = re.fullmatch(r"(?P<howmany>[0-9]+)d(?P<howmuch>[0-9]+)", a)
-    result = []
-    hma = int(setup.group("howmany"))
-    hmu = int(setup.group("howmuch"))
-    if setup:
-        if hma >= 100:
-            await ctx.send("Do you... really need to roll so many dice..?")
-            return
-        elif hmu >= 100:
-            await ctx.send("Do you... really need to roll dice with so many sides..?")
-            return
-        elif hma == 0:
-            await ctx.send("Please provide one or more dice to roll.")
-            return
-        elif hmu == 0:
-            await ctx.send("Please provide the amount of sides you wish your dice to have.")
-            return
-        else:
-            pass
-        for x in range(hma):
-            result.append(str(random.randint(1, hmu)))
-        await ctx.send(f"{ctx.author.mention}: {hma}d{hmu} = {s.join(result)}.")
-    else:
-        await ctx.send("Please use a valid dice format. Example: `2d10`.")
-
-
-@bot.command(pass_context=True, name="simpleroll", aliases=["sr"])
+@bot.command(pass_context=True, name="simpleroll", aliases=["sr", "simp"])
 async def simpleroll(ctx, *, howmuch: int):
     """Simply chooses a random number between 1 and your input."""
     if howmuch >= 1000:
@@ -764,6 +741,21 @@ async def suggestion(ctx, suggestionname, *args):
 
 # Owner Only
 
+@bot.command(pass_context=True, name="changepresence", aliases=["chp"])
+async def changepresence(ctx, *args):
+    """Changes presence."""
+    cmd = ctx.message
+    bad = ctx.message.author
+    if ctx.author.id != 97153790897045504:
+        await bad.send(f"You do not have permission to run that command! Context: `.changepresence`.")
+        await cmd.delete()
+        return
+    else:
+        if args == " ":
+            await bot.change_presence(status=discord.Status.online, activity=discord.Game("w/ batty friends! | .help"))
+        else:
+            await bot.change_presence(status=discord.Status.online, activity=discord.Game(f"{' '.join(args)} | .help"))
+
 
 @bot.command(pass_context=True)
 async def de(ctx, *args):
@@ -773,24 +765,40 @@ async def de(ctx, *args):
     if ctx.author.id != 97153790897045504:
         await bad.send(f"You do not have permission to use that command! Context: `.de`.")
         await cmd.delete()
+        return
     else:
         await ctx.send(" ".join(args))
         await cmd.delete()
 
 
 @bot.command(pass_context=True)
-async def doomsday(ctx):
-    """In case of the worst."""
-    # I didn't want to have to use this.
-    # blueflames = 510536932321656842
+async def invite(ctx):
+    """Prints an invite link for Batty Bot."""
+    cmd = ctx.message
+    bad = ctx.message.author
+    invitelink = os.environ.get("BBI")
+    if ctx.author.id != 97153790897045504:
+        await bad.send(f"You do not have permission to run that command! Context: `.invite`.")
+        await cmd.delete()
+        return
+    else:
+        await bad.send(f"{invitelink}")
+        await cmd.add_reaction("👍")
+
+
+@bot.command(pass_context=True)  # This function sends an error after leaving specified server. Need to fix.
+async def leave(ctx, server: int):
+    """Leaves a server by ID."""
     cmd = ctx.message
     bad = ctx.message.author
     if ctx.author.id != 97153790897045504:
-        await bad.send(f"You do not have permission to run that command! Context: `.doomsday`.")
+        await bad.send(f"You do not have permission to run that command! Context: `.leave`.")
         await cmd.delete()
+        return
     else:
-        server = bot.get_guild(510536932321656842)
-        await server.leave()
+        to_leave = bot.get_guild(server)
+        await cmd.add_reaction("👋")
+        await to_leave.leave()
 
 
 @bot.command(pass_context=True)
@@ -801,26 +809,12 @@ async def purge(ctx, amount):
     if ctx.author.id != 97153790897045504:
         await bad.send(f"You do not have permission to run that command! Context: `.purge`.")
         await cmd.delete()
+        return
     else:
         def is_batty(message):
             return message.author.id == 635484274023465000
         await ctx.channel.purge(limit=int(amount), check=is_batty)
         await ctx.message.add_reaction("👍")
-
-
-@bot.command(pass_context=True, name="changepresence", aliases=["chp"])
-async def changepresence(ctx, *args):
-    """Changes presence."""
-    cmd = ctx.message
-    bad = ctx.message.author
-    if ctx.author.id != 97153790897045504:
-        await bad.send(f"You do not have permission to run that command! Context: `.changepresence`.")
-        await cmd.delete()
-    else:
-        if args == " ":
-            await bot.change_presence(status=discord.Status.online, activity=discord.Game("w/ batty friends! | .help"))
-        else:
-            await bot.change_presence(status=discord.Status.online, activity=discord.Game(f"{' '.join(args)} | .help"))
 
 
 # Unfinished or For Testing
@@ -835,14 +829,14 @@ async def changepresence(ctx, *args):
     # fo.close()
 
 
-@bot.command(pass_context=True, name="timetest", aliases=["tt"])
-async def timetest(ctx):
-    today = date.today()
-    my_birthday = date(today.year, 8, 14)
-    if my_birthday < today:
-        my_birthday = my_birthday.replace(year=today.year + 1)
-    time_to_birthday = abs(my_birthday - today)
-    await ctx.send(f"{time_to_birthday}")
+# @bot.command(pass_context=True, name="timetest", aliases=["tt"])
+# async def timetest(ctx):
+    # today = date.today()
+    # my_birthday = date(today.year, 8, 14)
+    # if my_birthday < today:
+        # my_birthday = my_birthday.replace(year=today.year + 1)
+    # time_to_birthday = abs(my_birthday - today)
+    # await ctx.send(f"{time_to_birthday}")
 
 
 # On Message
@@ -854,8 +848,6 @@ async def on_message(message):
     batty = 635484274023465000
     repeat = "__***FULLMETAL ALCHEMIST.***__\n"
     two = re.search(r"(2|two)!$", message.content.lower())
-    # when = re.search(r"(?P<w>[w+h+e+n^])(?P<q>[?]$)", message.content.lower())
-    # setup = re.fullmatch(r"(?P<howmany>[0-9]+)d(?P<howmuch>[0-9]+)", a)
     cnt = message.content.lower()
     if message.author.id != batty:
         out = ""
@@ -874,8 +866,6 @@ async def on_message(message):
         if two:
             image = "assets/2.gif"
             await ctx.send(file=discord.File(image))
-        # if when:
-            # await ctx.send("test")
         if out:
             await ctx.send(out)
         if message.author.id == 97153790897045504 and message.content.startswith("Batty!"):
@@ -884,14 +874,10 @@ async def on_message(message):
 
 
 # TODO: Completed in current build:
-# Added changepresence command
+# Changed credits in desc, deleted some unnecessary commented out lines
 
 
 # TODO: v1.3
-# TODO: Birthday calender?
-# TODO: Schedule tasks for specific days
-# TODO: Birthday calender print is formatted table, reactions to navigate months
-# TODO: Voice??? Maybe???? Make Patreon exclusive
 # TODO: Challenge RPS
 # TODO: Modifiers on roll?
 # TODO: Embedify roll
@@ -900,6 +886,10 @@ async def on_message(message):
 # TODO: Figure out how to store numbers that are linked to userid in a text doc or smth to recall at any time, cookies
 # TODO: Challenge RPS
 # TODO: Add Challenge RPS to help
+# TODO: Birthday calender?
+# TODO: Schedule tasks for specific days
+# TODO: Birthday calender print is formatted table, reactions to navigate months
+# TODO: Voice??? Maybe???? Make Patreon exclusive
 
 
 # TODO: Long Way Off, hold 0 hope that these will ever happen

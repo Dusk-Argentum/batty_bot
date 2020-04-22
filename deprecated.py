@@ -40,3 +40,32 @@
     # await bot.process_commands(message)
 
 
+# @bot.command(pass_context=True, name="roll", aliases=["r"])
+# async def roll(ctx, *args):
+    # """Rolls dice. Format: `x`d`y`, ex. 2d6."""
+    # a = " ".join(args)
+    # s = ", "
+    # setup = re.fullmatch(r"(?P<howmany>[0-9]+)d(?P<howmuch>[0-9]+)", a)
+    # result = []
+    # hma = int(setup.group("howmany"))
+    # hmu = int(setup.group("howmuch"))
+    # if setup:
+        # if hma >= 100:
+            # await ctx.send("Do you... really need to roll so many dice..?")
+            # return
+        # elif hmu >= 100:
+            # await ctx.send("Do you... really need to roll dice with so many sides..?")
+            # return
+        # elif hma == 0:
+            # await ctx.send("Please provide one or more dice to roll.")
+            # return
+        # elif hmu == 0:
+            # await ctx.send("Please provide the amount of sides you wish your dice to have.")
+            # return
+        # else:
+            # pass
+        # for x in range(hma):
+            # result.append(str(random.randint(1, hmu)))
+        # await ctx.send(f"{ctx.author.mention}: {hma}d{hmu} = {s.join(result)}.")
+    # else:
+        # await ctx.send("Please use a valid dice format. Example: `2d10`.")
