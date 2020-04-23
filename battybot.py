@@ -848,6 +848,9 @@ async def on_message(message):
     batty = 635484274023465000
     repeat = "__***FULLMETAL ALCHEMIST.***__\n"
     two = re.search(r"(2|two)!$", message.content.lower())
+    monkapog = re.search(r"^(:|pog|monka)", message.content.lower())
+    noemotes = re.search(r"^:", message.content.lower())
+    emotes = re.search(r"^(pog|monkas)", message.content.lower())
     cnt = message.content.lower()
     if message.author.id != batty:
         out = ""
@@ -855,10 +858,14 @@ async def on_message(message):
             out += repeat
         if "/shrug" in cnt:
             out += "¯\\_(ツ)_/¯\n"
-        if "monkas" in cnt:
-            await ctx.send("<:monkas:636575202217689099>")
-        if "pog" in cnt:
-            await ctx.send("<:pogchamp:636572402054201368>")
+        if monkapog:
+            if noemotes:
+                return
+            elif emotes:
+                if "pog" in cnt:
+                    await ctx.send("<:pogchamp:636572402054201368>")
+                if "monkas" in cnt:
+                    await ctx.send("<:monkas:636575202217689099>")
         if message.content.startswith(".."):
             return
         if message.author.id == 461265486655520788 and message.channel.id != 414890945243512842:

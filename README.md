@@ -1,5 +1,11 @@
 # Changelog
 
+## Batty Bot v1.2.9
+
+`~` Fixed issue wherein using an emote containing `pog` or `monkas` would call up the `pogchamp` and `monkas` emojis redundantly.
+
+(Note: I should have fixed this months ago. Pushed on 4/22/20 @ 10:14 PM EST.)
+
 ## Batty Bot v1.2.8
 
 `~` TOTALLY overhauled `.roll`. Check it out! It can add the result of multiple numbers now. This took me months to figure out. Please clap.
