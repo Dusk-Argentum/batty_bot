@@ -1,5 +1,15 @@
 # Changelog
 
+## Batty Bot v1.2.10
+
+`+` Added `turnipchamps` to `.role` for consistency.
+
+`-` Removed ToddBot suppression.
+
+`~` Other backend changes.
+
+(Note: Nothing here. Pushed on 4/24/20 @ 10:36 PM EST.)
+
 ## Batty Bot v1.2.9
 
 `~` Fixed issue wherein using an emote containing `pog` or `monkas` would call up the `pogchamp` and `monkas` emojis redundantly.
