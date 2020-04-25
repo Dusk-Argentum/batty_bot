@@ -510,6 +510,25 @@ async def socialists(ctx):
         await message.delete(delay=15)
 
 
+@role.command(pass_context=True, name="turnipchamps", aliases=["t"])
+async def turnipchamps(ctx):
+    """Adds or removes the Turnipchamps role from you."""
+    turnipchamps_role = discord.utils.get(ctx.guild.roles, name="Turnipchamps")
+    message = ctx.message
+    if turnipchamps_role in ctx.author.roles:
+        await ctx.author.remove_roles(turnipchamps_role)
+        await(await ctx.send(f"Alrighty, {ctx.author.mention}. I've removed the Turnipchamps role from you.")).delete(
+            delay=15)
+        await message.add_reaction(emoji="\N{THUMBS UP SIGN}")
+        await message.delete(delay=15)
+    else:
+        await ctx.author.add_roles(turnipchamps_role)
+        await(await ctx.send(f"OK, {ctx.author.mention}! You're now a part of the Turnipchamps role!")).delete(
+            delay=15)
+        await message.add_reaction(emoji="\N{THUMBS UP SIGN}")
+        await message.delete(delay=15)
+
+
 # Fun
 
 
@@ -651,7 +670,7 @@ async def rps(ctx, move):
 
 
 @bot.command(pass_context=True, name="roll", aliases=["r"])
-async def testroll(ctx, *args):
+async def roll(ctx, *args):
     """Rolls dice. Format: `x`d`y`, ex. 2d6."""
     a = " ".join(args)
     p = " + "
@@ -741,6 +760,7 @@ async def suggestion(ctx, suggestionname, *args):
 
 # Owner Only
 
+
 @bot.command(pass_context=True, name="changepresence", aliases=["chp"])
 async def changepresence(ctx, *args):
     """Changes presence."""
@@ -787,7 +807,7 @@ async def invite(ctx):
 
 
 @bot.command(pass_context=True)  # This function sends an error after leaving specified server. Need to fix.
-async def leave(ctx, server: int):
+async def leave(ctx, server: int): # Not a breaking error by any means, but PyCharm's red text hurts.
     """Leaves a server by ID."""
     cmd = ctx.message
     bad = ctx.message.author
@@ -847,29 +867,38 @@ async def on_message(message):
     ctx = await bot.get_context(message)
     batty = 635484274023465000
     repeat = "__***FULLMETAL ALCHEMIST.***__\n"
-    two = re.search(r"(2|two)!$", message.content.lower())
-    monkapog = re.search(r"^(:|pog|monka)", message.content.lower())
-    noemotes = re.search(r"^:", message.content.lower())
-    emotes = re.search(r"^(pog|monkas)", message.content.lower())
     cnt = message.content.lower()
+    two = re.search(r"(2|two)!$", cnt)
+    # monkapog = re.search(r"^(:|pog|monka)", cnt)
+    noemotes = re.search(r"^:", cnt)
+    # emotes = re.search(r"^(pog|monka)", cnt)
+    monka = "monka"
+    pog = "pog"
+    colon = ":"
+    colonend = re.search(r":$", cnt)
     if message.author.id != batty:
         out = ""
         if "fullmetal alchemist" in cnt:
             out += repeat
         if "/shrug" in cnt:
             out += "¯\\_(ツ)_/¯\n"
-        if monkapog:
-            if noemotes:
+        if monka or pog or colon in cnt:
+            if colon in cnt:
                 return
-            elif emotes:
-                if "pog" in cnt:
-                    await ctx.send("<:pogchamp:636572402054201368>")
-                if "monkas" in cnt:
-                    await ctx.send("<:monkas:636575202217689099>")
+            if pog in cnt:
+                await ctx.send("<:pogchamp:636572402054201368>")
+            if monka in cnt:
+                await ctx.send("<:monkas:636575202217689099>")
+        # if monkapog:
+            # if noemotes:
+                # return
+            # elif emotes:
+                # if "pog" in cnt:
+                    # await ctx.send("<:pogchamp:636572402054201368>")
+                # if "monka" in cnt:
+                    # await ctx.send("<:monkas:636575202217689099>")
         if message.content.startswith(".."):
             return
-        if message.author.id == 461265486655520788 and message.channel.id != 414890945243512842:
-            await message.delete()
         if two:
             image = "assets/2.gif"
             await ctx.send(file=discord.File(image))
@@ -881,13 +910,12 @@ async def on_message(message):
 
 
 # TODO: Completed in current build:
-# Changed credits in desc, deleted some unnecessary commented out lines
+# Added turnipchamps argument to role for consistency, small backend changes
 
 
 # TODO: v1.3
 # TODO: Challenge RPS
 # TODO: Modifiers on roll?
-# TODO: Embedify roll
 
 # TODO: Undefined
 # TODO: Figure out how to store numbers that are linked to userid in a text doc or smth to recall at any time, cookies
