@@ -1,5 +1,17 @@
 # Changelog
 
+## Batty Bot v1.3.0
+
+`+` Added some additional aliases to some commands.
+
+`+` Reinstated ToddBot suppression.
+
+`~` Made absolutely sure that emotes from other users containing `pog` and `monkas` would not trigger Batty Bot's `:pogchamp:` or `:monkas:`. [Fixed this as per RFC#001.]
+
+`~` Some developer-only commands were overhauled.
+
+(Note: A bit of a smaller version-up update, mostly because I couldn't think of anything else new to add. Please remember that the `.suggestion` command exists, so I can get new ideas! Pushed on 4/23/20 @ 12:57 AM EST.)
+
 ## Batty Bot v1.2.10
 
 `+` Added `turnipchamps` to `.role` for consistency.

@@ -9,12 +9,6 @@ from discord.ext.commands import CommandNotFound
 import random
 import re
 
-import datetime
-from datetime import date
-import schedule
-
-import numexpr
-
 
 OWNER_ID = "97153790897045504"  # Hehe, that's me!
 BATDEN_ID = "290304276381564928"
@@ -27,7 +21,6 @@ TOKEN = os.environ.get("BBR")
 
 bot = commands.Bot(command_prefix=commands.when_mentioned_or(PREFIX), description=DESCRIPTION, pm_help=False,
                    case_insensitive=True)
-client = discord.Client()  # Leave this alone. I barely understand what this does, sometimes.
 
 
 bot.remove_command("help")
@@ -47,6 +40,8 @@ async def on_ready():
     # await socialists_role_message.add_reaction(emoji="🗣") ### Leave these in, in case of emergency, I guess.
     # await turnipchamps_role_message.add_reaction(emoji="<:turnipchamp:696791106653913148>")
     await bot.change_presence(status=discord.Status.online, activity=discord.Game("w/ batty friends! | .help"))
+    # await bot.change_presence(status=discord.Status.online, activity=discord.CustomActivity("""Chatting with batty
+    # friends! | .help""")) ## One day, this will work.
 
 
 @bot.event
@@ -67,8 +62,7 @@ async def on_member_join(ctx):  # Welcomes a new user when they join.
         await welcome_channel.send(f"""<@&636374013731667969>, {ctx.mention}!
         Welcome to Gazia's Bat Den! Please read <#413876271865528320>, and enjoy your stay!""")
     else:
-        unexpectedserverjoin = bot.get_guild(ctx)  # This doesn't quite work..?
-        print(f"Unexpected. Join caught in {str(unexpectedserverjoin)}.")
+        return
 
 
 @bot.event
@@ -582,7 +576,7 @@ async def pikachu(ctx):
     await ctx.send("<:pika:636581375612289024>")
 
 
-@emoji.command(pass_context=True, name="monkas", aliases=["m", "monkaS"])
+@emoji.command(pass_context=True, name="monkas", aliases=["m", "monkaS", "monka"])
 async def monkas(ctx):
     # await ctx.send(f"{ctx.author.mention} says: <:monkas:645002369091764284>") ### Do not delete this.
     await ctx.send("<:monkas:636575202217689099>")
@@ -592,7 +586,7 @@ async def monkas(ctx):
 async def meme(ctx):
     """Prints a specific meme."""
     if ctx.invoked_subcommand is None:
-        await ctx.send("Please enter a valid meme. Valid memes: `typo`, `wig`, `wig2`.")
+        await ctx.send("Please enter a valid meme. Valid memes: `chime`, `typo`, `wig`, `wig2`.")
     else:
         return
 
@@ -806,8 +800,8 @@ async def invite(ctx):
         await cmd.add_reaction("👍")
 
 
-@bot.command(pass_context=True)  # This function sends an error after leaving specified server. Need to fix.
-async def leave(ctx, server: int): # Not a breaking error by any means, but PyCharm's red text hurts.
+@bot.command(pass_context=True)
+async def leave(ctx, server: int):
     """Leaves a server by ID."""
     cmd = ctx.message
     bad = ctx.message.author
@@ -816,9 +810,14 @@ async def leave(ctx, server: int): # Not a breaking error by any means, but PyCh
         await cmd.delete()
         return
     else:
-        to_leave = bot.get_guild(server)
-        await cmd.add_reaction("👋")
-        await to_leave.leave()
+        if server == 0:
+            to_leave = bot.get_guild(ctx.guild.id)
+            await bad.send(f"I have left {cmd.guild.name} ({cmd.guild.id}).")
+            await to_leave.leave()
+        else:
+            to_leave = bot.get_guild(server)
+            await bad.send(f"I have left {cmd.guild.name} ({server}).")
+            await to_leave.leave()
 
 
 @bot.command(pass_context=True)
@@ -840,25 +839,6 @@ async def purge(ctx, amount):
 # Unfinished or For Testing
 
 
-# @bot.command(pass_context=True, name="writetest", aliases=["wt"])
-# async def writetest(ctx, *args):
-    # fo = open("test.txt", "rw+")
-    # string = str(args)
-    # fo.seek(0, 2)
-    # fo.write(string)
-    # fo.close()
-
-
-# @bot.command(pass_context=True, name="timetest", aliases=["tt"])
-# async def timetest(ctx):
-    # today = date.today()
-    # my_birthday = date(today.year, 8, 14)
-    # if my_birthday < today:
-        # my_birthday = my_birthday.replace(year=today.year + 1)
-    # time_to_birthday = abs(my_birthday - today)
-    # await ctx.send(f"{time_to_birthday}")
-
-
 # On Message
 
 
@@ -869,34 +849,23 @@ async def on_message(message):
     repeat = "__***FULLMETAL ALCHEMIST.***__\n"
     cnt = message.content.lower()
     two = re.search(r"(2|two)!$", cnt)
-    # monkapog = re.search(r"^(:|pog|monka)", cnt)
-    noemotes = re.search(r"^:", cnt)
-    # emotes = re.search(r"^(pog|monka)", cnt)
+    donotemote = re.search(r":.*?(pog|monka).*?:", cnt)
     monka = "monka"
     pog = "pog"
-    colon = ":"
-    colonend = re.search(r":$", cnt)
     if message.author.id != batty:
         out = ""
         if "fullmetal alchemist" in cnt:
             out += repeat
         if "/shrug" in cnt:
             out += "¯\\_(ツ)_/¯\n"
-        if monka or pog or colon in cnt:
-            if colon in cnt:
+        if monka or pog in cnt:
+            if donotemote:
                 return
-            if pog in cnt:
-                await ctx.send("<:pogchamp:636572402054201368>")
-            if monka in cnt:
-                await ctx.send("<:monkas:636575202217689099>")
-        # if monkapog:
-            # if noemotes:
-                # return
-            # elif emotes:
-                # if "pog" in cnt:
-                    # await ctx.send("<:pogchamp:636572402054201368>")
-                # if "monka" in cnt:
-                    # await ctx.send("<:monkas:636575202217689099>")
+            else:
+                if monka in cnt:
+                    await ctx.send("<:monkas:636575202217689099>")
+                if pog in cnt:
+                    await ctx.send("<:pogchamp:636572402054201368>")
         if message.content.startswith(".."):
             return
         if two:
@@ -906,6 +875,8 @@ async def on_message(message):
             await ctx.send(out)
         if message.author.id == 97153790897045504 and message.content.startswith("Batty!"):
             await ctx.message.add_reaction("👍")
+        if message.author.id == 461265486655520788:  # and message.channel.id != 414890945243512842:
+            await ctx.message.delete()  # He will be allowed to send messages in botshop once he has atoned.
         await bot.process_commands(message)
 
 
