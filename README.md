@@ -1,5 +1,13 @@
 # Changelog
 
+## Batty Bot v1.3.1
+
+`+` Added welcome message for Snowlo.
+
+`+` Added `.github`, which prints a message to Batty Bot's Github.
+
+(Note: Just some extra things. Pushed on 5/11/20 @ 10:32 PM EST.)
+
 ## Batty Bot v1.3.0
 
 `+` Added some additional aliases to some commands.

@@ -1,5 +1,6 @@
 import os
 
+
 import discord
 from discord.ext import commands
 from discord.ext.commands import CommandInvokeError
@@ -57,10 +58,15 @@ async def on_command_error(ctx, error):
 
 @bot.event
 async def on_member_join(ctx):  # Welcomes a new user when they join.
-    if ctx.guild.id == 290304276381564928:
+    if ctx.guild.id == 290304276381564928:  # Gazia's Bat Den
         welcome_channel = bot.get_channel(290304276381564928)
         await welcome_channel.send(f"""<@&636374013731667969>, {ctx.mention}!
         Welcome to Gazia's Bat Den! Please read <#413876271865528320>, and enjoy your stay!""")
+    if ctx.guild.id == 687225286525190144:  # Snowlo
+        welcome_channel = bot.get_channel(687225286525190147)
+        rielle = "assets/rielle.gif"
+        await welcome_channel.send(f"""Welcome, {ctx.mention}! Enjoy your stay!""")
+        await welcome_channel.send(file=discord.File(rielle))
     else:
         return
 
@@ -740,6 +746,13 @@ async def bug(ctx, bugname, *args):
     await channel.send(embed=embed)
 
 
+@bot.command(pass_context=True, name="github", aliases=["git", "g"])
+async def github(ctx):
+    """Prints a link to Batty Bot's github page."""
+    await ctx.send(f"""Fancy yourself a coder? Feel like submitting your very own feature for Batty Bot?
+Contribute to the Github here! https://github.com/Dusk-Argentum/batty_bot""")
+
+
 @bot.command(pass_context=True, name="suggestion", aliases=["suggest", "s"])
 async def suggestion(ctx, suggestionname, *args):
     """Submits a suggestion to the dev."""
@@ -875,7 +888,7 @@ async def on_message(message):
             await ctx.send(out)
         if message.author.id == 97153790897045504 and message.content.startswith("Batty!"):
             await ctx.message.add_reaction("👍")
-        if message.author.id == 461265486655520788:  # and message.channel.id != 414890945243512842:
+        if message.author.id == 461265486655520788 and message.channel.id != 414890945243512842:
             await ctx.message.delete()  # He will be allowed to send messages in botshop once he has atoned.
         await bot.process_commands(message)
 
