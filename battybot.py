@@ -17,7 +17,7 @@ BATDEN_ID = "290304276381564928"
 
 PREFIX = "."
 DESCRIPTION = "A bot made custom for Gazia's Bat Den. Just your typical chat bot! Made by Dusk Argentum#6530."
-TOKEN = os.environ.get("BBR")
+TOKEN = os.environ.get("BattyBotToken")
 
 
 bot = commands.Bot(command_prefix=commands.when_mentioned_or(PREFIX), description=DESCRIPTION, pm_help=False,
@@ -765,11 +765,29 @@ async def suggestion(ctx, suggestionname, *args):
     await channel.send(embed=embed)
 
 
+# Moderation (WIP)
+
+
 # Owner Only
 
 
-@bot.command(pass_context=True, name="changepresence", aliases=["chp"])
-async def changepresence(ctx, *args):
+@bot.command(pass_context=True, name="changenicknick", aliases=["chn", "n", "nick"])
+async def changenick(ctx, *args):
+    """Changes nickname on the server the command is invoked on."""
+    cmd = ctx.message
+    bad = ctx.message.author
+    if ctx.author.id != 97153790897045504:
+        await bad.send(f"You do not have permission to run that command! Context: `.changenick`.")
+        await cmd.delete()
+        return
+    else:
+        name = " ".join(args)
+        await ctx.guild.get_member(bot.user.id).edit(nick=name)
+        await cmd.add_reaction("👍")
+
+
+@bot.group(pass_context=True, name="changepresence", aliases=["chp"])
+async def changepresence(ctx, *, presence: str = None):
     """Changes presence."""
     cmd = ctx.message
     bad = ctx.message.author
@@ -778,10 +796,10 @@ async def changepresence(ctx, *args):
         await cmd.delete()
         return
     else:
-        if args == " ":
+        if presence is None:
             await bot.change_presence(status=discord.Status.online, activity=discord.Game("w/ batty friends! | .help"))
         else:
-            await bot.change_presence(status=discord.Status.online, activity=discord.Game(f"{' '.join(args)} | .help"))
+            await bot.change_presence(status=discord.Status.online, activity=discord.Game(f"{presence} | .help"))
 
 
 @bot.command(pass_context=True)
@@ -814,7 +832,7 @@ async def invite(ctx):
 
 
 @bot.command(pass_context=True)
-async def leave(ctx, server: int):
+async def leave(ctx, server: int = None):
     """Leaves a server by ID."""
     cmd = ctx.message
     bad = ctx.message.author
@@ -823,13 +841,14 @@ async def leave(ctx, server: int):
         await cmd.delete()
         return
     else:
-        if server == 0:
+        if server is None:
             to_leave = bot.get_guild(ctx.guild.id)
             await bad.send(f"I have left {cmd.guild.name} ({cmd.guild.id}).")
             await to_leave.leave()
         else:
             to_leave = bot.get_guild(server)
-            await bad.send(f"I have left {cmd.guild.name} ({server}).")
+            await bad.send(f"I have left {server}.")
+            # await bad.send(f"I have left {cmd.guild.name} ({server}).") ### To fix to use name where name is
             await to_leave.leave()
 
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## Batty Bot v1.3.2
+
+`~` Changed some backend/developer commands to be more efficient, or work, depending on the case.
+
+(Note: Some interesting stuff on the horizon. Keep an eye on this space! Pushed on 6/1/20 @ 5:35 PM EST.)
+
 ## Batty Bot v1.3.1
 
 `+` Added welcome message for Snowlo.
