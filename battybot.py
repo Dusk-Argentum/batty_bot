@@ -913,10 +913,9 @@ async def on_message(message):
 
 
 # TODO: Completed in current build:
-# Added turnipchamps argument to role for consistency, small backend changes
 
 
-# TODO: v1.3
+# TODO: Later
 # TODO: Challenge RPS
 # TODO: Modifiers on roll?
 

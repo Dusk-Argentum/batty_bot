@@ -1,5 +1,11 @@
 # Changelog
 
+## Batty Bot v1.3.3
+
+`~` Changed BattyBot's icon! Happy Pride!
+
+(Note: No major code changes, just wanted to draw attention to the new icon I made. Happy Pride! Stay safe! Pushed on 6/2/20 @ 2:02 PM EST.) 
+
 ## Batty Bot v1.3.2
 
 `~` Changed some backend/developer commands to be more efficient, or work, depending on the case.
