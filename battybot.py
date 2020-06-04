@@ -67,6 +67,9 @@ async def on_member_join(ctx):  # Welcomes a new user when they join.
         rielle = "assets/rielle.gif"
         await welcome_channel.send(f"""Welcome, {ctx.mention}! Enjoy your stay!""")
         await welcome_channel.send(file=discord.File(rielle))
+    if ctx.guild.id == 348897377400258560:  # Private
+        welcome_channel = bot.get_channel(348897378062827520)
+        await welcome_channel.send(f"""<@97153790897045504>, {ctx.mention} has joined the server.""")
     else:
         return
 
@@ -734,7 +737,7 @@ async def simpleroll(ctx, *, howmuch: int):
 # Meta
 
 
-@bot.command(pass_context=True, name="bug", aliases=["b"])
+@bot.command(pass_context=True, name="bug")
 async def bug(ctx, bugname, *args):
     """Submits a bug to the dev."""
     channel = bot.get_channel(645409157217910794)
@@ -768,16 +771,165 @@ async def suggestion(ctx, suggestionname, *args):
 # Moderation (WIP)
 
 
+@bot.command(pass_context=True, name="ban", aliases=["b"])
+async def ban(ctx, member: discord.Member = None, *, reason: str = "Reasons."):
+    """Bans a user from a server via @mention."""
+    cmd = ctx.message
+    cmduser = ctx.message.author
+    server = bot.get_guild(ctx.guild.id)
+    user = server.get_member(ctx.author.id)
+    moderator_role = discord.utils.get(server.roles, name="Moderator")
+    if moderator_role in user.roles:
+        if member is None:
+            await cmduser.send(f"Invalid member. To select a member, @mention them.")
+            return
+        elif moderator_role in member.roles:
+            await cmduser.send(f"You cannot punish that user! They are a Moderator.")
+            return
+        else:
+            await cmd.guild.ban(member, reason=reason, delete_message_days=1)
+            await cmd.add_reaction("👍")  # TODO: Make the successful running of this command log to a log channel.
+    else:
+        await cmduser.send(f"You do not have permission to run that command! Context: `.ban`.")
+        await cmd.delete()
+        return
+
+
+@bot.command(pass_context=True, name="forceban", aliases=["fb"])
+async def forceban(ctx, member_id: int = None, *, reason: str = "Forcefully banned for reasons."):
+    """Forcefully bans a user via ID."""
+    cmd = ctx.message
+    cmduser = ctx.message.author
+    server = bot.get_guild(ctx.guild.id)
+    user = server.get_member(ctx.author.id)
+    moderator_role = discord.utils.get(server.roles, name="Moderator")
+    if moderator_role in user.roles:
+        if member_id is None:
+            await cmduser.send(f"Invalid member. To select a member, use their ID.")
+            return
+        elif moderator_role in member.roles:
+            await cmduser.send(f"You cannot punish that user! They are a Moderator.")
+            return
+        else:
+            await cmd.guild.ban(discord.Object(id=member_id), reason=reason, delete_message_days=1)
+            await cmd.add_reaction("👍")  # TODO: Make the successful running of this command log to a log channel.
+    else:
+        await cmduser.send(f"You do not have permission to run that command! Context: `.forceban`.")
+        await cmd.delete()
+        return
+
+
+@bot.command(pass_context=True, name="kick", aliases=["k"])
+async def kick(ctx, member: discord.Member = None, *, reason: str = None):
+    """Kicks a user from a server via @mention."""
+    cmd = ctx.message
+    cmduser = ctx.message.author
+    server = bot.get_guild(ctx.guild.id)
+    user = server.get_member(ctx.author.id)
+    moderator_role = discord.utils.get(server.roles, name="Moderator")
+    if moderator_role in user.roles:
+        if member is None:
+            await cmduser.send(f"Invalid member. To select a member, @mention them.")
+        elif moderator_role in member.roles:
+            await cmduser.send(f"You cannot punish that user! They are a Moderator.")
+            return
+        else:
+            await cmd.guild.kick(member, reason=reason)
+            await cmd.add_reaction("👍")  # TODO: Make the successful running of this command log to a log channel.:
+    else:
+        await cmduser.send(f"You do not have permission to run that command! Context: `.kick`.")
+        await cmd.delete()
+        return
+
+
+@bot.command(pass_context=True, name="purge_messages", aliases=["pm"])
+async def purge_messages(ctx, member: discord.Member = None, amount: int = None):
+    """Searches through `amount` messages in channel in which command was invoked, deleting messages from `member`."""
+    cmd = ctx.message
+    cmduser = ctx.message.author
+    server = bot.get_guild(ctx.guild.id)
+    user = server.get_member(ctx.author.id)
+    moderator_role = discord.utils.get(server.roles, name="Moderator")
+    if moderator_role in user.roles:
+        if moderator_role in member.roles:
+            await cmduser.send(f"You cannot punish that user! They are a Moderator.")
+            return
+
+        def is_member(message):
+            return message.author == member
+        await cmd.channel.purge(limit=int(amount), check=is_member)
+        await cmd.add_reaction("👍")
+    else:
+        await cmduser.send(f"You do not have permission to run that command! Context: `.purge_messages`.")
+        await cmd.delete()
+        return
+
+
+@bot.command(pass_context=True, name="unban", aliases=["ub"])
+async def unban(ctx, member_id: int = None):
+    """Unbans a user from a server via ID."""
+    cmd = ctx.message
+    cmduser = ctx.message.author
+    server = bot.get_guild(ctx.guild.id)
+    user = server.get_member(ctx.author.id)
+    moderator_role = discord.utils.get(server.roles, name="Moderator")
+    if moderator_role in user.roles:
+        if member_id is None:
+            await cmduser.send(f"Invalid member. To select a member, use their ID.")
+            return
+        else:
+            to_unban = await bot.fetch_user(member_id)
+            banned = await cmd.guild.bans()
+            banned_list = str(banned)
+            is_banned = re.search(rf"{member_id}", banned_list)
+            if is_banned is None:
+                await cmduser.send(f"That user is not banned! User: {to_unban} ({member_id}.")
+                return
+            else:
+                await cmd.guild.unban(to_unban)
+                await cmd.add_reaction("👍")  # TODO: Make the successful running of this command log to a log channel.
+    else:
+        await cmduser.send(f"You do not have permission to run that command! Context: `.unban`.")
+        await cmd.delete()
+        return
+
+
+# @bot.command(pass_context=True, name="warn", aliases=["w"]) # TODO: Unfinished. Unsure how to count warns.
+# async def warn(ctx, member: discord.Member = None, reason: str = None):
+    # """Gives a user a warning."""
+    # cmd = ctx.message
+    # cmduser = ctx.message.author
+    # server = bot.get_guild(ctx.guild.id)
+    # user = server.get_member(ctx.author.id)
+    # moderator_role = discord.utils.get(server.roles, name="Moderator")
+    # if moderator_role in user.roles:
+        # bot.counter = {}
+        # if member not in bot.counter:
+            # bot.counter[member] = 0
+        # await ctx.channel.send(f"I have given a warning to {member}. Reason: {reason}.")
+        # if bot.counter[member] == 0:
+            # member_warn_count = sum([1], bot.counter[member])
+        # if member_warn_count == 1:
+            # total_warn_count = sum([1], member_warn_count)
+
+        # await ctx.channel.send(f"The amount of warnings they have now is {str(warn_count)}.")
+        # return
+    # else:
+        # await cmduser.send(f"You do not have permission to run that command! Context: `.warn`.")
+        # await cmd.delete()
+        # return
+
+
 # Owner Only
 
 
 @bot.command(pass_context=True, name="changenicknick", aliases=["chn", "n", "nick"])
 async def changenick(ctx, *args):
-    """Changes nickname on the server the command is invoked on."""
+    """Changes the bot's nickname on the server the command is invoked on."""
     cmd = ctx.message
-    bad = ctx.message.author
+    cmduser = ctx.message.author
     if ctx.author.id != 97153790897045504:
-        await bad.send(f"You do not have permission to run that command! Context: `.changenick`.")
+        await cmduser.send(f"You do not have permission to run that command! Context: `.changenick`.")
         await cmd.delete()
         return
     else:
@@ -790,9 +942,9 @@ async def changenick(ctx, *args):
 async def changepresence(ctx, *, presence: str = None):
     """Changes presence."""
     cmd = ctx.message
-    bad = ctx.message.author
+    cmduser = ctx.message.author
     if ctx.author.id != 97153790897045504:
-        await bad.send(f"You do not have permission to run that command! Context: `.changepresence`.")
+        await cmduser.send(f"You do not have permission to run that command! Context: `.changepresence`.")
         await cmd.delete()
         return
     else:
@@ -806,9 +958,9 @@ async def changepresence(ctx, *, presence: str = None):
 async def de(ctx, *args):
     """Echoes back what you say while deleting invocation for illusion of sentience."""
     cmd = ctx.message
-    bad = ctx.message.author
+    cmduser = ctx.message.author
     if ctx.author.id != 97153790897045504:
-        await bad.send(f"You do not have permission to use that command! Context: `.de`.")
+        await cmduser.send(f"You do not have permission to use that command! Context: `.de`.")
         await cmd.delete()
         return
     else:
@@ -820,14 +972,14 @@ async def de(ctx, *args):
 async def invite(ctx):
     """Prints an invite link for Batty Bot."""
     cmd = ctx.message
-    bad = ctx.message.author
+    cmduser = ctx.message.author
     invitelink = os.environ.get("BBI")
     if ctx.author.id != 97153790897045504:
-        await bad.send(f"You do not have permission to run that command! Context: `.invite`.")
+        await cmduser.send(f"You do not have permission to run that command! Context: `.invite`.")
         await cmd.delete()
         return
     else:
-        await bad.send(f"{invitelink}")
+        await cmduser.send(f"{invitelink}")
         await cmd.add_reaction("👍")
 
 
@@ -835,20 +987,20 @@ async def invite(ctx):
 async def leave(ctx, server: int = None):
     """Leaves a server by ID."""
     cmd = ctx.message
-    bad = ctx.message.author
+    cmduser = ctx.message.author
     if ctx.author.id != 97153790897045504:
-        await bad.send(f"You do not have permission to run that command! Context: `.leave`.")
+        await cmduser.send(f"You do not have permission to run that command! Context: `.leave`.")
         await cmd.delete()
         return
     else:
         if server is None:
             to_leave = bot.get_guild(ctx.guild.id)
-            await bad.send(f"I have left {cmd.guild.name} ({cmd.guild.id}).")
+            await cmduser.send(f"I have left {cmd.guild.name} ({cmd.guild.id}).")
             await to_leave.leave()
         else:
             to_leave = bot.get_guild(server)
-            await bad.send(f"I have left {server}.")
-            # await bad.send(f"I have left {cmd.guild.name} ({server}).") ### To fix to use name where name is
+            await cmduser.send(f"I have left {server}.")
+            # await cmduser.send(f"I have left {cmd.guild.name} ({server}).") ### To fix to use name where name is
             await to_leave.leave()
 
 
@@ -856,9 +1008,9 @@ async def leave(ctx, server: int = None):
 async def purge(ctx, amount):
     """Purges bot messages, looking back `amount` amount of messages (including invocation)."""
     cmd = ctx.message
-    bad = ctx.message.author
+    cmduser = ctx.message.author
     if ctx.author.id != 97153790897045504:
-        await bad.send(f"You do not have permission to run that command! Context: `.purge`.")
+        await cmduser.send(f"You do not have permission to run that command! Context: `.purge`.")
         await cmd.delete()
         return
     else:
@@ -914,6 +1066,11 @@ async def on_message(message):
 
 # TODO: Completed in current build:
 
+# TODO: MODERATION TODO
+# ZHU WISHLIST: Warn logging, temp muting/banning, case tracking per user, username/nick tracking, raid mode
+
+# TODO: GENERAL TODO
+# Replace all instances of batty's old avi with new avi
 
 # TODO: Later
 # TODO: Challenge RPS

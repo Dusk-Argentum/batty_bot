@@ -1,5 +1,11 @@
 # Changelog
 
+## Batty Bot 1.3.4
+
+`~` Backend changes.
+
+(Note: Working on some stuff. Just wanted to back up my work. Nothing to see here. Pushed on 6/4/20 @ 1:01 AM EST.)
+
 ## Batty Bot v1.3.3
 
 `~` Changed BattyBot's icon! Happy Pride!
