@@ -1,5 +1,35 @@
 # Changelog
 
+## Batty Bot v1.3.5
+
+`~` Once again, overhauled `.help`.
+
+	`~` Made the initial `.help` message more clean and organized.
+	
+	`~` Reordered certain categories to make all align to alphabetizing.
+	
+	`+` Added a line denoting that `Key Phrases` do not require the prefix to invoke.
+
+`~` Made it so `.e pog`/`.e monkas` won't send their respective emoji twice.
+
+`~` Changed `.bug`/`.suggestion` to use a more organized method of confirming/sending reports.
+
+`~` Made it so anything that required triplequotes in the code no longer makes a whole new line/makes line formatting wonky.
+
+`~` Backend changes:
+
+	`+` Added `return` to the end of a lot of statements. (Please use `.bug` if anything is broken as a result of this.)
+	
+	`~` Changed around command/category orders in the code.
+	
+	`~` Renamed some internal `help` variables for cleanliness.
+	
+	`~` Various other extremely minor changes.
+	
+	`-` Removed some unnecessary lines.
+	
+(Note: Trying out a bit of a different approach to changelog logging, so changelogs might be a bit more thicc in the future. Pushed on 6/8/20 @ 9:12 EST.)
+
 ## Batty Bot 1.3.4
 
 `~` Backend changes.

@@ -11,10 +11,6 @@ import random
 import re
 
 
-OWNER_ID = "97153790897045504"  # Hehe, that's me!
-BATDEN_ID = "290304276381564928"
-
-
 PREFIX = "."
 DESCRIPTION = "A bot made custom for Gazia's Bat Den. Just your typical chat bot! Made by Dusk Argentum#6530."
 TOKEN = os.environ.get("BattyBotToken")
@@ -61,7 +57,7 @@ async def on_member_join(ctx):  # Welcomes a new user when they join.
     if ctx.guild.id == 290304276381564928:  # Gazia's Bat Den
         welcome_channel = bot.get_channel(290304276381564928)
         await welcome_channel.send(f"""<@&636374013731667969>, {ctx.mention}!
-        Welcome to Gazia's Bat Den! Please read <#413876271865528320>, and enjoy your stay!""")
+Welcome to Gazia's Bat Den! Please read <#413876271865528320>, and enjoy your stay!""")
     if ctx.guild.id == 687225286525190144:  # Snowlo
         welcome_channel = bot.get_channel(687225286525190147)
         rielle = "assets/rielle.gif"
@@ -127,433 +123,398 @@ async def on_raw_reaction_add(event):
 # Help
 
 
-@bot.group(pass_context=True, name="help2", aliases=["cmds", "commands", "h", "h-hewp!!!", "help"])
-async def help2(ctx):
-    """The help command."""
+@bot.group(pass_context=True, name="help_", aliases=["cmds", "commands", "h", "h-hewp!!!", "help"])
+async def help_(ctx):
+    """Shows a list of all commands, and whether or not a command as subcommands."""
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
     if ctx.invoked_subcommand is None:
         embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A))
-        embed.add_field(name="General", value="""`.help` \n Shows this help. \n `.test` 
-        Sends a test message to check if the bot's online.""", inline=True)
-        embed.add_field(name="Roles", value="""`.role [subcommand]` 
-        Assign or redact a specific role from yourself via command.""", inline=False)
         embed.add_field(name="Fun", value="""`.eightball`
         Gives a cryptic answer to your queries. \n `.emoji [subcommand]`
-        Have the bot print out a specific emoji. \n `.meme`
-        Have the bot print out a specific meme. \n `.rps [move]`
-        Play Rock, Paper, Scissors with the bot. \n `.roll` \n Rolls dice. Format: `x`d`y`, ex. 2d6.
-        `.simpleroll` \n Simply chooses a random number between 1 and your input.""", inline=True)
-        embed.add_field(name="Meta", value="""`.bug [name] [description]` \n Submit a bug report to the dev.
-        `.suggestion [name] [description]` \n Submit a suggestion to the dev.""", inline=True)
-        embed.add_field(name="Key Phrases", value="""`Fullmetal Alchemist`
-        Causes the bot to repeat the phrase, but louder.
-        `/shrug` \n Prints "¯\\_(ツ)_/¯", no matter where `/shrug` is in your message.
-        `2!` at the end \n Sends the "Peggle! 2!" gif.
-        `monkas` \n Prints the monkaS emoji.
-        `pog`/`pogchamp` \n Prints the pogchamp emoji.""", inline=True)
-        embed.set_footer(text="""If a command has subcommands,
-        do `.help [command name]` for further help. Made by Dusk Argentum#6530!""")
-        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+        Have the bot send a specific emoji. \n `.meme`
+        Have the bot send a specific meme. \n `.rps [move]`
+        Play Rock, Paper, Scissors with the bot. \n `.roll`
+        Rolls dice. Format: `x`d`y`, ex. 2d6. \n `.simpleroll`
+        Simply chooses a random number between 1 and your input.""", inline=False)
+        embed.add_field(name="General", value="""`.help`
+        Shows this help. \n `.test` 
+        Sends a test message to check if the bot's online.""", inline=False)
+        embed.add_field(name="Meta", value="""`.bug [name] [description]`
+        Submit a bug report to the dev. \n `.suggestion [name] [description]`
+        Submit a suggestion to the dev.""", inline=False)
+        embed.add_field(name="Roles", value="""`.role [subcommand]` 
+        Assign or redact a specific role from yourself via command.""", inline=False)
+        embed.add_field(name="Key Phrases - These do not require the prefix.", value="""`Fullmetal Alchemist`
+        Causes the bot to repeat the phrase, but louder. \n `/shrug`
+        Sends "¯\\_(ツ)_/¯", no matter where `/shrug` is in your message. \n `2!` at the end
+        Sends the "Peggle! 2!" gif meme. \n `monka`
+        Sends the monkaS emoji. \n `pog`
+        Sends the pogchamp emoji.""", inline=False)
+        embed.set_footer(text="""If a command has subcommands, \
+do `.help [command name]` for further help. \n Made by Dusk Argentum#6530!""")
+        embed.set_thumbnail(url=url)
         await ctx.send(embed=embed)
+        return
     else:
         pass
 
 
-@help2.command(pass_context=True, name="-pm")
+@help_.command(pass_context=True, name="-pm")
 async def pm(ctx):
+    """PMs the help message to the invoker."""
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
     embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A))
-    embed.add_field(name="General", value="""`.help` \n Shows this help. \n `.test` 
-    Sends a test message to check if the bot's online.""", inline=True)
-    embed.add_field(name="Roles", value="""`.role [subcommand]` 
-    Assign or redact a specific role from yourself via command.""", inline=False)
     embed.add_field(name="Fun", value="""`.eightball`
-    Gives a cryptic answer to your queries. \n `.emoji [subcommand]`
-    Have the bot print out a specific emoji. \n `.meme`
-    Have the bot print out a specific meme. \n `.rps [move]`
-    Play Rock, Paper, Scissors with the bot. \n `.roll` \n Rolls dice. Format: `x`d`y`, ex. 2d6.
-    `.simpleroll` \n Simply chooses a random number between 1 and your input.""", inline=True)
-    embed.add_field(name="Meta", value="""`.bug [name] [description]` \n Submit a bug report to the dev.
-    `.suggestion [name] [description]` \n Submit a suggestion to the dev.""", inline=True)
-    embed.add_field(name="Key Phrases", value="""`Fullmetal Alchemist`
-    Causes the bot to repeat the phrase, but louder.
-    `/shrug` \n Prints "¯\\_(ツ)_/¯", no matter where `/shrug` is in your message.
-    `2!` at the end \n Sends the "Peggle! 2!" gif.
-    `monkas` \n Prints the monkaS emoji.
-    `pog`/`pogchamp` \n Prints the pogchamp emoji.""", inline=True)
-    embed.set_footer(text="""If a command has subcommands,
-    do `.help [command name]` for further help. Made by Dusk Argentum#6530!""")
-    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+            Gives a cryptic answer to your queries. \n `.emoji [subcommand]`
+            Have the bot send a specific emoji. \n `.meme`
+            Have the bot send a specific meme. \n `.rps [move]`
+            Play Rock, Paper, Scissors with the bot. \n `.roll`
+            Rolls dice. Format: `x`d`y`, ex. 2d6. \n `.simpleroll`
+            Simply chooses a random number between 1 and your input.""", inline=False)
+    embed.add_field(name="General", value="""`.help`
+            Shows this help. \n `.test` 
+            Sends a test message to check if the bot's online.""", inline=False)
+    embed.add_field(name="Meta", value="""`.bug [name] [description]`
+            Submit a bug report to the dev. \n `.suggestion [name] [description]`
+            Submit a suggestion to the dev.""", inline=False)
+    embed.add_field(name="Roles", value="""`.role [subcommand]` 
+            Assign or redact a specific role from yourself via command.""", inline=False)
+    embed.add_field(name="Key Phrases - These do not require the prefix.", value="""`Fullmetal Alchemist`
+            Causes the bot to repeat the phrase, but louder. \n `/shrug`
+            Sends "¯\\_(ツ)_/¯", no matter where `/shrug` is in your message. \n `2!` at the end
+            Sends the "Peggle! 2!" gif meme. \n `monka`
+            Sends the monkaS emoji. \n `pog`
+            Sends the pogchamp emoji.""", inline=False)
+    embed.set_footer(text="""If a command has subcommands, \
+    do `.help [command name]` for further help. \n Made by Dusk Argentum#6530!""")
+    embed.set_thumbnail(url=url)
     await ctx.author.send(embed=embed)
+    return
 
 
-@help2.group(pass_context=True, name="help3", aliases=["cmds", "commands", "h", "h-hewp!!!", "help"])
-async def help3(ctx):  # Wish everything named help didn't "shadow builtin command"!
+@help_.group(pass_context=True, name="help__", aliases=["cmds", "commands", "h", "h-hewp!!!", "help"])
+async def help__(ctx):
+    """The help entry for `.help`."""
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
     if ctx.invoked_subcommand is None:
-        embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE9B52A), description="""Aliases: 
+        embed = discord.Embed(title="`.help`", color=discord.Color(0xE9B52A), description="""Aliases: 
     `.cmds`, `.commands`, `.h`, `.h-hewp!!!`.""")
-        embed.add_field(name="`.help`", value="Shows the help for Batty Bot.", inline=True)
-        embed.add_field(name="Possible Arguments", value="""`-pm` \n PMs the help to you,
-        instead of posting it in the invoking channel.""", inline=True)
-        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+        embed.add_field(name="Function:", value="Shows the help for Batty Bot.", inline=False)
+        embed.add_field(name="Possible Arguments:", value="""`-pm` \n PMs the help to you, \
+instead of posting it in the invoking channel.""", inline=False)
+        embed.set_thumbnail(url=url)
         await ctx.send(embed=embed)
+        return
     else:
         pass
 
 
-@help3.command(pass_context=True, name="-pm")
+@help__.command(pass_context=True, name="-pm")
 async def pm(ctx):
-    embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE9B52A), description="""Aliases: 
+    """The PM'd help entry for `.help`."""
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
+    embed = discord.Embed(title="`.help`", color=discord.Color(0xE9B52A), description="""Aliases: 
         `.cmds`, `.commands`, `.h`, `.h-hewp!!!`.""")
-    embed.add_field(name="`.help`", value="Shows the help for Batty Bot.", inline=True)
-    embed.add_field(name="Possible Arguments", value="""`pm` \n PMs the help to you,
-    instead of posting it in the invoking channel.""", inline=True)
-    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+    embed.add_field(name="Function:", value="Shows the help for Batty Bot.", inline=False)
+    embed.add_field(name="Possible Arguments:", value="""`-pm` \n PMs the help to you, \
+instead of posting it in the invoking channel.""", inline=False)
+    embed.set_thumbnail(url=url)
     await ctx.author.send(embed=embed)
+    return
 
 
-@help2.group(pass_context=True)
+@help_.group(pass_context=True)
 async def test(ctx):
+    """The help entry for `.test`."""
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
     if ctx.invoked_subcommand is None:
-        embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE9B52A))
-        embed.add_field(name="`.test`", value="Sends a test message to check if the bot's online.", inline=True)
-        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+        embed = discord.Embed(title="`.test`", color=discord.Color(0xE9B52A))
+        embed.add_field(name="Function:", value="Sends a test message to check if the bot's online.", inline=False)
+        embed.set_thumbnail(url=url)
         await ctx.send(embed=embed)
+        return
     else:
         pass
 
 
 @test.command(pass_context=True, name="-pm")
 async def pm(ctx):
-    embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE9B52A))
-    embed.add_field(name="`.test`", value="Sends a test message to check if the bot's online.", inline=True)
-    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+    """The PM'd help entry for `.test`."""
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
+    embed = discord.Embed(title="`.test`", color=discord.Color(0xE9B52A))
+    embed.add_field(name="Function:", value="Sends a test message to check if the bot's online.", inline=False)
+    embed.set_thumbnail(url=url)
     await ctx.author.send(embed=embed)
+    return
 
 
-@help2.group(pass_context=True)
+@help_.group(pass_context=True)
 async def role(ctx):
+    """The help entry for `.role`."""
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
     if ctx.invoked_subcommand is None:
-        """Help for `.role`."""
-        embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A))
-        embed.add_field(name="`.role`", value="""Assign or redact a specific role from yourself via command.""",
-                        inline=True)
-        embed.add_field(name="Possible Arguments", value="""`gamers` \n  Assigns or redacts the Gamers role from you.
+        embed = discord.Embed(title="`.role`", color=discord.Color(0xE8B52A))
+        embed.add_field(name="Function:", value="""Assign or redact a specific role from yourself via command.""",
+                        inline=False)
+        embed.add_field(name="Possible Arguments:", value="""`gamers` \n  Assigns or redacts the Gamers role from you.
         `greetings` \n Assigns or redacts the Greetings role from you. \n `socialists` \n Assigns or redacts the
-        Socialists role from you.""")
-        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+        Socialists role from you. \n `turnipchamps` \n Assigns or redacts the Turnipchamps role from you.""",
+                        inline=False)
+        embed.set_thumbnail(url=url)
         await ctx.send(embed=embed)
+        return
     else:
         pass
 
 
 @role.command(pass_context=True, name="-pm")
 async def pm(ctx):
-    embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A))
-    embed.add_field(name="`.role`", value="Assign or redact a specific role from yourself via command.", inline=True)
-    embed.add_field(name="Possible Arguments", value="""`gamers` \n  Assigns or redacts the Gamers role from you.
-            `greetings` \n Assigns or redacts the Greetings role from you. \n `socialists` \n Assigns or redacts the
-            Socialists role from you.""")
-    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+    """THe PM'd help entry for `.role`."""
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
+    embed = discord.Embed(title="`.role`", color=discord.Color(0xE8B52A))
+    embed.add_field(name="Function:", value="""Assign or redact a specific role from yourself via command.""",
+                    inline=False)
+    embed.add_field(name="Possible Arguments:", value="""`gamers` \n  Assigns or redacts the Gamers role from you.
+    `greetings` \n Assigns or redacts the Greetings role from you. \n `socialists` \n Assigns or redacts the
+    Socialists role from you. \n `turnipchamps` \n Assigns or redacts the Turnipchamps role from you.""",
+                    inline=False)
+    embed.set_thumbnail(url=url)
     await ctx.author.send(embed=embed)
+    return
 
 
-@help2.group(pass_context=True, aliases=["8", "8ball"])
+@help_.group(pass_context=True, aliases=["8", "8ball"])
 async def eightball(ctx):
+    """The help entry for `.eightball`."""
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
     if ctx.invoked_subcommand is None:
-        embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A), description="""Aliases:
+        embed = discord.Embed(title="`.eightball`", color=discord.Color(0xE8B52A), description="""Aliases:
         `.8`, `.8ball`.""")
-        embed.add_field(name="`.eightball`", value="Gives a cryptic answer to your queries.")
-        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+        embed.add_field(name="Function:", value="Gives a cryptic answer to your queries.", inline=False)
+        embed.set_thumbnail(url=url)
         await ctx.send(embed=embed)
+        return
     else:
         pass
 
 
 @eightball.command(pass_context=True, name="-pm")
 async def pm(ctx):
-    embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A), description="""Aliases:
+    """The PM'd help entry for `.eightball`."""
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
+    embed = discord.Embed(title="`.eightball`", color=discord.Color(0xE8B52A), description="""Aliases:
             `.8`, `.8ball`.""")
-    embed.add_field(name="`.eightball`", value="Gives a cryptic answer to your queries.")
-    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+    embed.add_field(name="Function:`", value="Gives a cryptic answer to your queries.", inline=False)
+    embed.set_thumbnail(url=url)
     await ctx.author.send(embed=embed)
+    return
 
 
-@help2.group(pass_context=True, aliases=["e"])
+@help_.group(pass_context=True, aliases=["e"])
 async def emoji(ctx):
+    """The help entry for `.emoji`."""
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
     if ctx.invoked_subcommand is None:
         """Help for `.emoji`."""
-        embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A))
-        embed.add_field(name="`.emoji`", value="""Have the bot print out a specific emoji.""", inline=True)
-        embed.add_field(name="Accepted Arguments", value="""`monkas` \n Sends monkaS. \n `pikachu`
-        Sends Surprised Pikachu, in the style of the Poketch. \n `pogchamp` \n Sends Pogchamp.""")
-        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+        embed = discord.Embed(title="`.emoji`", color=discord.Color(0xE8B52A), description="""Aliases:
+        `.e`.""")
+        embed.add_field(name="Function:", value="""Have the bot print out a specific emoji.""", inline=False)
+        embed.add_field(name="Accepted Arguments:", value="""`monkas` \n Sends monkaS. \n `pikachu`
+        Sends Surprised Pikachu, in the style of the Poketch. \n `pogchamp` \n Sends Pogchamp.""", inline=False)
+        embed.set_thumbnail(url=url)
         await ctx.send(embed=embed)
+        return
     else:
         pass
 
 
 @emoji.command(pass_context=True, name="-pm")
 async def pm(ctx):
-    embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A))
-    embed.add_field(name="`.emoji`", value="""Have the bot print out a specific emoji.""", inline=True)
-    embed.add_field(name="Accepted Arguments", value="""`monkas` \n Sends monkaS. \n `pikachu`
-            Sends Surprised Pikachu, in the style of the Poketch. \n `pogchamp` \n Sends Pogchamp.""")
-    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+    """The PM'd help entry for `.emoji`."""
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
+    embed = discord.Embed(title="`.emoji`", color=discord.Color(0xE8B52A), description="""Aliases:
+    `.e`.""")
+    embed.add_field(name="Function:", value="""Have the bot print out a specific emoji.""", inline=False)
+    embed.add_field(name="Accepted Arguments:", value="""`monkas` \n Sends monkaS. \n `pikachu`
+    Sends Surprised Pikachu, in the style of the Poketch. \n `pogchamp` \n Sends Pogchamp.""", inline=False)
+    embed.set_thumbnail(url=url)
     await ctx.author.send(embed=embed)
+    return
 
 
-@help2.group(pass_context=True, aliases=["m"])
+@help_.group(pass_context=True, aliases=["m"])
 async def meme(ctx):
+    """The help entry for `.meme`."""
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
     if ctx.invoked_subcommand is None:
-        embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A), description="""Aliases:
+        embed = discord.Embed(title="`.meme`", color=discord.Color(0xE8B52A), description="""Aliases:
         `.m`.""")
-        embed.add_field(name="`.meme`", value="Send a specific meme.", inline=True)
-        embed.add_field(name="Accepted Arguments", value="""`chime` \n Sends the "Oh? You're a chime?" meme. \n `typo`
+        embed.add_field(name="Function:", value="Send a specific meme.", inline=False)
+        embed.add_field(name="Accepted Arguments:", value="""`chime` \n Sends the "Oh? You're a chime?" meme. \n `typo`
          \n Sends the "TYPO! In the Groupchat" meme. \n
-        `wig` \n Sends the "Wig" meme. \n `wig2` \n Sends a "Wig" video clip.""")
-        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+        `wig` \n Sends the "Wig" meme. \n `wig2` \n Sends a "Wig" video clip.""", inline=False)
+        embed.set_thumbnail(url=url)
         await ctx.send(embed=embed)
+        return
     else:
         pass
 
 
 @meme.group(pass_context=True, name="-pm")
 async def pm(ctx):
-    embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A), description="""Aliases:
-            `.m`.""")
-    embed.add_field(name="`.meme`", value="Send a specific meme.", inline=True)
-    embed.add_field(name="Accepted Arguments", value="""`chime` \n Sends the "Oh? You're a chime?" meme. \n `typo`
+    """The PM'd help entry for `.meme`."""
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
+    embed = discord.Embed(title="`.meme`", color=discord.Color(0xE8B52A), description="""Aliases:
+    `.m`.""")
+    embed.add_field(name="Function:", value="Send a specific meme.", inline=False)
+    embed.add_field(name="Accepted Arguments:", value="""`chime` \n Sends the "Oh? You're a chime?" meme. \n `typo`
      \n Sends the "TYPO! In the Groupchat" meme. \n
-    `wig` \n Sends the "Wig" meme. \n `wig2` \n Sends a "Wig" video clip.""")
-    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+    `wig` \n Sends the "Wig" meme. \n `wig2` \n Sends a "Wig" video clip.""", inline=False)
+    embed.set_thumbnail(url=url)
     await ctx.author.send(embed=embed)
+    return
 
 
-@help2.group(pass_context=True, aliases=["rockpaperscissors"])
+@help_.group(pass_context=True, aliases=["rockpaperscissors"])
 async def rps(ctx):
+    """The help entry for `.rps`."""
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
     if ctx.invoked_subcommand is None:
-        embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A), description="""Aliases:
+        embed = discord.Embed(title="`.rps`", color=discord.Color(0xE8B52A), description="""Aliases:
         `.rockpaperscissors`.""")
-        embed.add_field(name="`.rps`", value="Play Rock, Paper, Scissors with the bot.", inline=True)
-        embed.add_field(name="Accepted Arguments", value="""`rock` \n Play as Rock. \n `paper`
-        Play as Paper. \n `scissors` \n Play as scissors.""")
-        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+        embed.add_field(name="Function:", value="Play Rock, Paper, Scissors with the bot.", inline=False)
+        embed.add_field(name="Accepted Arguments:", value="""`rock` \n Play as Rock. \n `paper`
+        Play as Paper. \n `scissors` \n Play as scissors.""", inline=False)
+        embed.set_thumbnail(url=url)
         await ctx.send(embed=embed)
+        return
     else:
         pass
 
 
 @rps.group(pass_context=True, name="-pm")
 async def pm(ctx):
-    embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A), description="""Aliases:
-            `.rockpaperscissors`.""")
-    embed.add_field(name="`.rps`", value="Play Rock, Paper, Scissors with the bot.", inline=True)
-    embed.add_field(name="Accepted Arguments", value="""`rock` \n Play as Rock. \n `paper`
-            Play as Paper. \n `scissors` \n Play as scissors.""")
-    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+    """The PM'd help entry for `.rps`."""
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
+    embed = discord.Embed(title="`.rps`", color=discord.Color(0xE8B52A), description="""Aliases:
+    `.rockpaperscissors`.""")
+    embed.add_field(name="Function:", value="Play Rock, Paper, Scissors with the bot.", inline=False)
+    embed.add_field(name="Accepted Arguments:", value="""`rock` \n Play as Rock. \n `paper`
+    Play as Paper. \n `scissors` \n Play as scissors.""", inline=False)
+    embed.set_thumbnail(url=url)
     await ctx.author.send(embed=embed)
+    return
 
 
-@help2.group(pass_context=True, aliases=["r"])
+@help_.group(pass_context=True, aliases=["r"])
 async def roll(ctx):
+    """The help entry for `.roll`."""
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
     if ctx.invoked_subcommand is None:
-        embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A), description="""Aliases:
+        embed = discord.Embed(title="`.roll`", color=discord.Color(0xE8B52A), description="""Aliases:
         `.r`.""")
-        embed.add_field(name="`.roll`", value="Rolls dice. Format: `x`d`y`, ex. 2d6.", inline=True)
-        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+        embed.add_field(name="Function:", value="Rolls dice. Format: `x`d`y`, ex. 2d6.", inline=False)
+        embed.set_thumbnail(url=url)
         await ctx.send(embed=embed)
+        return
     else:
         pass
 
 
 @roll.group(pass_context=True, name="-pm")
 async def pm(ctx):
-    embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A), description="""Aliases:
-            `.r`.""")
-    embed.add_field(name="`.roll`", value="Rolls dice. Format: `x`d`y`, ex. 2d6.", inline=True)
-    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+    """The PM'd help entry for `.roll`."""
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
+    embed = discord.Embed(title="`.roll`", color=discord.Color(0xE8B52A), description="""Aliases:
+    `.r`.""")
+    embed.add_field(name="Function:", value="Rolls dice. Format: `x`d`y`, ex. 2d6.", inline=False)
+    embed.set_thumbnail(url=url)
     await ctx.author.send(embed=embed)
+    return
 
 
-@help2.group(pass_context=True, aliases=["sr"])
+@help_.group(pass_context=True, aliases=["sr", "simp"])
 async def simpleroll(ctx):
+    """The help entry for `.simpleroll`."""
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
     if ctx.invoked_subcommand is None:
-        embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A), description="""Aliases:
-        `.sr`.""")
-        embed.add_field(name="`.simpleroll`", value="""Simply chooses a random number between 1 and your input.""",
-                        inline=True)
-        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+        embed = discord.Embed(title="`.simpleroll`", color=discord.Color(0xE8B52A), description="""Aliases:
+        `.sr`, `simp`.""")
+        embed.add_field(name="Function:", value="""Simply chooses a random number between 1 and your input.""",
+                        inline=False)
+        embed.set_thumbnail(url=url)
         await ctx.send(embed=embed)
+        return
     else:
         pass
 
 
 @simpleroll.command(pass_context=True, name="-pm")
 async def pm(ctx):
-    embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A), description="""Aliases:
-            `.sr`.""")
-    embed.add_field(name="`.simpleroll`", value="Simply chooses a random number between 1 and your input.", inline=True)
-    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+    """The PM'd help entry for `.simpleroll`."""
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
+    embed = discord.Embed(title="`.simpleroll`", color=discord.Color(0xE8B52A), description="""Aliases:
+            `.sr`, `simp`.""")
+    embed.add_field(name="`Function:", value="""Simply chooses a random number between 1 and your input.""",
+                    inline=False)
+    embed.set_thumbnail(url=url)
     await ctx.author.send(embed=embed)
+    return
 
 
-@help2.group(pass_context=True, name="bug")
+@help_.group(pass_context=True, name="bug")
 async def bug(ctx):
+    """The help entry for `.bug`."""
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
     if ctx.invoked_subcommand is None:
-        embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A), description="""Aliases:
-        `.b`.""")
-        embed.add_field(name="`.bug", value="Submit a bug report to the dev.", inline=True)
-        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+        embed = discord.Embed(title="`.bug`", color=discord.Color(0xE8B52A))
+        embed.add_field(name="Function:", value="Submit a bug report to the dev.", inline=False)
+        embed.set_thumbnail(url=url)
         await ctx.send(embed=embed)
+        return
     else:
         pass
 
 
 @bug.command(pass_context=True, name="-pm")
 async def pm(ctx):
-    embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A), description="""Aliases:
-            `.b`.""")
-    embed.add_field(name="`.bug", value="Submit a bug report to the dev.", inline=True)
-    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+    """The PM'd help entry for `.bug`."""
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
+    embed = discord.Embed(title="`.bug`", color=discord.Color(0xE8B52A))
+    embed.add_field(name="Function:", value="Submit a bug report to the dev.", inline=False)
+    embed.set_thumbnail(url=url)
     await ctx.author.send(embed=embed)
+    return
 
 
-@help2.group(pass_context=True, name="suggestion")
+@help_.group(pass_context=True, name="suggestion", aliases=["s", "suggest"])
 async def suggestion(ctx):
+    """The help entry for `.suggestion`."""
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
     if ctx.invoked_subcommand is None:
-        embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A), description="""Aliases:
+        embed = discord.Embed(title="`.suggestion`", color=discord.Color(0xE8B52A), description="""Aliases:
         `.s`, `.suggest`.""")
-        embed.add_field(name="`.suggestion", value="Submit a suggestion to the dev.", inline=True)
-        embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+        embed.add_field(name="Function:", value="Submit a suggestion to the dev.", inline=False)
+        embed.set_thumbnail(url=url)
         await ctx.send(embed=embed)
+        return
     else:
         pass
 
 
 @suggestion.command(pass_context=True, name="-pm")
 async def pm(ctx):
-    embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A), description="""Aliases:
-            `.s`, `.suggestion`.""")
-    embed.add_field(name="`.suggestion", value="Submit a suggestion to the dev.", inline=True)
-    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+    """The PM'd help entry for `.suggestion`."""
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
+    embed = discord.Embed(title="`.suggestion`", color=discord.Color(0xE8B52A), description="""Aliases:
+    `.s`, `.suggest`.""")
+    embed.add_field(name="Function:", value="Submit a suggestion to the dev.", inline=False)
+    embed.set_thumbnail(url=url)
     await ctx.author.send(embed=embed)
-
-# General
-
-
-@bot.command(pass_context=True, name="test", hidden=True)  # Basically, confirm that the bot is still online.
-async def test(ctx):
-    """ Confirms whether or not the bot is online, basically. """
-    await ctx.send("I work!")
+    return
 
 
-# Role
-
-
-@bot.group(pass_context=True, name="role")
-async def role(ctx):
-    """Adds or removes a role."""
-    if ctx.invoked_subcommand is None:
-        await ctx.send("Please choose a role. Valid roles: `Gamers`, `Greetings`, and `Socialists`.")
-
-
-@role.command(pass_context=True, name="greetings", aliases=["gr"])
-async def greetings(ctx):
-    """Adds or removes the Greetings role from you."""
-    greetings_role = discord.utils.get(ctx.guild.roles, name="Greetings")
-    message = ctx.message
-    if greetings_role in ctx.author.roles:
-        await ctx.author.remove_roles(greetings_role)
-        await(await ctx.send(f"Alrighty, {ctx.author.mention}. I've removed the Greetings role from you.")).delete(
-            delay=15)
-        await message.add_reaction(emoji="\N{THUMBS UP SIGN}")
-        await message.delete(delay=15)
-    else:
-        await ctx.author.add_roles(greetings_role)
-        await(await ctx.send(f"OK, {ctx.author.mention}! You're now a part of the Greetings role!")).delete(
-            delay=15)
-        await message.add_reaction(emoji="\N{THUMBS UP SIGN}")
-        await message.delete(delay=15)
-
-
-@role.command(pass_context=True, name="gamers", aliases=["ga"])
-async def gamers(ctx):
-    """Adds or removes the Gamers role from you."""
-    gamers_role = discord.utils.get(ctx.guild.roles, name="Gamers")
-    message = ctx.message
-    if gamers_role in ctx.author.roles:
-        await ctx.author.remove_roles(gamers_role)
-        await(await ctx.send(f"Alrighty, {ctx.author.mention}. I've removed the Gamers role from you.")).delete(
-            delay=15)
-        await message.add_reaction(emoji="\N{THUMBS UP SIGN}")
-        await message.delete(delay=15)
-    else:
-        await ctx.author.add_roles(gamers_role)
-        await(await ctx.send(f"OK, {ctx.author.mention}! You're now a part of the Gamers role!")).delete(
-            delay=15)
-        await message.add_reaction(emoji="\N{THUMBS UP SIGN}")
-        await message.delete(delay=15)
-
-
-@role.command(pass_context=True, name="socialists", aliases=["s"])
-async def socialists(ctx):
-    """Adds or removes the Socialists role from you."""
-    socialists_role = discord.utils.get(ctx.guild.roles, name="Socialists")
-    message = ctx.message
-    if socialists_role in ctx.author.roles:
-        await ctx.author.remove_roles(socialists_role)
-        await(await ctx.send(f"Alrighty, {ctx.author.mention}. I've removed the Socialists role from you.")).delete(
-            delay=15)
-        await message.add_reaction(emoji="\N{THUMBS UP SIGN}")
-        await message.delete(delay=15)
-    else:
-        await ctx.author.add_roles(socialists_role)
-        await(await ctx.send(f"OK, {ctx.author.mention}! You're now a part of the Socialists role!")).delete(
-            delay=15)
-        await message.add_reaction(emoji="\N{THUMBS UP SIGN}")
-        await message.delete(delay=15)
-
-
-@role.command(pass_context=True, name="turnipchamps", aliases=["t"])
-async def turnipchamps(ctx):
-    """Adds or removes the Turnipchamps role from you."""
-    turnipchamps_role = discord.utils.get(ctx.guild.roles, name="Turnipchamps")
-    message = ctx.message
-    if turnipchamps_role in ctx.author.roles:
-        await ctx.author.remove_roles(turnipchamps_role)
-        await(await ctx.send(f"Alrighty, {ctx.author.mention}. I've removed the Turnipchamps role from you.")).delete(
-            delay=15)
-        await message.add_reaction(emoji="\N{THUMBS UP SIGN}")
-        await message.delete(delay=15)
-    else:
-        await ctx.author.add_roles(turnipchamps_role)
-        await(await ctx.send(f"OK, {ctx.author.mention}! You're now a part of the Turnipchamps role!")).delete(
-            delay=15)
-        await message.add_reaction(emoji="\N{THUMBS UP SIGN}")
-        await message.delete(delay=15)
-
-
-# Fun
-
-
-# TODO
-
-
-# @bot.command(pass_context=True, name="crps", aliases=["challengerockpaperscissors"])
-# async def crps(ctx, player2: discord.User, move):
-    # embed = discord.Embed(title="A challenge!", color=discord.Color(0xe0890d), description=f"""{player2.mention}!
-    # You have been challenged to a Rock Paper Scissors match by {ctx.message.author.mention}! Do you accept?""")
-    # embed.set_thumbnail(url="""
-    # https://cdn.discordapp.com/attachments/627784999873019914/645061608976154665/challenger.png""")
-    # embed.set_footer(text="""If you do, simply say what move you wish to make! If not, just reply "no".""")
-    # embed2 = await ctx.send(embed=embed)
-    # await embed2.add_reaction(emoji="\N{THUMBS UP SIGN}")
-    # await ctx.message.delete()
-#
-    # def check(user):
-    #     return user == player2
-#
-    # await bot.wait_for("reaction_add", check=check)
-    # await ctx.send(f"{player2.mention}, {move}")
+# FUN
 
 
 @bot.command(pass_context=True, name="eightball", aliases=["8", "8ball"])
@@ -562,6 +523,7 @@ async def eightball(ctx):
     answer = random.choice(["Yes.", "No.", "Possibly.", "Not likely.", "It's up to you.", "It's out of your control.",
                             "I can't say.", "That is beyond the scope of my programming."])
     await ctx.send(answer)
+    return
 
 
 @bot.group(pass_context=True, name="emoji", aliases=["e", "emote"])
@@ -569,6 +531,7 @@ async def emoji(ctx):
     """Prints a specific emoji."""
     if ctx.invoked_subcommand is None:
         await ctx.send("Please enter a valid emoji. Valid emojis: `monkas`, `pogchamp`, `pikachu`.")
+        return
     else:
         return
 
@@ -577,18 +540,21 @@ async def emoji(ctx):
 async def pogchamp(ctx):
     # await ctx.send(f"{ctx.author.mention} says: <:pogchamp:636572402054201368>") ### Do not delete this.
     await ctx.send("<:pogchamp:636572402054201368>")
+    return
 
 
 @emoji.command(pass_context=True, name="pikachu", aliases=["pika", "pi"])
 async def pikachu(ctx):
     # await ctx.send(f"{ctx.author.mention} says: <:pika:636581375612289024>") ### Do not delete this.
     await ctx.send("<:pika:636581375612289024>")
+    return
 
 
 @emoji.command(pass_context=True, name="monkas", aliases=["m", "monkaS", "monka"])
 async def monkas(ctx):
     # await ctx.send(f"{ctx.author.mention} says: <:monkas:645002369091764284>") ### Do not delete this.
     await ctx.send("<:monkas:636575202217689099>")
+    return
 
 
 @bot.group(pass_context=True, name="meme", aliases=["m"])
@@ -596,6 +562,7 @@ async def meme(ctx):
     """Prints a specific meme."""
     if ctx.invoked_subcommand is None:
         await ctx.send("Please enter a valid meme. Valid memes: `chime`, `typo`, `wig`, `wig2`.")
+        return
     else:
         return
 
@@ -605,6 +572,7 @@ async def chime(ctx):
     """Sends the "Oh? You're a chime?" meme."""
     image = "assets/chime.jpeg"
     await ctx.send(file=discord.File(image))
+    return
 
 
 @meme.command(pass_context=True, name="typo", aliases=["t"])
@@ -612,6 +580,7 @@ async def typo(ctx):
     """Sends the "TYPO! In the Groupchat" meme."""
     image = "assets/typo.jpg"
     await ctx.send(file=discord.File(image))
+    return
 
 
 @meme.command(pass_context=True, name="wig", aliases=["w"])
@@ -619,6 +588,7 @@ async def wig(ctx):
     """Sends the "Wig" meme."""
     image = "assets/wig.jpg"
     await ctx.send(file=discord.File(image))
+    return
 
 
 @meme.command(pass_context=True, name="wig2", aliases=["w2"])
@@ -626,6 +596,7 @@ async def wig2(ctx):
     """Y'all ready?"""
     video = "assets/wig.mp4"
     await ctx.send(file=discord.File(video))
+    return
 
 
 @bot.command(pass_context=True, name="rps", aliases=["rockpaperscissors"])
@@ -646,30 +617,39 @@ async def rps(ctx, move):
         if player_move == "rock" and bot_move == "rock":
             embed = discord.Embed(title=title, color=draw_color, description=f"I got Rock... {draw_desc}")
             await ctx.send(embed=embed)
+            return
         elif player_move == "rock" and bot_move == "paper":
             embed = discord.Embed(title=title, color=lose_color, description=f"I got Paper... {lose_desc}")
             await ctx.send(embed=embed)
+            return
         elif player_move == "rock" and bot_move == "scissors":
             embed = discord.Embed(title=title, color=win_color, description=f"I got Scissors... {win_desc}")
             await ctx.send(embed=embed)
+            return
         elif player_move == "paper" and bot_move == "rock":
             embed = discord.Embed(title=title, color=win_color, description=f"I got Rock... {win_desc}")
             await ctx.send(embed=embed)
+            return
         elif player_move == "paper" and bot_move == "paper":
             embed = discord.Embed(title=title, color=draw_color, description=f"I got Paper... {draw_desc}")
             await ctx.send(embed=embed)
+            return
         elif player_move == "paper" and bot_move == "scissors":
             embed = discord.Embed(title=title, color=lose_color, description=f"I got Scissors... {lose_desc}")
             await ctx.send(embed=embed)
+            return
         elif player_move == "scissors" and bot_move == "rock":
             embed = discord.Embed(title=title, color=lose_color, description=f"I got Rock... {lose_desc}")
             await ctx.send(embed=embed)
+            return
         elif player_move == "scissors" and bot_move == "paper":
             embed = discord.Embed(title=title, color=win_color, description=f"I got Paper... {win_desc}")
             await ctx.send(embed=embed)
+            return
         elif player_move == "scissors" and bot_move == "scissors":
             embed = discord.Embed(title=title, color=draw_color, description=f"I got Scissors... {draw_desc}")
             await ctx.send(embed=embed)
+            return
 
 
 @bot.command(pass_context=True, name="roll", aliases=["r"])
@@ -682,6 +662,7 @@ async def roll(ctx, *args):
     resultstr = []
     hma = int(setup.group("howmany"))
     hmu = int(setup.group("howmuch"))
+    url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
     if setup:
         if hma >= 100:
             await ctx.send("Do you... really need to roll so many dice..?")
@@ -705,21 +686,22 @@ async def roll(ctx, *args):
             total = sum(result)
             embed = discord.Embed(title=f"Rolling {hma}d{hmu}...", color=discord.Color(0xE8B52A))
             embed.add_field(name="Result:", value=f"{p.join(resultstr)} = **{str(total)}**")
-            embed.set_thumbnail(
-                url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+            embed.set_thumbnail(url=url)
             await ctx.send(embed=embed)
+            return
         elif hma == 1:
             for x in range(hma):
                 value = random.randint(1, hmu)
                 result.append(int(value))
                 resultstr.append(str(value))
             embed = discord.Embed(title=f"Rolling {hma}d{hmu}...", color=discord.Color(0xE8B52A))
-            embed.set_thumbnail(
-                url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
+            embed.set_thumbnail(url=url)
             embed.add_field(name="Result:", value=f"{a.join(resultstr)}")
             await ctx.send(embed=embed)
+            return
     else:
         await ctx.send("Please use a valid dice format. Example: `2d10`.")
+        return
 
 
 @bot.command(pass_context=True, name="simpleroll", aliases=["sr", "simp"])
@@ -732,21 +714,50 @@ async def simpleroll(ctx, *, howmuch: int):
         for x in range(1):
             result = random.randint(1, howmuch)
             await ctx.send(f"{ctx.author.mention}: {result}.")
+            return
 
 
-# Meta
+# GENERAL
+
+
+@bot.command(pass_context=True, name="test")  # Basically, confirm that the bot is still online.
+async def test(ctx):
+    """Confirms whether or not the bot is online, basically."""
+    await ctx.send("I work!")
+    return
+
+
+# META
 
 
 @bot.command(pass_context=True, name="bug")
 async def bug(ctx, bugname, *args):
     """Submits a bug to the dev."""
+    avatar = ctx.message.author.avatar_url
     channel = bot.get_channel(645409157217910794)
-    await ctx.send("Alrighty! I'll make sure your report gets off to the dev right away!")
-    await channel.send(f"Hey, boss! {ctx.author} wanted me to let you know about this!")
-    embed = discord.Embed(title="Bug Report", color=discord.Color(0x6e0d25))
-    embed.add_field(name=bugname, value=" ".join(args))
-    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
-    await channel.send(embed=embed)
+    await ctx.send(f"Thanks for your bug report, {ctx.author}! Does this bug report look right?")
+    embed = discord.Embed(title=f"Bug Report: {bugname}", color=discord.Color(0x057a51))
+    embed.add_field(name=f"{ctx.author} reports:", value=" ".join(args))
+    embed.set_thumbnail(url=avatar)
+    embed.set_footer(text=f"""If this looks right, give it a thumbs up! If not, redo the bug report.
+If the bug report name got cut off, redo the bug report with quotes surrounding the name!""")
+    await ctx.send(embed=embed)
+
+    def check(reaction, user):
+        return user == ctx.message.author and str(reaction.emoji) == "👍"
+
+    try:
+        reaction, user = await bot.wait_for("reaction_add", timeout=60.0, check=check)
+    except asyncio.TimeoutError:
+        await ctx.send("Bug report not sent. Awaited 👍, got nothing.")
+        return
+    else:
+        await ctx.send("OK! I've sent off your bug report.")
+        embed2 = discord.Embed(title=f"Bug Report: {bugname}", color=discord.Color(0x057a51))
+        embed2.add_field(name=f"{ctx.author} reports:", value=" ".join(args))
+        embed2.set_thumbnail(url=avatar)
+        await channel.send(embed=embed2)
+        return
 
 
 @bot.command(pass_context=True, name="github", aliases=["git", "g"])
@@ -754,21 +765,134 @@ async def github(ctx):
     """Prints a link to Batty Bot's github page."""
     await ctx.send(f"""Fancy yourself a coder? Feel like submitting your very own feature for Batty Bot?
 Contribute to the Github here! https://github.com/Dusk-Argentum/batty_bot""")
+    return
 
 
 @bot.command(pass_context=True, name="suggestion", aliases=["suggest", "s"])
 async def suggestion(ctx, suggestionname, *args):
     """Submits a suggestion to the dev."""
-    channel = bot.get_channel(645409157217910794)
-    await ctx.send("Alrighty! I'll make sure your suggestion gets off to the dev right away!")
-    await channel.send(f"Hey, boss! {ctx.author} had an idea!")
-    embed = discord.Embed(title="Suggestion", color=discord.Color(0x057a51))
-    embed.add_field(name=suggestionname, value=" ".join(args))
-    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/348897378062827520/640434972720758784/bat.jpg")
-    await channel.send(embed=embed)
+    avatar = ctx.message.author.avatar_url
+    channel = bot.get_channel(645409183348424706)
+    await ctx.send(f"Thanks for your suggestion, {ctx.author}! Does this suggestion look right?")
+    embed = discord.Embed(title=f"Suggestion: {suggestionname}", color=discord.Color(0x057a51))
+    embed.add_field(name=f"{ctx.author} says:", value=" ".join(args))
+    embed.set_thumbnail(url=avatar)
+    embed.set_footer(text=f"""If this looks right, give it a thumbs up! If not, redo the suggestion.
+If the suggestion name got cut off, redo the suggestion with quotes surrounding the name!""")
+    await ctx.send(embed=embed)
+
+    def check(reaction, user):
+        return user == ctx.message.author and str(reaction.emoji) == "👍"
+
+    try:
+        reaction, user = await bot.wait_for("reaction_add", timeout=60.0, check=check)
+    except asyncio.TimeoutError:
+        await ctx.send("Suggestion not sent. Awaited 👍, got nothing.")
+        return
+    else:
+        await ctx.send("OK! I've sent off your suggestion.")
+        embed2 = discord.Embed(title=f"Suggestion: {suggestionname}", color=discord.Color(0x057a51))
+        embed2.add_field(name=f"{ctx.author} requests:", value=" ".join(args))
+        embed2.set_thumbnail(url=avatar)
+        await channel.send(embed=embed2)
+        return
+
+# ROLE
 
 
-# Moderation (WIP)
+@bot.group(pass_context=True, name="role")
+async def role(ctx):
+    """Adds or removes a role."""
+    if ctx.invoked_subcommand is None:
+        await ctx.send("Please choose a role. Valid roles: `Gamers`, `Greetings`, and `Socialists`.")
+        return
+
+
+@role.command(pass_context=True, name="greetings", aliases=["gr"])
+async def greetings(ctx):
+    """Adds or removes the Greetings role from you."""
+    greetings_role = discord.utils.get(ctx.guild.roles, name="Greetings")
+    message = ctx.message
+    if greetings_role in ctx.author.roles:
+        await ctx.author.remove_roles(greetings_role)
+        await(await ctx.send(f"Alrighty, {ctx.author.mention}. I've removed the Greetings role from you.")).delete(
+            delay=15)
+        await message.add_reaction(emoji="\N{THUMBS UP SIGN}")
+        await message.delete(delay=15)
+        return
+    else:
+        await ctx.author.add_roles(greetings_role)
+        await(await ctx.send(f"OK, {ctx.author.mention}! You're now a part of the Greetings role!")).delete(
+            delay=15)
+        await message.add_reaction(emoji="\N{THUMBS UP SIGN}")
+        await message.delete(delay=15)
+        return
+
+
+@role.command(pass_context=True, name="gamers", aliases=["ga"])
+async def gamers(ctx):
+    """Adds or removes the Gamers role from you."""
+    gamers_role = discord.utils.get(ctx.guild.roles, name="Gamers")
+    message = ctx.message
+    if gamers_role in ctx.author.roles:
+        await ctx.author.remove_roles(gamers_role)
+        await(await ctx.send(f"Alrighty, {ctx.author.mention}. I've removed the Gamers role from you.")).delete(
+            delay=15)
+        await message.add_reaction(emoji="\N{THUMBS UP SIGN}")
+        await message.delete(delay=15)
+        return
+    else:
+        await ctx.author.add_roles(gamers_role)
+        await(await ctx.send(f"OK, {ctx.author.mention}! You're now a part of the Gamers role!")).delete(
+            delay=15)
+        await message.add_reaction(emoji="\N{THUMBS UP SIGN}")
+        await message.delete(delay=15)
+        return
+
+
+@role.command(pass_context=True, name="socialists", aliases=["s"])
+async def socialists(ctx):
+    """Adds or removes the Socialists role from you."""
+    socialists_role = discord.utils.get(ctx.guild.roles, name="Socialists")
+    message = ctx.message
+    if socialists_role in ctx.author.roles:
+        await ctx.author.remove_roles(socialists_role)
+        await(await ctx.send(f"Alrighty, {ctx.author.mention}. I've removed the Socialists role from you.")).delete(
+            delay=15)
+        await message.add_reaction(emoji="\N{THUMBS UP SIGN}")
+        await message.delete(delay=15)
+        return
+    else:
+        await ctx.author.add_roles(socialists_role)
+        await(await ctx.send(f"OK, {ctx.author.mention}! You're now a part of the Socialists role!")).delete(
+            delay=15)
+        await message.add_reaction(emoji="\N{THUMBS UP SIGN}")
+        await message.delete(delay=15)
+        return
+
+
+@role.command(pass_context=True, name="turnipchamps", aliases=["t"])
+async def turnipchamps(ctx):
+    """Adds or removes the Turnipchamps role from you."""
+    turnipchamps_role = discord.utils.get(ctx.guild.roles, name="Turnipchamps")
+    message = ctx.message
+    if turnipchamps_role in ctx.author.roles:
+        await ctx.author.remove_roles(turnipchamps_role)
+        await(await ctx.send(f"Alrighty, {ctx.author.mention}. I've removed the Turnipchamps role from you.")).delete(
+            delay=15)
+        await message.add_reaction(emoji="\N{THUMBS UP SIGN}")
+        await message.delete(delay=15)
+        return
+    else:
+        await ctx.author.add_roles(turnipchamps_role)
+        await(await ctx.send(f"OK, {ctx.author.mention}! You're now a part of the Turnipchamps role!")).delete(
+            delay=15)
+        await message.add_reaction(emoji="\N{THUMBS UP SIGN}")
+        await message.delete(delay=15)
+        return
+
+
+# MODERATION (INTERNAL)
 
 
 @bot.command(pass_context=True, name="ban", aliases=["b"])
@@ -789,6 +913,7 @@ async def ban(ctx, member: discord.Member = None, *, reason: str = "Reasons."):
         else:
             await cmd.guild.ban(member, reason=reason, delete_message_days=1)
             await cmd.add_reaction("👍")  # TODO: Make the successful running of this command log to a log channel.
+            return
     else:
         await cmduser.send(f"You do not have permission to run that command! Context: `.ban`.")
         await cmd.delete()
@@ -813,6 +938,7 @@ async def forceban(ctx, member_id: int = None, *, reason: str = "Forcefully bann
         else:
             await cmd.guild.ban(discord.Object(id=member_id), reason=reason, delete_message_days=1)
             await cmd.add_reaction("👍")  # TODO: Make the successful running of this command log to a log channel.
+            return
     else:
         await cmduser.send(f"You do not have permission to run that command! Context: `.forceban`.")
         await cmd.delete()
@@ -830,12 +956,14 @@ async def kick(ctx, member: discord.Member = None, *, reason: str = None):
     if moderator_role in user.roles:
         if member is None:
             await cmduser.send(f"Invalid member. To select a member, @mention them.")
+            return
         elif moderator_role in member.roles:
             await cmduser.send(f"You cannot punish that user! They are a Moderator.")
             return
         else:
             await cmd.guild.kick(member, reason=reason)
-            await cmd.add_reaction("👍")  # TODO: Make the successful running of this command log to a log channel.:
+            await cmd.add_reaction("👍")  # TODO: Make the successful running of this command log to a log channel.
+            return
     else:
         await cmduser.send(f"You do not have permission to run that command! Context: `.kick`.")
         await cmd.delete()
@@ -859,6 +987,7 @@ async def purge_messages(ctx, member: discord.Member = None, amount: int = None)
             return message.author == member
         await cmd.channel.purge(limit=int(amount), check=is_member)
         await cmd.add_reaction("👍")
+        return
     else:
         await cmduser.send(f"You do not have permission to run that command! Context: `.purge_messages`.")
         await cmd.delete()
@@ -888,6 +1017,7 @@ async def unban(ctx, member_id: int = None):
             else:
                 await cmd.guild.unban(to_unban)
                 await cmd.add_reaction("👍")  # TODO: Make the successful running of this command log to a log channel.
+                return
     else:
         await cmduser.send(f"You do not have permission to run that command! Context: `.unban`.")
         await cmd.delete()
@@ -905,12 +1035,12 @@ async def unban(ctx, member_id: int = None):
     # if moderator_role in user.roles:
         # bot.counter = {}
         # if member not in bot.counter:
-            # bot.counter[member] = 0
+        # bot.counter[member] = 0
         # await ctx.channel.send(f"I have given a warning to {member}. Reason: {reason}.")
         # if bot.counter[member] == 0:
-            # member_warn_count = sum([1], bot.counter[member])
+        # member_warn_count = sum([1], bot.counter[member])
         # if member_warn_count == 1:
-            # total_warn_count = sum([1], member_warn_count)
+        # total_warn_count = sum([1], member_warn_count)
 
         # await ctx.channel.send(f"The amount of warnings they have now is {str(warn_count)}.")
         # return
@@ -923,7 +1053,7 @@ async def unban(ctx, member_id: int = None):
 # Owner Only
 
 
-@bot.command(pass_context=True, name="changenicknick", aliases=["chn", "n", "nick"])
+@bot.command(pass_context=True, name="changenick", aliases=["chn", "n", "nick"])
 async def changenick(ctx, *args):
     """Changes the bot's nickname on the server the command is invoked on."""
     cmd = ctx.message
@@ -936,6 +1066,7 @@ async def changenick(ctx, *args):
         name = " ".join(args)
         await ctx.guild.get_member(bot.user.id).edit(nick=name)
         await cmd.add_reaction("👍")
+        return
 
 
 @bot.group(pass_context=True, name="changepresence", aliases=["chp"])
@@ -950,8 +1081,10 @@ async def changepresence(ctx, *, presence: str = None):
     else:
         if presence is None:
             await bot.change_presence(status=discord.Status.online, activity=discord.Game("w/ batty friends! | .help"))
+            return
         else:
             await bot.change_presence(status=discord.Status.online, activity=discord.Game(f"{presence} | .help"))
+            return
 
 
 @bot.command(pass_context=True)
@@ -966,6 +1099,7 @@ async def de(ctx, *args):
     else:
         await ctx.send(" ".join(args))
         await cmd.delete()
+        return
 
 
 @bot.command(pass_context=True)
@@ -981,6 +1115,7 @@ async def invite(ctx):
     else:
         await cmduser.send(f"{invitelink}")
         await cmd.add_reaction("👍")
+        return
 
 
 @bot.command(pass_context=True)
@@ -997,11 +1132,13 @@ async def leave(ctx, server: int = None):
             to_leave = bot.get_guild(ctx.guild.id)
             await cmduser.send(f"I have left {cmd.guild.name} ({cmd.guild.id}).")
             await to_leave.leave()
+            return
         else:
             to_leave = bot.get_guild(server)
             await cmduser.send(f"I have left {server}.")
             # await cmduser.send(f"I have left {cmd.guild.name} ({server}).") ### To fix to use name where name is
             await to_leave.leave()
+            return
 
 
 @bot.command(pass_context=True)
@@ -1018,9 +1155,28 @@ async def purge(ctx, amount):
             return message.author.id == 635484274023465000
         await ctx.channel.purge(limit=int(amount), check=is_batty)
         await ctx.message.add_reaction("👍")
+        return
 
 
 # Unfinished or For Testing
+
+
+# @bot.command(pass_context=True, name="crps", aliases=["challengerockpaperscissors"])
+# async def crps(ctx, player2: discord.User, move):
+    # embed = discord.Embed(title="A challenge!", color=discord.Color(0xe0890d), description=f"""{player2.mention}!
+    # You have been challenged to a Rock Paper Scissors match by {ctx.message.author.mention}! Do you accept?""")
+    # embed.set_thumbnail(url="""
+    # https://cdn.discordapp.com/attachments/627784999873019914/645061608976154665/challenger.png""")
+    # embed.set_footer(text="""If you do, simply say what move you wish to make! If not, just reply "no".""")
+    # embed2 = await ctx.send(embed=embed)
+    # await embed2.add_reaction(emoji="\N{THUMBS UP SIGN}")
+    # await ctx.message.delete()
+#
+    # def check(user):
+    #     return user == player2
+#
+    # await bot.wait_for("reaction_add", check=check)
+    # await ctx.send(f"{player2.mention}, {move}")
 
 
 # On Message
@@ -1034,6 +1190,7 @@ async def on_message(message):
     cnt = message.content.lower()
     two = re.search(r"(2|two)!$", cnt)
     donotemote = re.search(r":.*?(pog|monka).*?:", cnt)
+    donotemote2 = re.search(r"^(\.)e", cnt)
     monka = "monka"
     pog = "pog"
     if message.author.id != batty:
@@ -1045,6 +1202,8 @@ async def on_message(message):
         if monka or pog in cnt:
             if donotemote:
                 return
+            if donotemote2:
+                pass
             else:
                 if monka in cnt:
                     await ctx.send("<:monkas:636575202217689099>")
@@ -1060,7 +1219,7 @@ async def on_message(message):
         if message.author.id == 97153790897045504 and message.content.startswith("Batty!"):
             await ctx.message.add_reaction("👍")
         if message.author.id == 461265486655520788 and message.channel.id != 414890945243512842:
-            await ctx.message.delete()  # He will be allowed to send messages in botshop once he has atoned.
+            await ctx.message.delete()
         await bot.process_commands(message)
 
 
@@ -1069,11 +1228,9 @@ async def on_message(message):
 # TODO: MODERATION TODO
 # ZHU WISHLIST: Warn logging, temp muting/banning, case tracking per user, username/nick tracking, raid mode
 
-# TODO: GENERAL TODO
-# Replace all instances of batty's old avi with new avi
+# GENERAL TODO:
 
 # TODO: Later
-# TODO: Challenge RPS
 # TODO: Modifiers on roll?
 
 # TODO: Undefined
