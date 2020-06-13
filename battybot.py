@@ -10,6 +10,8 @@ from discord.ext.commands import CommandNotFound
 import random
 import re
 
+import asyncio
+
 
 PREFIX = "."
 DESCRIPTION = "A bot made custom for Gazia's Bat Den. Just your typical chat bot! Made by Dusk Argentum#6530."
@@ -736,7 +738,7 @@ async def bug(ctx, bugname, *args):
     avatar = ctx.message.author.avatar_url
     channel = bot.get_channel(645409157217910794)
     await ctx.send(f"Thanks for your bug report, {ctx.author}! Does this bug report look right?")
-    embed = discord.Embed(title=f"Bug Report: {bugname}", color=discord.Color(0x057a51))
+    embed = discord.Embed(title=f"Bug Report: {bugname}", color=discord.Color(0xa8411e))
     embed.add_field(name=f"{ctx.author} reports:", value=" ".join(args))
     embed.set_thumbnail(url=avatar)
     embed.set_footer(text=f"""If this looks right, give it a thumbs up! If not, redo the bug report.
@@ -753,7 +755,7 @@ If the bug report name got cut off, redo the bug report with quotes surrounding 
         return
     else:
         await ctx.send("OK! I've sent off your bug report.")
-        embed2 = discord.Embed(title=f"Bug Report: {bugname}", color=discord.Color(0x057a51))
+        embed2 = discord.Embed(title=f"Bug Report: {bugname}", color=discord.Color(0xa8411e))
         embed2.add_field(name=f"{ctx.author} reports:", value=" ".join(args))
         embed2.set_thumbnail(url=avatar)
         await channel.send(embed=embed2)
@@ -896,13 +898,15 @@ async def turnipchamps(ctx):
 
 
 @bot.command(pass_context=True, name="ban", aliases=["b"])
-async def ban(ctx, member: discord.Member = None, *, reason: str = "Reasons."):
+async def ban(ctx, member: discord.Member = None, *, reason: str = "Unspecified reason."):
     """Bans a user from a server via @mention."""
     cmd = ctx.message
     cmduser = ctx.message.author
     server = bot.get_guild(ctx.guild.id)
     user = server.get_member(ctx.author.id)
     moderator_role = discord.utils.get(server.roles, name="Moderator")
+    mod_log_channel = discord.utils.get(server.channels, name="mod_log")
+    url = member.avatar_url
     if moderator_role in user.roles:
         if member is None:
             await cmduser.send(f"Invalid member. To select a member, @mention them.")
@@ -912,8 +916,20 @@ async def ban(ctx, member: discord.Member = None, *, reason: str = "Reasons."):
             return
         else:
             await cmd.guild.ban(member, reason=reason, delete_message_days=1)
-            await cmd.add_reaction("👍")  # TODO: Make the successful running of this command log to a log channel.
-            return
+            await cmd.add_reaction("👍")
+            if mod_log_channel is None:
+                await cmduser.send(f"""Action successfully completed. To enable moderation command logging, \
+please create a channel named `#mod_log`.""")
+                return
+            else:
+                embed = discord.Embed(title=f"Banhammer swung.", color=discord.Color(0xa81707))
+                embed.add_field(name=f"Responsible Mod:", value=f"{cmduser.mention} ({cmduser.id})", inline=True)
+                embed.add_field(name=f"Action Taken On:", value=f"{member.mention} ({member.id})", inline=True)
+                embed.add_field(name=f"Reason:", value=f"{reason}", inline=False)
+                embed.set_thumbnail(url=url)
+                await mod_log_channel.send(embed=embed)
+                await cmd.add_reaction("📜")
+                return
     else:
         await cmduser.send(f"You do not have permission to run that command! Context: `.ban`.")
         await cmd.delete()
@@ -921,13 +937,15 @@ async def ban(ctx, member: discord.Member = None, *, reason: str = "Reasons."):
 
 
 @bot.command(pass_context=True, name="forceban", aliases=["fb"])
-async def forceban(ctx, member_id: int = None, *, reason: str = "Forcefully banned for reasons."):
+async def forceban(ctx, member_id: int = None, *, reason: str = "Unspecified reason."):
     """Forcefully bans a user via ID."""
     cmd = ctx.message
     cmduser = ctx.message.author
     server = bot.get_guild(ctx.guild.id)
     user = server.get_member(ctx.author.id)
     moderator_role = discord.utils.get(server.roles, name="Moderator")
+    mod_log_channel = discord.utils.get(server.channels, name="mod_log")
+    url = ctx.author.avatar_url
     if moderator_role in user.roles:
         if member_id is None:
             await cmduser.send(f"Invalid member. To select a member, use their ID.")
@@ -937,8 +955,20 @@ async def forceban(ctx, member_id: int = None, *, reason: str = "Forcefully bann
             return
         else:
             await cmd.guild.ban(discord.Object(id=member_id), reason=reason, delete_message_days=1)
-            await cmd.add_reaction("👍")  # TODO: Make the successful running of this command log to a log channel.
-            return
+            await cmd.add_reaction("👍")
+            if mod_log_channel is None:
+                await cmduser.send(f"""Action successfully completed. To enable moderation command logging, \
+please create a channel named `#mod_log`.""")
+                return
+            else:
+                embed = discord.Embed(title=f"Banhammer swung with force.", color=discord.Color(0x95a5a6))
+                embed.add_field(name=f"Responsible Mod:", value=f"{cmduser.mention} ({cmduser.id})", inline=True)
+                embed.add_field(name=f"Action Taken On:", value=f"{member_id}", inline=True)
+                embed.add_field(name=f"Reason:", value=f"{reason}", inline=False)
+                embed.set_thumbnail(url=url)
+                await mod_log_channel.send(embed=embed)
+                await cmd.add_reaction("📜")
+                return
     else:
         await cmduser.send(f"You do not have permission to run that command! Context: `.forceban`.")
         await cmd.delete()
@@ -946,13 +976,15 @@ async def forceban(ctx, member_id: int = None, *, reason: str = "Forcefully bann
 
 
 @bot.command(pass_context=True, name="kick", aliases=["k"])
-async def kick(ctx, member: discord.Member = None, *, reason: str = None):
+async def kick(ctx, member: discord.Member = None, *, reason: str = "Unspecified reason."):
     """Kicks a user from a server via @mention."""
     cmd = ctx.message
     cmduser = ctx.message.author
     server = bot.get_guild(ctx.guild.id)
     user = server.get_member(ctx.author.id)
     moderator_role = discord.utils.get(server.roles, name="Moderator")
+    mod_log_channel = discord.utils.get(server.channels, name="mod_log")
+    url = member.avatar_url
     if moderator_role in user.roles:
         if member is None:
             await cmduser.send(f"Invalid member. To select a member, @mention them.")
@@ -962,46 +994,187 @@ async def kick(ctx, member: discord.Member = None, *, reason: str = None):
             return
         else:
             await cmd.guild.kick(member, reason=reason)
-            await cmd.add_reaction("👍")  # TODO: Make the successful running of this command log to a log channel.
-            return
+            await cmd.add_reaction("👍")
+            if mod_log_channel is None:
+                await cmduser.send(f"""Action successfully completed. To enable moderation command logging, \
+please create a channel named `#mod_log`.""")
+                return
+            else:
+                embed = discord.Embed(title=f"Kick performed.", color=discord.Color(0x95a5a6))
+                embed.add_field(name=f"Responsible Mod:", value=f"{cmduser.mention} ({cmduser.id})", inline=True)
+                embed.add_field(name=f"Action Taken On:", value=f"{member.mention} ({member.id})", inline=True)
+                embed.add_field(name=f"Reason:", value=f"{reason}", inline=False)
+                embed.set_thumbnail(url=url)
+                await mod_log_channel.send(embed=embed)
+                await cmd.add_reaction("📜")
+                return
     else:
         await cmduser.send(f"You do not have permission to run that command! Context: `.kick`.")
         await cmd.delete()
         return
 
 
+@bot.command(pass_context=True, name="mute", aliases=["mu"])  # TODO ON ALL MUTES: Create role/give proper permissions
+async def mute(ctx, member: discord.Member = None, *, reason: str = "Unspecified reason."):
+    """Mutes a member permanently."""  # if no role named "Muted" exists
+    cmd = ctx.message
+    cmduser = ctx.message.author
+    server = bot.get_guild(ctx.guild.id)
+    user = server.get_member(ctx.author.id)
+    moderator_role = discord.utils.get(server.roles, name="Moderator")
+    muted_role = discord.utils.get(server.roles, name="Muted")
+    mod_log_channel = discord.utils.get(server.channels, name="mod_log")
+    url = member.avatar_url
+    if moderator_role in user.roles:
+        if member is None:
+            await cmduser.send(f"Invalid member. To select a member, @mention them.")
+            return
+        elif muted_role is None:
+            await cmduser.send(f"""The `Muted` role does not exist! Please create a role named `Muted`, \
+and give it the proper permissions for this function to work properly.""")
+            return
+        elif moderator_role in member.roles:
+            await cmduser.send(f"You cannot punish that user! They are a Moderator.")
+            return
+        else:
+            if muted_role in member.roles:
+                await cmduser.send("That member is already muted! Use `.unmute` to unmute them.")
+                return
+            else:
+                await member.add_roles(muted_role)
+                await cmd.add_reaction("👍")
+                if mod_log_channel is None:
+                    await cmduser.send(f"""Action successfully completed. To enable moderation command logging, \
+please create a channel named `#mod_log`.""")
+                    return
+                else:
+                    embed = discord.Embed(title=f"Mute created.", color=discord.Color(0x95a5a6))
+                    embed.add_field(name=f"Responsible Mod:", value=f"{cmduser.mention} ({cmduser.id})", inline=True)
+                    embed.add_field(name=f"Action Taken On:", value=f"{member.mention} ({member.id})", inline=True)
+                    embed.add_field(name=f"Reason:", value=f"{reason}", inline=False)
+                    embed.set_thumbnail(url=url)
+                    await mod_log_channel.send(embed=embed)
+                    await cmd.add_reaction("📜")
+                    return
+    else:
+        await cmduser.send(f"You do not have permission to run that command! Context: `.unmute`.")
+        await cmd.delete()
+        return
+
+
 @bot.command(pass_context=True, name="purge_messages", aliases=["pm"])
-async def purge_messages(ctx, member: discord.Member = None, amount: int = None):
+async def purge_messages(ctx, member: discord.Member = None, amount: int = 1, *,
+                         reason: str = "Unspecified reason."):
     """Searches through `amount` messages in channel in which command was invoked, deleting messages from `member`."""
     cmd = ctx.message
     cmduser = ctx.message.author
     server = bot.get_guild(ctx.guild.id)
     user = server.get_member(ctx.author.id)
     moderator_role = discord.utils.get(server.roles, name="Moderator")
+    mod_log_channel = discord.utils.get(server.channels, name="mod_log")
+    url = member.avatar_url
     if moderator_role in user.roles:
-        if moderator_role in member.roles:
+        if member is None:
+            await cmduser.send(f"Invalid member. To select a member, @mention them.")
+            return
+        elif moderator_role in member.roles:
             await cmduser.send(f"You cannot punish that user! They are a Moderator.")
             return
-
-        def is_member(message):
-            return message.author == member
-        await cmd.channel.purge(limit=int(amount), check=is_member)
-        await cmd.add_reaction("👍")
-        return
+        else:
+            if amount < 1:
+                await cmduser.send(f"Invalid amount. Amount must be a positive integer over 0.")
+                return
+            else:
+                def is_member(message):
+                    return message.author == member
+                await cmd.channel.purge(limit=int(amount), check=is_member)
+                await cmd.add_reaction("👍")
+                if mod_log_channel is None:
+                    await cmduser.send(f"""Action successfully completed. To enable moderation command logging, \
+please create a channel named `#mod_log`.""")
+                    return
+                else:
+                    embed = discord.Embed(title=f"Messages purged.", color=discord.Color(0x95a5a6))
+                    embed.add_field(name=f"Responsible Mod:", value=f"{cmduser.mention} ({cmduser.id})", inline=True)
+                    embed.add_field(name=f"Action Taken On:", value=f"{member.mention} ({member.id})", inline=True)
+                    embed.add_field(name=f"Amount:", value=f"{amount}", inline=True)
+                    embed.add_field(name=f"Reason:", value=f"{reason}", inline=False)
+                    embed.set_thumbnail(url=url)
+                    await mod_log_channel.send(embed=embed)
+                    await cmd.add_reaction("📜")
+                    return
     else:
         await cmduser.send(f"You do not have permission to run that command! Context: `.purge_messages`.")
         await cmd.delete()
         return
 
 
+@bot.command(pass_context=True, name="tempmute", aliases=["tm"])  # discord.utils.sleep_until
+async def tempmute(ctx, member: discord.Member = None, duration: int = 1, *, reason: str = "Unspecified reason."):
+    """Temporarily mutes a member for the duration in minutes."""  # Do research on sleep_until!
+    """Note: For now, member remains muted if bot is restarted before duration expires. Use `.unmute`."""
+    cmd = ctx.message
+    cmduser = ctx.message.author
+    server = bot.get_guild(ctx.guild.id)
+    user = server.get_member(ctx.author.id)
+    moderator_role = discord.utils.get(server.roles, name="Moderator")
+    muted_role = discord.utils.get(server.roles, name="Muted")
+    mute_duration = duration * 60
+    mod_log_channel = discord.utils.get(server.channels, name="mod_log")
+    url = member.avatar_url
+    if moderator_role in user.roles:
+        if member is None:
+            await cmduser.send(f"Invalid member. To select a member, @mention them.")
+            return
+        elif moderator_role in member.roles:
+            await cmduser.send(f"You cannot punish that user! They are a Moderator.")
+            return
+        else:
+            if muted_role is None:
+                await cmduser.send(f"""The `Muted` role does not exist! Please create a role named `Muted`, \
+and give it the proper permissions for this function to work properly.""")
+                return
+            elif muted_role in member.roles:
+                await cmduser.send(f"That member is already muted! Use `.unmute` to unmute them.")
+                return
+            else:
+                await member.add_roles(muted_role)
+                await cmd.add_reaction("👍")
+                if mod_log_channel is None:
+                    await cmduser.send(f"""Action successfully completed. To enable moderation command logging, \
+please create a channel named `#mod_log`.""")
+                    return
+                else:
+                    embed = discord.Embed(title=f"Temporary mute created.", color=discord.Color(0x95a5a6))
+                    embed.add_field(name=f"Responsible Mod:", value=f"{cmduser.mention} ({cmduser.id})", inline=True)
+                    embed.add_field(name=f"Action Taken On:", value=f"{member.mention} ({member.id})", inline=True)
+                    embed.add_field(name=f"Duration:`*`", value=f"{duration} minute(s).", inline=True)
+                    embed.add_field(name=f"Reason:", value=f"{reason}", inline=False)
+                    embed.set_footer(text=f"""*: Due to current programming limitations, temporary mutes \
+may last indefinitely if the bot restarts between mute set point and end point. Please use \
+`.unmute` if this situation arises. Many apologies.""")
+                    embed.set_thumbnail(url=url)
+                    await mod_log_channel.send(embed=embed)
+                    await cmd.add_reaction("📜")
+                    await asyncio.sleep(mute_duration)
+                    await cmduser.send(f"I have unmuted {member} after waiting {duration} minutes.")
+                    return
+    else:
+        await cmduser.send(f"You do not have permission to run that command! Context: `.tempmute`.")
+        await cmd.delete()
+        return
+
+
 @bot.command(pass_context=True, name="unban", aliases=["ub"])
-async def unban(ctx, member_id: int = None):
+async def unban(ctx, member_id: int = None, reason: str = None):
     """Unbans a user from a server via ID."""
     cmd = ctx.message
     cmduser = ctx.message.author
     server = bot.get_guild(ctx.guild.id)
     user = server.get_member(ctx.author.id)
     moderator_role = discord.utils.get(server.roles, name="Moderator")
+    mod_log_channel = discord.utils.get(server.channels, name="mod_log")
+    url = member.avatar_url
     if moderator_role in user.roles:
         if member_id is None:
             await cmduser.send(f"Invalid member. To select a member, use their ID.")
@@ -1015,11 +1188,72 @@ async def unban(ctx, member_id: int = None):
                 await cmduser.send(f"That user is not banned! User: {to_unban} ({member_id}.")
                 return
             else:
-                await cmd.guild.unban(to_unban)
-                await cmd.add_reaction("👍")  # TODO: Make the successful running of this command log to a log channel.
-                return
+                if reason is None:
+                    await cmduser.send(f"Please specify a reason for the unban.")
+                    return
+                else:
+                    await cmd.guild.unban(to_unban)
+                    await cmd.add_reaction("👍")
+                    if mod_log_channel is None:
+                        await cmduser.send(f"""Action successfully completed. To enable moderation command logging, \
+please create a channel named `#mod_log`.""")
+                        return
+                    else:
+                        embed = discord.Embed(title=f"Unban occurred.", color=discord.Color(0x95a5a6))
+                        embed.add_field(name=f"Responsible Mod:",
+                                        value=f"{cmduser.mention} ({cmduser.id})", inline=True)
+                        embed.add_field(name=f"Action Taken On:", value=f"{member_id}", inline=True)
+                        embed.add_field(name=f"Reason:", value=f"{reason}", inline=False)
+                        embed.set_thumbnail(url=url)
+                        await mod_log_channel.send(embed=embed)
+                        await cmd.add_reaction("📜")
+                        return
     else:
         await cmduser.send(f"You do not have permission to run that command! Context: `.unban`.")
+        await cmd.delete()
+        return
+
+
+@bot.command(pass_context=True, name="unmute", aliases=["um"])
+async def unmute(ctx, member: discord.Member = None, *, reason: str = "Unspecified reason."):
+    """Unmutes a temporarily or permanently muted member."""
+    cmd = ctx.message
+    cmduser = ctx.message.author
+    server = bot.get_guild(ctx.guild.id)
+    user = server.get_member(ctx.author.id)
+    moderator_role = discord.utils.get(server.roles, name="Moderator")
+    muted_role = discord.utils.get(server.roles, name="Muted")
+    mod_log_channel = discord.utils.get(server.channels, name="mod_log")
+    url = member.avatar_url
+    if moderator_role in user.roles:
+        if member is None:
+            await cmduser.send(f"Invalid member. To select a member, @mention them.")
+            return
+        elif moderator_role in member.roles:
+            await cmduser.send(f"You cannot un-punish that user! They are a Moderator.")
+            return
+        else:
+            if muted_role in member.roles:
+                await member.remove_roles(muted_role)
+                await cmd.add_reaction("👍")
+                if mod_log_channel is None:
+                    await cmduser.send(f"""Action successfully completed. To enable moderation command logging, \
+please create a channel named `#mod_log`.""")
+                    return
+                else:
+                    embed = discord.Embed(title=f"Unmute initiated.", color=discord.Color(0x95a5a6))
+                    embed.add_field(name=f"Responsible Mod:", value=f"{cmduser.mention} ({cmduser.id})", inline=True)
+                    embed.add_field(name=f"Action Taken On:", value=f"{member.mention} ({member.id})", inline=True)
+                    embed.add_field(name=f"Reason:", value=f"{reason}", inline=False)
+                    embed.set_thumbnail(url=url)
+                    await mod_log_channel.send(embed=embed)
+                    await cmd.add_reaction("📜")
+                    return
+            else:
+                await cmduser.send(f"That member is not muted! Use `.mute` or `.tempmute` to mute them.")
+                return
+    else:
+        await cmduser.send(f"You do not have permission to run that command! Context: `.unmute`.")
         await cmd.delete()
         return
 
@@ -1229,6 +1463,16 @@ async def on_message(message):
 # ZHU WISHLIST: Warn logging, temp muting/banning, case tracking per user, username/nick tracking, raid mode
 
 # GENERAL TODO:
+
+# TODO: IF TEMPMUTE/BAN EXPIRATION PAST FLOW:
+# event looping every 30 seconds
+# ignored_variable = 1
+# while ignored_variable == 1
+# if temp expiration is inpast:
+# remove role/unban
+# else:
+# pass
+# asyncio.sleep(30)
 
 # TODO: Later
 # TODO: Modifiers on roll?
