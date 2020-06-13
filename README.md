@@ -1,10 +1,18 @@
 # Changelog
 
+## Batty Bot v1.3.6b
+
+```diff
+~ Apparently, neither Github nor Discord like when a + or - is preceeded by a tab. :pensive:
+```
+
+(Note: Why. Pushed on 6/13/20 @ 8:23 AM.)
+
 ## Batty Bot v1.3.6
 
 ```diff
 + Added some new things to the backend.
-	+ Added `asyncio` module.
++ Added `asyncio` module.
 - Removed some unused/testing/blank files from the file hierarchy.
 ~ Fixed `.bug` and `.suggestion` sending an error if no reaction is recieved within 60s.
 ~ Changed `.bug`'s embed color to better match the feel of a bug report. (Green > Red)
