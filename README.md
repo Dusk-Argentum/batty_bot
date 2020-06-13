@@ -1,5 +1,13 @@
 # Changelog
 
+## Batty Bot v1.3.7
+
+```diff
+~ Fixed `.roll` so it works properly if the `d` in its execution is capitalized.
+```
+
+(Note: Another small fix, just pushing work before I go to sleep. Pushed on 6/13/20 @ 7:21 PM.)
+
 ## Batty Bot v1.3.6b
 
 ```diff
