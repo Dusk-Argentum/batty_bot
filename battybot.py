@@ -10,7 +10,11 @@ from discord.ext.commands import CommandNotFound
 import random
 import re
 
+
 import asyncio
+
+
+import datetime
 
 
 PREFIX = "."
@@ -659,7 +663,7 @@ async def roll(ctx, *args):
     """Rolls dice. Format: `x`d`y`, ex. 2d6."""
     a = " ".join(args)
     p = " + "
-    setup = re.fullmatch(r"(?P<howmany>[0-9]+)d(?P<howmuch>[0-9]+)", a)
+    setup = re.fullmatch(r"(?P<howmany>[0-9]+)d(?P<howmuch>[0-9]+)", a, re.IGNORECASE)
     result = []
     resultstr = []
     hma = int(setup.group("howmany"))
@@ -931,7 +935,8 @@ please create a channel named `#mod_log`.""")
                 await cmd.add_reaction("📜")
                 return
     else:
-        await cmduser.send(f"You do not have permission to run that command! Context: `.ban`.")
+        await cmduser.send(f"""You do not have permission to run that command! Context: `.ban`. \
+You must have the role `Moderator` to run this command.""")
         await cmd.delete()
         return
 
@@ -970,8 +975,8 @@ please create a channel named `#mod_log`.""")
                 await cmd.add_reaction("📜")
                 return
     else:
-        await cmduser.send(f"You do not have permission to run that command! Context: `.forceban`.")
-        await cmd.delete()
+        await cmduser.send(f"""You do not have permission to run that command! Context: `.ban`. \
+You must have the role `Moderator` to run this command.""")
         return
 
 
@@ -1009,7 +1014,8 @@ please create a channel named `#mod_log`.""")
                 await cmd.add_reaction("📜")
                 return
     else:
-        await cmduser.send(f"You do not have permission to run that command! Context: `.kick`.")
+        await cmduser.send(f"""You do not have permission to run that command! Context: `.ban`. \
+You must have the role `Moderator` to run this command.""")
         await cmd.delete()
         return
 
@@ -1057,7 +1063,8 @@ please create a channel named `#mod_log`.""")
                     await cmd.add_reaction("📜")
                     return
     else:
-        await cmduser.send(f"You do not have permission to run that command! Context: `.unmute`.")
+        await cmduser.send(f"""You do not have permission to run that command! Context: `.ban`. \
+You must have the role `Moderator` to run this command.""")
         await cmd.delete()
         return
 
@@ -1104,13 +1111,14 @@ please create a channel named `#mod_log`.""")
                     await cmd.add_reaction("📜")
                     return
     else:
-        await cmduser.send(f"You do not have permission to run that command! Context: `.purge_messages`.")
+        await cmduser.send(f"""You do not have permission to run that command! Context: `.ban`. \
+You must have the role `Moderator` to run this command.""")
         await cmd.delete()
         return
 
 
 @bot.command(pass_context=True, name="tempmute", aliases=["tm"])  # discord.utils.sleep_until
-async def tempmute(ctx, member: discord.Member = None, duration: int = 1, *, reason: str = "Unspecified reason."):
+async def tempmute(ctx, member: discord.Member = None, duration: str = "1m", *, reason: str = "Unspecified reason."):
     """Temporarily mutes a member for the duration in minutes."""  # Do research on sleep_until!
     """Note: For now, member remains muted if bot is restarted before duration expires. Use `.unmute`."""
     cmd = ctx.message
@@ -1118,8 +1126,13 @@ async def tempmute(ctx, member: discord.Member = None, duration: int = 1, *, rea
     server = bot.get_guild(ctx.guild.id)
     user = server.get_member(ctx.author.id)
     moderator_role = discord.utils.get(server.roles, name="Moderator")
+    temp_muted_role = discord.utils.get(server.roles, name="Temp. Muted")
     muted_role = discord.utils.get(server.roles, name="Muted")
-    mute_duration = duration * 60
+    mute_duration = re.search(r"(^\d{1,2})(m$|h$|d$)", duration, re.IGNORECASE)
+    mute_duration_number = int(mute_duration.group(1))
+    mute_duration_letter = str(mute_duration.group(2))
+    final_mute_duration_number = 0
+    time_longevity_signifier = "minute(s)"
     mod_log_channel = discord.utils.get(server.channels, name="mod_log")
     url = member.avatar_url
     if moderator_role in user.roles:
@@ -1130,25 +1143,41 @@ async def tempmute(ctx, member: discord.Member = None, duration: int = 1, *, rea
             await cmduser.send(f"You cannot punish that user! They are a Moderator.")
             return
         else:
-            if muted_role is None:
-                await cmduser.send(f"""The `Muted` role does not exist! Please create a role named `Muted`, \
-and give it the proper permissions for this function to work properly.""")
+            if temp_muted_role is None:
+                await cmduser.send(f"""The `Temp. Muted` role does not exist! Please create a role named \
+`Temp. Muted`, and give it the proper permissions for this function to work properly.""")
+                return
+            elif temp_muted_role in member.roles:
+                await cmduser.send(f"That member is already temporarily muted! Use `.unmute` to unmute them.")
                 return
             elif muted_role in member.roles:
-                await cmduser.send(f"That member is already muted! Use `.unmute` to unmute them.")
+                await cmduser.send(f"That member is already permanently muted! Use `.unmute` to unmute them.")
                 return
             else:
-                await member.add_roles(muted_role)
+                if mute_duration_letter is "m":
+                    final_mute_duration_number = mute_duration_number * 60
+                    time_longevity_signifier = "minute(s)"
+                    pass
+                elif mute_duration_letter is "h":
+                    final_mute_duration_number = mute_duration_number * 3600
+                    time_longevity_signifier = "hour(s)"
+                    pass
+                elif mute_duration_letter is "d":
+                    final_mute_duration_number = mute_duration_number * 86400
+                    time_longevity_signifier = "day(s)"
+                    pass
+                await member.add_roles(temp_muted_role)
                 await cmd.add_reaction("👍")
                 if mod_log_channel is None:
                     await cmduser.send(f"""Action successfully completed. To enable moderation command logging, \
 please create a channel named `#mod_log`.""")
-                    return
+                    pass
                 else:
                     embed = discord.Embed(title=f"Temporary mute created.", color=discord.Color(0x95a5a6))
                     embed.add_field(name=f"Responsible Mod:", value=f"{cmduser.mention} ({cmduser.id})", inline=True)
                     embed.add_field(name=f"Action Taken On:", value=f"{member.mention} ({member.id})", inline=True)
-                    embed.add_field(name=f"Duration:`*`", value=f"{duration} minute(s).", inline=True)
+                    embed.add_field(name=f"Duration:`*`", value=f"""{mute_duration_number} \
+{time_longevity_signifier}.""", inline=True)
                     embed.add_field(name=f"Reason:", value=f"{reason}", inline=False)
                     embed.set_footer(text=f"""*: Due to current programming limitations, temporary mutes \
 may last indefinitely if the bot restarts between mute set point and end point. Please use \
@@ -1156,11 +1185,15 @@ may last indefinitely if the bot restarts between mute set point and end point. 
                     embed.set_thumbnail(url=url)
                     await mod_log_channel.send(embed=embed)
                     await cmd.add_reaction("📜")
-                    await asyncio.sleep(mute_duration)
-                    await cmduser.send(f"I have unmuted {member} after waiting {duration} minutes.")
-                    return
+                    pass
+                await asyncio.sleep(final_mute_duration_number)
+                await member.remove_roles(temp_muted_role)
+                await cmduser.send(f"""I have unmuted {member} after waiting {mute_duration_number} \
+{time_longevity_signifier}.""")
+                return
     else:
-        await cmduser.send(f"You do not have permission to run that command! Context: `.tempmute`.")
+        await cmduser.send(f"""You do not have permission to run that command! Context: `.ban`. \
+You must have the role `Moderator` to run this command.""")
         await cmd.delete()
         return
 
@@ -1209,7 +1242,8 @@ please create a channel named `#mod_log`.""")
                         await cmd.add_reaction("📜")
                         return
     else:
-        await cmduser.send(f"You do not have permission to run that command! Context: `.unban`.")
+        await cmduser.send(f"""You do not have permission to run that command! Context: `.ban`. \
+You must have the role `Moderator` to run this command.""")
         await cmd.delete()
         return
 
@@ -1223,6 +1257,7 @@ async def unmute(ctx, member: discord.Member = None, *, reason: str = "Unspecifi
     user = server.get_member(ctx.author.id)
     moderator_role = discord.utils.get(server.roles, name="Moderator")
     muted_role = discord.utils.get(server.roles, name="Muted")
+    temp_muted_role = discord.utils.get(server.roles, name="Temp. Muted")
     mod_log_channel = discord.utils.get(server.channels, name="mod_log")
     url = member.avatar_url
     if moderator_role in user.roles:
@@ -1233,8 +1268,13 @@ async def unmute(ctx, member: discord.Member = None, *, reason: str = "Unspecifi
             await cmduser.send(f"You cannot un-punish that user! They are a Moderator.")
             return
         else:
-            if muted_role in member.roles:
-                await member.remove_roles(muted_role)
+            if muted_role or temp_muted_role in member.roles:
+                if muted_role in member.roles:
+                    await member.remove_roles(muted_role)
+                    pass
+                elif temp_muted_role in member.roles:
+                    await member.remove_roles(temp_muted_role)
+                    pass
                 await cmd.add_reaction("👍")
                 if mod_log_channel is None:
                     await cmduser.send(f"""Action successfully completed. To enable moderation command logging, \
@@ -1253,7 +1293,8 @@ please create a channel named `#mod_log`.""")
                 await cmduser.send(f"That member is not muted! Use `.mute` or `.tempmute` to mute them.")
                 return
     else:
-        await cmduser.send(f"You do not have permission to run that command! Context: `.unmute`.")
+        await cmduser.send(f"""You do not have permission to run that command! Context: `.ban`. \
+You must have the role `Moderator` to run this command.""")
         await cmd.delete()
         return
 
@@ -1413,6 +1454,16 @@ async def purge(ctx, amount):
     # await ctx.send(f"{player2.mention}, {move}")
 
 
+# @bot.command(pass_context=True, name="filetest", aliases=["ft"])
+# async def filetest(ctx, *args):
+    # """A test command to test file reading and writing."""
+    # testfile = open("testfile.txt", "a")
+    # testfile.write(" ".join(args))
+    # testfile.close()
+    # await ctx.message.add_reaction("👍")
+    # return
+
+
 # On Message
 
 
@@ -1458,11 +1509,15 @@ async def on_message(message):
 
 
 # TODO: Completed in current build:
+# `.roll` now works if D is capitalized
 
 # TODO: MODERATION TODO
 # ZHU WISHLIST: Warn logging, temp muting/banning, case tracking per user, username/nick tracking, raid mode
 
 # GENERAL TODO:
+# FIgure out if you can get a list of EVERYBODY in a role
+# Create TempMuted role?
+# For unmute, like, do if member not in muted or temp muted do thing. If member muted or temp muted cannot mute
 
 # TODO: IF TEMPMUTE/BAN EXPIRATION PAST FLOW:
 # event looping every 30 seconds
