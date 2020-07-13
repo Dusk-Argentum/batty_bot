@@ -1,5 +1,13 @@
 # Changelog
 
+## Batty Bot v1.3.8
+```diff
+~ Various small changes.
+~ Some backend typos fixed.
+```
+
+(Note: Nothing to see here. Just backing up some of the very small changes made within the past month. Pushed on 7/13/20 @ 4:36 AM EST.)
+
 ## Batty Bot v1.3.7
 
 ```diff
