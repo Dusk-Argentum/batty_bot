@@ -64,14 +64,21 @@ async def on_member_join(ctx):  # Welcomes a new user when they join.
         welcome_channel = bot.get_channel(290304276381564928)
         await welcome_channel.send(f"""<@&636374013731667969>, {ctx.mention}!
 Welcome to Gazia's Bat Den! Please read <#413876271865528320>, and enjoy your stay!""")
+        return
     if ctx.guild.id == 687225286525190144:  # Snowlo
         welcome_channel = bot.get_channel(687225286525190147)
         rielle = "assets/rielle.gif"
         await welcome_channel.send(f"""Welcome, {ctx.mention}! Enjoy your stay!""")
         await welcome_channel.send(file=discord.File(rielle))
+        return
     if ctx.guild.id == 348897377400258560:  # Private
         welcome_channel = bot.get_channel(348897378062827520)
         await welcome_channel.send(f"""<@97153790897045504>, {ctx.mention} has joined the server.""")
+        return
+    if ctx.guild.id == 657439231995543575:  # DnD
+        welcome_channel = bot.get_channel(657439231995543590)
+        await welcome_channel.send(f"""Welcome, {ctx.mention}, to Elysium.""")
+        return
     else:
         return
 
@@ -131,7 +138,7 @@ async def on_raw_reaction_add(event):
 
 @bot.group(pass_context=True, name="help_", aliases=["cmds", "commands", "h", "h-hewp!!!", "help"])
 async def help_(ctx):
-    """Shows a list of all commands, and whether or not a command as subcommands."""
+    """Shows a list of all commands, and whether or not a command has subcommands."""
     url = "https://cdn.discordapp.com/attachments/627784999873019914/718981774440661022/battypride.png"
     if ctx.invoked_subcommand is None:
         embed = discord.Embed(title="Batty Bot's Commands!", color=discord.Color(0xE8B52A))
@@ -157,7 +164,7 @@ async def help_(ctx):
         Sends the monkaS emoji. \n `pog`
         Sends the pogchamp emoji.""", inline=False)
         embed.set_footer(text="""If a command has subcommands, \
-do `.help [command name]` for further help. \n Made by Dusk Argentum#6530!""")
+do `.help [command name]` for further help.\nMade by Dusk Argentum#6530!""")
         embed.set_thumbnail(url=url)
         await ctx.send(embed=embed)
         return
@@ -192,7 +199,7 @@ async def pm(ctx):
             Sends the monkaS emoji. \n `pog`
             Sends the pogchamp emoji.""", inline=False)
     embed.set_footer(text="""If a command has subcommands, \
-    do `.help [command name]` for further help. \n Made by Dusk Argentum#6530!""")
+    do `.help [command name]` for further help.\nMade by Dusk Argentum#6530!""")
     embed.set_thumbnail(url=url)
     await ctx.author.send(embed=embed)
     return
@@ -520,6 +527,135 @@ async def pm(ctx):
     return
 
 
+# DnD-SERVER EXCLUSIVE COMMANDS
+
+
+@bot.group(pass_context=True, name="color", aliases=["c"])
+async def color(ctx, color=None):
+    """Changes your role's color. Only usable on Dusk's DnD server."""
+    cmd = ctx.message
+    cmduser = ctx.message.author
+    server = bot.get_guild(ctx.guild.id)
+    player1role = discord.utils.get(server.roles, id=722553852011741214)
+    player2role = discord.utils.get(server.roles, id=722553954596159622)
+    player3role = discord.utils.get(server.roles, id=722553971813646366)
+    player4role = discord.utils.get(server.roles, id=722553985118240789)
+    player5role = discord.utils.get(server.roles, id=722554001165385829)
+    if server.id != 657439231995543575:
+        await cmduser.send(f"This command is not available on the server you're trying to use it on!")
+        await cmd.delete()
+        return
+    elif server.id == 657439231995543575:
+        color_input = re.search(r"([0-9]|[a-f])([0-9]|[a-f])([0-9]|[a-f])([0-9]|[a-f])([0-9]|[a-f])([0-9]|[a-f])",
+                                str(color), re.IGNORECASE)
+        color_input_random = re.search(r"random", str(color), re.IGNORECASE)
+        if color_input_random:
+            random_color = random.randint(1, 16777215)
+            if player1role in cmduser.roles:
+                await player1role.edit(color=discord.Color(int(random_color)))
+                await ctx.send(f"I have changed {player1role.mention}'s color.")
+                return
+            if player2role in cmduser.roles:
+                await player2role.edit(color=discord.Color(int(random_color)))
+                await ctx.send(f"I have changed {player2role.mention}'s color.")
+                return
+            if player3role in cmduser.roles:
+                await player3role.edit(color=discord.Color(int(random_color)))
+                await ctx.send(f"I have changed {player3role.mention}'s color.")
+                return
+            if player4role in cmduser.roles:
+                await player4role.edit(color=discord.Color(int(random_color)))
+                await ctx.send(f"I have changed {player4role.mention}'s color.")
+                return
+            if player5role in cmduser.roles:
+                await player5role.edit(color=discord.Color(int(random_color)))
+                await ctx.send(f"I have changed {player5role.mention}'s color.")
+                return
+        if color_input is None:
+            await ctx.send("""That's not a valid color! Please make sure it is a hex code **without** the \
+`#` at the beginning.""")
+            return
+        else:
+            if player1role in cmduser.roles:
+                await player1role.edit(color=discord.Color(int(color, 16)))
+                await ctx.send(f"I have changed {player1role.mention}'s color to #{color}.")
+                return
+            if player2role in cmduser.roles:
+                await player2role.edit(color=discord.Color(int(color, 16)))
+                await ctx.send(f"I have changed {player2role.mention}'s color to #{color}.")
+                return
+            if player3role in cmduser.roles:
+                await player3role.edit(color=discord.Color(int(color, 16)))
+                await ctx.send(f"I have changed {player3role.mention}'s color to #{color}.")
+                return
+            if player4role in cmduser.roles:
+                await player4role.edit(color=discord.Color(int(color, 16)))
+                await ctx.send(f"I have changed {player4role.mention}'s color to #{color}.")
+                return
+            if player5role in cmduser.roles:
+                await player5role.edit(color=discord.Color(int(color, 16)))
+                await ctx.send(f"I have changed {player5role.mention}'s color to #{color}.")
+                return
+            else:
+                await cmduser.send("You should also not see this.")
+                return
+    else:
+        await cmduser.send("You should not see this message.")
+        return
+
+
+@bot.group(pass_context=True, name="name", aliases=["n"])
+async def name(ctx, *, name: str = None):
+    """Changes your role's color. Only usable on Dusk's DnD server."""
+    cmd = ctx.message
+    cmduser = ctx.message.author
+    server = bot.get_guild(ctx.guild.id)
+    player1role = discord.utils.get(server.roles, id=722553852011741214)
+    player2role = discord.utils.get(server.roles, id=722553954596159622)
+    player3role = discord.utils.get(server.roles, id=722553971813646366)
+    player4role = discord.utils.get(server.roles, id=722553985118240789)
+    player5role = discord.utils.get(server.roles, id=722554001165385829)
+    if server.id != 657439231995543575:
+        await cmduser.send(f"This command is not available on the server you're trying to use it on!")
+        await cmd.delete()
+        return
+    elif server.id == 657439231995543575:
+        name_input = re.search(r".{1,99}", name, re.IGNORECASE)
+        if name_input is None:
+            await ctx.send("""That's not a valid name! Please make sure it has less than 100 characters.""")
+            return
+        if name is None:
+            await ctx.send("""That's not a valid name!""")
+            return
+        else:
+            if player1role in cmduser.roles:
+                await player1role.edit(name=str(name))
+                await ctx.send(f"I have changed {player1role.mention}'s name.")
+                return
+            if player2role in cmduser.roles:
+                await player2role.edit(name=str(name))
+                await ctx.send(f"I have changed {player2role.mention}'s name.")
+                return
+            if player3role in cmduser.roles:
+                await player3role.edit(name=str(name))
+                await ctx.send(f"I have changed {player3role.mention}'s name.")
+                return
+            if player4role in cmduser.roles:
+                await player4role.edit(name=str(name))
+                await ctx.send(f"I have changed {player4role.mention}'s name.")
+                return
+            if player5role in cmduser.roles:
+                await player5role.edit(name=str(name))
+                await ctx.send(f"I have changed {player5role.mention}'s name.")
+                return
+            else:
+                await cmduser.send("You should also not see this.")
+                return
+    else:
+        await cmduser.send("You should not see this message.")
+        return
+
+
 # FUN
 
 
@@ -810,7 +946,7 @@ If the suggestion name got cut off, redo the suggestion with quotes surrounding 
 async def role(ctx):
     """Adds or removes a role."""
     if ctx.invoked_subcommand is None:
-        await ctx.send("Please choose a role. Valid roles: `Gamers`, `Greetings`, and `Socialists`.")
+        await ctx.send("Please choose a role. Valid roles: `Gamers`, `Greetings`, `Socialists`, and `Turnipchamps`.")
         return
 
 
@@ -1299,36 +1435,96 @@ You must have the role `Moderator` to run this command.""")
         return
 
 
-# @bot.command(pass_context=True, name="warn", aliases=["w"]) # TODO: Unfinished. Unsure how to count warns.
-# async def warn(ctx, member: discord.Member = None, reason: str = None):
-    # """Gives a user a warning."""
-    # cmd = ctx.message
-    # cmduser = ctx.message.author
-    # server = bot.get_guild(ctx.guild.id)
-    # user = server.get_member(ctx.author.id)
-    # moderator_role = discord.utils.get(server.roles, name="Moderator")
-    # if moderator_role in user.roles:
-        # bot.counter = {}
-        # if member not in bot.counter:
-        # bot.counter[member] = 0
-        # await ctx.channel.send(f"I have given a warning to {member}. Reason: {reason}.")
-        # if bot.counter[member] == 0:
-        # member_warn_count = sum([1], bot.counter[member])
-        # if member_warn_count == 1:
-        # total_warn_count = sum([1], member_warn_count)
+@bot.command(pass_context=True, name="warn2", aliases=["w2"])  # ROLE copy
+async def warn2(ctx, member: discord.Member = None, reason: str = "Unspecified reason."):
+    """Gives a user a warning."""
+    cmd = ctx.message
+    cmduser = ctx.message.author
+    server = bot.get_guild(ctx.guild.id)
+    user = server.get_member(ctx.author.id)
+    moderator_role = discord.utils.get(server.roles, name="Moderator")
+    print("test")
+    print(server.roles)
+    warn_amount_get = re.search(rf"Warns: (\d+)", server.roles)
+    print("cringe")
+    warned_roles = discord.utils.get(server.roles, name=warn_amount_get)
+    mod_log_channel = discord.utils.get(server.channels, name="mod_log")
+    url = member.avatar_url
+    if moderator_role in user.roles:
+        if member is None:
+            await cmduser.send("Invalid user! Please @ mention the user you wish to warn.")
+            return
+        if warn_amount_get is None:
+            await server.create_role(name="Warns: 1", reason="Warn logging.")
+            return
+        else:
+            await cmduser.send("Placeholder has role")
+            return
+    else:
+        await cmduser.send("Placeholder not mod")
+        return
 
-        # await ctx.channel.send(f"The amount of warnings they have now is {str(warn_count)}.")
-        # return
-    # else:
-        # await cmduser.send(f"You do not have permission to run that command! Context: `.warn`.")
-        # await cmd.delete()
-        # return
+
+@bot.command(pass_context=True, name="warn", aliases=["w"])  # TODO: Unfinished. Unsure how to count warns.
+async def warn(ctx, member: discord.Member = None, reason: str = None):
+    """Gives a user a warning."""
+    cmd = ctx.message
+    cmduser = ctx.message.author
+    server = bot.get_guild(ctx.guild.id)
+    user = server.get_member(ctx.author.id)
+    moderator_role = discord.utils.get(server.roles, name="Moderator")
+    mod_log_channel = discord.utils.get(server.channels, name="mod_log")
+    url = member.avatar_url
+    if moderator_role in user.roles:
+        warn_file = open("warn_file.txt", "r+")
+        warn_file_read = warn_file.read()
+        is_warned_here = re.search(rf"{server.id}, {member.id}, (\d+)", str(warn_file_read))
+        if is_warned_here is None:
+            warn_file.write(f"{server.id}, {member.id}, 1\n")
+            warn_file.close()
+            await cmduser.send(f"I have given a warning to {member}. Total warnings: 1.")
+            await cmd.add_reaction("👍")
+            if mod_log_channel is None:
+                await cmduser.send(f"""Action successfully completed. To enable moderation command logging, \
+please create a channel named `#mod_log`.""")
+                return
+            else:
+                embed = discord.Embed(title=f"Warn given.", color=discord.Color(0x8c1d2a))
+                embed.add_field(name=f"Responsible Mod:", value=f"{cmduser.mention} ({cmduser.id})", inline=True)
+                embed.add_field(name=f"Action Taken On:", value=f"{member.mention} ({member.id})", inline=True)
+                embed.add_field(name=f"Warnings:", value=f"1.", inline=True)
+                embed.add_field(name=f"Reason:", value=f"{reason}", inline=False)
+                embed.set_thumbnail(url=url)
+                await mod_log_channel.send(embed=embed)
+                await cmd.add_reaction("📜")
+                return
+        elif is_warned_here is not None:
+            warned_before = re.search(rf"{server.id}, {member.id}, \d+", str(warn_file_read))
+            new_warn_count = warn_file_read.replace(f"{server.id}, {member.id}, 2", f"{server.id}, {member.id}, 3")
+            # THE ABOVE IS CLOSE, DO NOT DELETE
+            write_file = warn_file.write(new_warn_count)
+            print("completechamp")
+            return
+    else:
+        await cmduser.send(f"You do not have permission to run that command! Context: `.warn`.")
+        await cmd.delete()
+        return
+
+
+# @bot.command(pass_context=True, name="filetest", aliases=["ft"])
+# async def filetest(ctx, *args):
+    # """A test command to test file reading and writing."""
+    # testfile = open("testfile.txt", "a")
+    # testfile.write(" ".join(args))
+    # testfile.close()
+    # await ctx.message.add_reaction("👍")
+    # return
 
 
 # Owner Only
 
 
-@bot.command(pass_context=True, name="changenick", aliases=["chn", "n", "nick"])
+@bot.command(pass_context=True, name="changenick", aliases=["chn", "nick"])
 async def changenick(ctx, *args):
     """Changes the bot's nickname on the server the command is invoked on."""
     cmd = ctx.message
@@ -1373,6 +1569,26 @@ async def de(ctx, *args):
         return
     else:
         await ctx.send(" ".join(args))
+        await cmd.delete()
+        return
+
+
+@bot.command(pass_context=True, name="questembed", aliases=["qe"])
+async def questembed(ctx, title: str = None, color: str = None, field_title: str = None, field_text: str = None,
+                     footer: str = None, thumbnail: str = None):
+    """Creates a quest embed for Elysium."""
+    cmd = ctx.message
+    cmduser = ctx.message.author
+    if ctx.author.id != 97153790897045504:
+        await cmduser.send(f"You do not have permission to use that command! Context: `.questembed`.")
+        await cmd.delete()
+        return
+    else:
+        embed = discord.Embed(title=title, color=discord.Color(int(color, 16)))
+        embed.add_field(name=field_title, value=field_text)
+        embed.set_footer(text=footer)
+        embed.set_thumbnail(url=thumbnail)
+        await ctx.send(embed=embed)
         await cmd.delete()
         return
 
