@@ -14,7 +14,11 @@ import re
 import asyncio
 
 
-import datetime
+import json
+
+
+from datetime import datetime
+import pytz
 
 
 PREFIX = "."
@@ -1070,6 +1074,31 @@ please create a channel named `#mod_log`.""")
                 await mod_log_channel.send(embed=embed)
                 await cmd.add_reaction("📜")
                 return
+    elif ctx.author.id == 157298325014577152:
+        tear_that_bitch_apart_channel = discord.utils.get(ctx.guild.channels, id=687225286525190147)
+        if member is None:
+            await cmduser.send(f"Invalid member. To select a member, @mention them.")
+            return
+        elif moderator_role in member.roles:
+            await cmduser.send(f"You cannot punish that user! They are a Moderator.")
+            return
+        else:
+            await cmd.guild.ban(member, reason=reason, delete_message_days=1)
+            await cmd.add_reaction("👍")
+            if mod_log_channel is None:
+                await cmduser.send(f"""Action successfully completed. To enable moderation command logging, \
+please create a channel named `#mod_log`.""")
+                return
+            else:
+                embed = discord.Embed(title=f"Banhammer swung.", color=discord.Color(0xa81707))
+                embed.add_field(name=f"Responsible Mod:", value=f"{cmduser.mention} ({cmduser.id})", inline=True)
+                embed.add_field(name=f"Action Taken On:", value=f"{member.mention} ({member.id})", inline=True)
+                embed.add_field(name=f"Reason:", value=f"{reason}", inline=False)
+                embed.set_thumbnail(url=url)
+                embed.set_footer(text="Maybe you shouldn't've been cringe.")
+                await tear_that_bitch_apart_channel.send(embed=embed)
+                await cmd.add_reaction("📜")
+                return
     else:
         await cmduser.send(f"""You do not have permission to run that command! Context: `.ban`. \
 You must have the role `Moderator` to run this command.""")
@@ -1435,80 +1464,311 @@ You must have the role `Moderator` to run this command.""")
         return
 
 
-@bot.command(pass_context=True, name="warn2", aliases=["w2"])  # ROLE copy
-async def warn2(ctx, member: discord.Member = None, reason: str = "Unspecified reason."):
-    """Gives a user a warning."""
-    cmd = ctx.message
-    cmduser = ctx.message.author
-    server = bot.get_guild(ctx.guild.id)
-    user = server.get_member(ctx.author.id)
-    moderator_role = discord.utils.get(server.roles, name="Moderator")
-    print("test")
-    print(server.roles)
-    warn_amount_get = re.search(rf"Warns: (\d+)", server.roles)
-    print("cringe")
-    warned_roles = discord.utils.get(server.roles, name=warn_amount_get)
-    mod_log_channel = discord.utils.get(server.channels, name="mod_log")
-    url = member.avatar_url
-    if moderator_role in user.roles:
-        if member is None:
-            await cmduser.send("Invalid user! Please @ mention the user you wish to warn.")
-            return
-        if warn_amount_get is None:
-            await server.create_role(name="Warns: 1", reason="Warn logging.")
-            return
-        else:
-            await cmduser.send("Placeholder has role")
-            return
-    else:
-        await cmduser.send("Placeholder not mod")
-        return
+# @bot.command(pass_context=True, name="warn2", aliases=["w2"])  # ROLE copy
+# async def warn2(ctx, member: discord.Member = None, reason: str = "Unspecified reason."):
+#     """Gives a user a warning."""
+#     cmd = ctx.message
+#     cmduser = ctx.message.author
+#     server = bot.get_guild(ctx.guild.id)
+#     user = server.get_member(ctx.author.id)
+#     moderator_role = discord.utils.get(server.roles, name="Moderator")
+#     print("test")
+#     print(server.roles)
+#     warn_amount_get = re.search(rf"Warns: (\d+)", server.roles)
+#     print("cringe")
+#     warned_roles = discord.utils.get(server.roles, name=warn_amount_get)
+#     mod_log_channel = discord.utils.get(server.channels, name="mod_log")
+#     url = member.avatar_url
+#     if moderator_role in user.roles:
+#         if member is None:
+#             await cmduser.send("Invalid user! Please @ mention the user you wish to warn.")
+#             return
+#         if warn_amount_get is None:
+#             await server.create_role(name="Warns: 1", reason="Warn logging.")
+#             return
+#         else:
+#             await cmduser.send("Placeholder has role")
+#             return
+#     else:
+#         await cmduser.send("Placeholder not mod")
+#         return
+
+
+# @bot.command(pass_context=True, name="saa")
+# async def saa(ctx):
+#     with open("warn_file.json", "r+") as warn_file:
+#         character_id = "cid"
+#         character_first_name = "cfn"
+#         character_last_name = "cln"
+#         character_world_name = "cwn"
+#         character_dc_name = "cdn"
+#         character_avatar_url = "cau"
+#         data = {"warn_info": {}}
+#         data["warn_info"][f"{ctx.author.id}"] = {
+#             "character_id": f"{character_id}",
+#             "character_first_name": f"{character_first_name}",
+#             "character_last_name": f"{character_last_name}",
+#             "character_world_name": f"{character_world_name}",
+#             "character_dc_name": f"{character_dc_name}",
+#             "character_avatar_url": f"{character_avatar_url}"
+#         }
+#         print("99")
+#         warn_file.seek(0)
+#         json.dump(data, warn_file, indent=2)
+#         print("Done!")
+#         warn_file.close()
 
 
 @bot.command(pass_context=True, name="warn", aliases=["w"])  # TODO: Unfinished. Unsure how to count warns.
-async def warn(ctx, member: discord.Member = None, reason: str = None):
+async def warn(ctx, member: discord.Member = None, *, reason: str = "Unspecified reason."):
     """Gives a user a warning."""
     cmd = ctx.message
     cmduser = ctx.message.author
     server = bot.get_guild(ctx.guild.id)
     user = server.get_member(ctx.author.id)
-    moderator_role = discord.utils.get(server.roles, name="Moderator")
+    moderator_role = discord.utils.get(server.roles, name="Moderator.")
     mod_log_channel = discord.utils.get(server.channels, name="mod_log")
     url = member.avatar_url
-    if moderator_role in user.roles:
-        warn_file = open("warn_file.txt", "r+")
-        warn_file_read = warn_file.read()
-        is_warned_here = re.search(rf"{server.id}, {member.id}, (\d+)", str(warn_file_read))
-        if is_warned_here is None:
-            warn_file.write(f"{server.id}, {member.id}, 1\n")
-            warn_file.close()
-            await cmduser.send(f"I have given a warning to {member}. Total warnings: 1.")
-            await cmd.add_reaction("👍")
-            if mod_log_channel is None:
-                await cmduser.send(f"""Action successfully completed. To enable moderation command logging, \
+    tz_utc = pytz.timezone("UTC")
+    current_utc_time = datetime.now(tz_utc)
+    if moderator_role in ctx.author.roles:
+        with open("warn_file.json", "r+") as warn_file:
+            check_if_id_in_reason = re.search(r"\d{18}", str(reason), re.IGNORECASE)
+            if check_if_id_in_reason is None:
+                pass
+            elif check_if_id_in_reason is not None:
+                await ctx.send("Please do not include user or server IDs in a warn reason.")
+                return
+            warn_file_content = json.load(warn_file)
+            print(warn_file_content)
+            server_search = re.search(rf"({server.id})", str(warn_file_content))
+            server_warned_members = warn_file_content["warn_list"][f"{server.id}"]
+            print(server_search)
+            print(server_warned_members)  # TODO: This whole thing bugs the fuck out if someone's id is in the reason
+            if server_search is not None:
+                pass
+            elif server_search is None:
+                new_server_id = {
+                    f"{server.id}": {
+
+                    }
+                }
+                with open("warn_file.json", "r+") as warn__file:
+                    data2 = json.load(warn__file)
+                    data2["warn_list"].update(new_server_id)
+                    warn__file.seek(0)
+                    json.dump(data2, warn__file, indent=2)
+                    warn__file.truncate()
+                    warn__file.close()
+                    print("ass")
+                    pass
+            if str(member.id) in str(server_warned_members):  # Working on this
+                with open("warn_file.json", "r+") as warn___file:
+                    data3 = json.load(warn___file)
+                    current_warn_count = []
+                    current_warn_count = data3["warn_list"][f"{ctx.guild.id}"][f"{member.id}"]["warn_count"]
+                    print("9")
+                    new_warn_count = int(current_warn_count) + 1
+                    print("a23")
+                    print(str(new_warn_count))
+                    new_warn = {
+                        "warn_count": f"{str(new_warn_count)}"
+                    }
+                    new_warn_reason_and_time = {
+                        f"{str(new_warn_count)}": f"""\
+{reason} | {current_utc_time.strftime("%m/%d/%Y @ %I:%M:%S %p %Z")}"""
+                    }
+                    with open("warn_file.json", "r+") as warn_____file:
+                        data5 = json.load(warn_____file)
+                        print("ba")
+                        data5["warn_list"][f"{server.id}"][f"{member.id}"].update(new_warn)
+                        print("ca")
+                        warn_____file.seek(0)
+                        print("da")
+                        json.dump(data5, warn_____file, indent=2)
+                        warn_____file.truncate()
+                        warn_____file.close()
+                        print("assa")
+                        with open("warn_file.json", "r+") as warn______file:
+                            data6 = json.load(warn______file)
+                            data6["warn_list"][f"{server.id}"][f"{member.id}"]["warn_reason_and_time"].update(
+                                new_warn_reason_and_time
+                            )
+                            warn______file.seek(0)
+                            json.dump(data6, warn______file, indent=2)
+                            warn______file.truncate()
+                            warn______file.close()
+                            pass
+                        await cmd.add_reaction("👍")
+                        if mod_log_channel is None:
+                            await cmduser.send(f"""Action successfully completed. To enable moderation command logging, \
 please create a channel named `#mod_log`.""")
-                return
-            else:
-                embed = discord.Embed(title=f"Warn given.", color=discord.Color(0x8c1d2a))
-                embed.add_field(name=f"Responsible Mod:", value=f"{cmduser.mention} ({cmduser.id})", inline=True)
-                embed.add_field(name=f"Action Taken On:", value=f"{member.mention} ({member.id})", inline=True)
-                embed.add_field(name=f"Warnings:", value=f"1.", inline=True)
-                embed.add_field(name=f"Reason:", value=f"{reason}", inline=False)
-                embed.set_thumbnail(url=url)
-                await mod_log_channel.send(embed=embed)
-                await cmd.add_reaction("📜")
-                return
-        elif is_warned_here is not None:
-            warned_before = re.search(rf"{server.id}, {member.id}, \d+", str(warn_file_read))
-            new_warn_count = warn_file_read.replace(f"{server.id}, {member.id}, 2", f"{server.id}, {member.id}, 3")
-            # THE ABOVE IS CLOSE, DO NOT DELETE
-            write_file = warn_file.write(new_warn_count)
-            print("completechamp")
-            return
+                            return
+                        else:
+                            embed = discord.Embed(title=f"Warn issued.", color=discord.Color(0xd47006))
+                            embed.add_field(name=f"Responsible Mod:", value=f"{cmduser.mention} ({cmduser.id})",
+                                            inline=True)
+                            embed.add_field(name=f"Action Taken On:", value=f"{member.mention} ({member.id})",
+                                            inline=True)
+                            embed.add_field(name=f"Warnings:", value=f"{str(new_warn_count)}.", inline=True)
+                            embed.add_field(name=f"Reason:", value=f"{reason}", inline=False)
+                            embed.set_footer(text=f"""
+Warn Issued At: {current_utc_time.strftime("%m/%d/%Y @ %I:%M:%S %p %Z")}""")
+                            embed.set_thumbnail(url=url)
+                            await mod_log_channel.send(embed=embed)
+                            await cmd.add_reaction("📜")
+                            return
+            elif str(member.id) not in str(server_warned_members):
+                print("a")
+                tz_utc = pytz.timezone("UTC")
+                current_utc_time = datetime.now(tz_utc)
+                new_member_id = {
+                    f"{member.id}": {
+
+                    }
+                }
+                with open("warn_file.json", "r+") as warn__A__file:
+                    dataA = json.load(warn__A__file)
+                    dataA["warn_list"][f"{server.id}"].update(new_member_id)
+                    warn__A__file.seek(0)
+                    json.dump(dataA, warn__A__file, indent=2)
+                    warn__A__file.truncate()
+                    warn__A__file.close()
+                    pass
+                initial_warn = {
+                    "warn_count": "1",
+                    "warn_reason_and_time": {
+                        "1": f"""{reason} | {current_utc_time.strftime("%m/%d/%Y @ %I:%M:%S %p %Z")}"""
+                    }
+                }
+                print("a2")
+                with open("warn_file.json", "r+") as warn____file:
+                    data4 = json.load(warn____file)
+                    print("b")
+                    data4["warn_list"][f"{server.id}"][f"{member.id}"].update(initial_warn)
+                    print("c")
+                    warn____file.seek(0)
+                    print("d")
+                    json.dump(data4, warn____file, indent=2)
+                    warn____file.truncate()
+                    warn____file.close()
+                    print("ass")
+                    print(warn_file_content)
+                    await cmd.add_reaction("👍")
+                    if mod_log_channel is None:
+                        await cmduser.send(f"""Action successfully completed. To enable moderation command logging, \
+please create a channel named `#mod_log`.""")
+                        return
+                    else:
+                        embed = discord.Embed(title=f"Warn issued.", color=discord.Color(0xd47006))
+                        embed.add_field(name=f"Responsible Mod:", value=f"{cmduser.mention} ({cmduser.id})",
+                                        inline=True)
+                        embed.add_field(name=f"Action Taken On:", value=f"{member.mention} ({member.id})", inline=True)
+                        embed.add_field(name=f"Warnings:", value="1.", inline=True)
+                        embed.add_field(name=f"Reason:", value=f"{reason}", inline=False)
+                        embed.set_footer(text=f"""
+Warn Issued At: {current_utc_time.strftime("%m/%d/%Y @ %I:%M:%S %p %Z")}""")
+                        embed.set_thumbnail(url=url)
+                        await mod_log_channel.send(embed=embed)
+                        await cmd.add_reaction("📜")
+                        return
+            # elif member.id not in warn_file:
+            #     print("test2")
+            #     print(member.id)
+            #     data = {"warn_list": {}}
+            #     print("test3")
+            #     data["warn_list"][f"{server.id}"] = {
+            #         f"{member.id}": {
+            #             "warn_count": "1",
+            #             "warn_reason_and_time": {
+            #                 "1": f"""{reason} | {current_utc_time.strftime("%m/%d/%Y @ %I:%M:%S %p %Z")}"""
+            #             }
+            #         }
+            #     }
+            #     print("test4")
+            #     json.dump(data, warn_file, indent=2)
+            #     print("test5")
+            #     warn_file.truncate()
+            #     warn_file.close()
+#         warn_file = open("warn_file.txt", "r+")
+#         warn_file_read = warn_file.read()
+#         is_warned_here = re.search(rf"{server.id}, {member.id}, (\d+)", str(warn_file_read))
+#         if is_warned_here is None:
+#             warn_file.write(f"{server.id}, {member.id}, 1\n")
+#             warn_file.close()
+#             await cmduser.send(f"I have given a warning to {member}. Total warnings: 1.")
+#             await cmd.add_reaction("👍")
+#             if mod_log_channel is None:
+#                 await cmduser.send(f"""Action successfully completed. To enable moderation command logging, \
+# please create a channel named `#mod_log`.""")
+#                 return
+#             else:
+#                 embed = discord.Embed(title=f"Warn given.", color=discord.Color(0x8c1d2a))
+#                 embed.add_field(name=f"Responsible Mod:", value=f"{cmduser.mention} ({cmduser.id})", inline=True)
+#                 embed.add_field(name=f"Action Taken On:", value=f"{member.mention} ({member.id})", inline=True)
+#                 embed.add_field(name=f"Warnings:", value=f"1.", inline=True)
+#                 embed.add_field(name=f"Reason:", value=f"{reason}", inline=False)
+#                 embed.set_thumbnail(url=url)
+#                 await mod_log_channel.send(embed=embed)
+#                 await cmd.add_reaction("📜")
+#                 return
+#         elif is_warned_here is not None:
+#             warned_before = re.search(rf"{server.id}, {member.id}, \d+", str(warn_file_read))
+#             new_warn_count = warn_file_read.replace(f"{server.id}, {member.id}, 2", f"{server.id}, {member.id}, 3")
+#             # THE ABOVE IS CLOSE, DO NOT DELETE
+#             write_file = warn_file.write(new_warn_count)
+#             print("completechamp")
+#             return
     else:
         await cmduser.send(f"You do not have permission to run that command! Context: `.warn`.")
         await cmd.delete()
         return
+
+
+# @bot.command(pass_context=True, name="warn", aliases=["w"])  # TODO: Unfinished. Unsure how to count warns.
+# async def warn(ctx, member: discord.Member = None, reason: str = None):
+#     """Gives a user a warning."""
+#     cmd = ctx.message
+#     cmduser = ctx.message.author
+#     server = bot.get_guild(ctx.guild.id)
+#     user = server.get_member(ctx.author.id)
+#     moderator_role = discord.utils.get(server.roles, name="Moderator")
+#     mod_log_channel = discord.utils.get(server.channels, name="mod_log")
+#     url = member.avatar_url
+#     if moderator_role in user.roles:
+#         warn_file = open("warn_file.txt", "r+")
+#         warn_file_read = warn_file.read()
+#         is_warned_here = re.search(rf"{server.id}, {member.id}, (\d+)", str(warn_file_read))
+#         if is_warned_here is None:
+#             warn_file.write(f"{server.id}, {member.id}, 1\n")
+#             warn_file.close()
+#             await cmduser.send(f"I have given a warning to {member}. Total warnings: 1.")
+#             await cmd.add_reaction("👍")
+#             if mod_log_channel is None:
+#                 await cmduser.send(f"""Action successfully completed. To enable moderation command logging, \
+# please create a channel named `#mod_log`.""")
+#                 return
+#             else:
+#                 embed = discord.Embed(title=f"Warn given.", color=discord.Color(0x8c1d2a))
+#                 embed.add_field(name=f"Responsible Mod:", value=f"{cmduser.mention} ({cmduser.id})", inline=True)
+#                 embed.add_field(name=f"Action Taken On:", value=f"{member.mention} ({member.id})", inline=True)
+#                 embed.add_field(name=f"Warnings:", value=f"1.", inline=True)
+#                 embed.add_field(name=f"Reason:", value=f"{reason}", inline=False)
+#                 embed.set_thumbnail(url=url)
+#                 await mod_log_channel.send(embed=embed)
+#                 await cmd.add_reaction("📜")
+#                 return
+#         elif is_warned_here is not None:
+#             warned_before = re.search(rf"{server.id}, {member.id}, \d+", str(warn_file_read))
+#             new_warn_count = warn_file_read.replace(f"{server.id}, {member.id}, 2", f"{server.id}, {member.id}, 3")
+#             # THE ABOVE IS CLOSE, DO NOT DELETE
+#             write_file = warn_file.write(new_warn_count)
+#             print("completechamp")
+#             return
+#     else:
+#         await cmduser.send(f"You do not have permission to run that command! Context: `.warn`.")
+#         await cmd.delete()
+#         return
 
 
 # @bot.command(pass_context=True, name="filetest", aliases=["ft"])
@@ -1598,7 +1858,7 @@ async def invite(ctx):
     """Prints an invite link for Batty Bot."""
     cmd = ctx.message
     cmduser = ctx.message.author
-    invitelink = os.environ.get("BBI")
+    invitelink = os.environ.get("Batty_Bot_Invite")
     if ctx.author.id != 97153790897045504:
         await cmduser.send(f"You do not have permission to run that command! Context: `.invite`.")
         await cmd.delete()
@@ -1734,6 +1994,9 @@ async def on_message(message):
 # FIgure out if you can get a list of EVERYBODY in a role
 # Create TempMuted role?
 # For unmute, like, do if member not in muted or temp muted do thing. If member muted or temp muted cannot mute
+
+# After MODERATION suite:
+# 100% total rewrite. You've learned so much since the beginning, and now it's time to make this shit more readable.
 
 # TODO: IF TEMPMUTE/BAN EXPIRATION PAST FLOW:
 # event looping every 30 seconds
