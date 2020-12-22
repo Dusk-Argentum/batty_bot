@@ -26,8 +26,12 @@ DESCRIPTION = "A bot made custom for Gazia's Bat Den. Just your typical chat bot
 TOKEN = os.environ.get("BattyBotToken")
 
 
+intents = discord.Intents.default()
+intents.members = True
+
+
 bot = commands.Bot(command_prefix=commands.when_mentioned_or(PREFIX), description=DESCRIPTION, pm_help=False,
-                   case_insensitive=True)
+                   case_insensitive=True, intents=intents)
 
 
 bot.remove_command("help")
@@ -49,6 +53,7 @@ async def on_ready():
     await bot.change_presence(status=discord.Status.online, activity=discord.Game("w/ batty friends! | .help"))
     # await bot.change_presence(status=discord.Status.online, activity=discord.CustomActivity("""Chatting with batty
     # friends! | .help""")) ## One day, this will work.
+    print("Batty Bot online!")
 
 
 @bot.event
@@ -68,6 +73,7 @@ async def on_member_join(ctx):  # Welcomes a new user when they join.
         welcome_channel = bot.get_channel(290304276381564928)
         await welcome_channel.send(f"""<@&636374013731667969>, {ctx.mention}!
 Welcome to Gazia's Bat Den! Please read <#413876271865528320>, and enjoy your stay!""")
+        # await welcome_channel.send("Please ignore this message!", delete_after=10)
         return
     if ctx.guild.id == 687225286525190144:  # Snowlo
         welcome_channel = bot.get_channel(687225286525190147)
@@ -76,6 +82,7 @@ Welcome to Gazia's Bat Den! Please read <#413876271865528320>, and enjoy your st
         await welcome_channel.send(file=discord.File(rielle))
         return
     if ctx.guild.id == 348897377400258560:  # Private
+
         welcome_channel = bot.get_channel(348897378062827520)
         await welcome_channel.send(f"""<@97153790897045504>, {ctx.mention} has joined the server.""")
         return
@@ -634,23 +641,33 @@ async def name(ctx, *, name: str = None):
         else:
             if player1role in cmduser.roles:
                 await player1role.edit(name=str(name))
-                await ctx.send(f"I have changed {player1role.mention}'s name.")
+                await ctx.send(f"""I have changed {player1role.mention}'s name.
+Because of a Discord limitation, your change may not be immediately visible on the role sidebar, but rest assured; \
+it's there.""")
                 return
             if player2role in cmduser.roles:
                 await player2role.edit(name=str(name))
-                await ctx.send(f"I have changed {player2role.mention}'s name.")
+                await ctx.send(f"""I have changed {player2role.mention}'s name.
+Because of a Discord limitation, your change may not be immediately visible on the role sidebar, but rest assured; \
+it's there.""")
                 return
             if player3role in cmduser.roles:
                 await player3role.edit(name=str(name))
-                await ctx.send(f"I have changed {player3role.mention}'s name.")
+                await ctx.send(f"""I have changed {player3role.mention}'s name.
+Because of a Discord limitation, your change may not be immediately visible on the role sidebar, but rest assured; \
+it's there.""")
                 return
             if player4role in cmduser.roles:
                 await player4role.edit(name=str(name))
-                await ctx.send(f"I have changed {player4role.mention}'s name.")
+                await ctx.send(f"""I have changed {player4role.mention}'s name.
+Because of a Discord limitation, your change may not be immediately visible on the role sidebar, but rest assured; \
+it's there.""")
                 return
             if player5role in cmduser.roles:
                 await player5role.edit(name=str(name))
-                await ctx.send(f"I have changed {player5role.mention}'s name.")
+                await ctx.send(f"""I have changed {player5role.mention}'s name.
+Because of a Discord limitation, your change may not be immediately visible on the role sidebar, but rest assured; \
+it's there.""")
                 return
             else:
                 await cmduser.send("You should also not see this.")
@@ -873,6 +890,12 @@ async def test(ctx):
     return
 
 
+@bot.command(pass_context=True, name="break", aliases=["br"])
+async def break_(ctx):
+    await ctx.send("```\n \n```")
+    return
+
+
 # META
 
 
@@ -1039,6 +1062,8 @@ async def turnipchamps(ctx):
 
 
 # MODERATION (INTERNAL)
+# Please note: Almost all of these commands are unfinished and not intended for use at all. They
+# usually WILL NOT WORK.
 
 
 @bot.command(pass_context=True, name="ban", aliases=["b"])
@@ -1072,31 +1097,6 @@ please create a channel named `#mod_log`.""")
                 embed.add_field(name=f"Reason:", value=f"{reason}", inline=False)
                 embed.set_thumbnail(url=url)
                 await mod_log_channel.send(embed=embed)
-                await cmd.add_reaction("📜")
-                return
-    elif ctx.author.id == 157298325014577152:
-        tear_that_bitch_apart_channel = discord.utils.get(ctx.guild.channels, id=687225286525190147)
-        if member is None:
-            await cmduser.send(f"Invalid member. To select a member, @mention them.")
-            return
-        elif moderator_role in member.roles:
-            await cmduser.send(f"You cannot punish that user! They are a Moderator.")
-            return
-        else:
-            await cmd.guild.ban(member, reason=reason, delete_message_days=1)
-            await cmd.add_reaction("👍")
-            if mod_log_channel is None:
-                await cmduser.send(f"""Action successfully completed. To enable moderation command logging, \
-please create a channel named `#mod_log`.""")
-                return
-            else:
-                embed = discord.Embed(title=f"Banhammer swung.", color=discord.Color(0xa81707))
-                embed.add_field(name=f"Responsible Mod:", value=f"{cmduser.mention} ({cmduser.id})", inline=True)
-                embed.add_field(name=f"Action Taken On:", value=f"{member.mention} ({member.id})", inline=True)
-                embed.add_field(name=f"Reason:", value=f"{reason}", inline=False)
-                embed.set_thumbnail(url=url)
-                embed.set_footer(text="Maybe you shouldn't've been cringe.")
-                await tear_that_bitch_apart_channel.send(embed=embed)
                 await cmd.add_reaction("📜")
                 return
     else:
@@ -1664,11 +1664,33 @@ async def warn_list(ctx, member: discord.Member = None, *, reason_number: int = 
             print("f")
             embed.add_field(name="Member:", value=f"{member.mention}\n({member.id})", inline=True)
             embed.add_field(name="Warn Count:", value=f"{str(warn_count)}", inline=True)
+            warn_log_count = 1
+            while int(warn_log_count) <= int(warn_count):
+                warn_info_raw = (data["warn_list"][f"{ctx.guild.id}"][f"{member.id}"]["warn_reason_and_time"]
+                                 [f"{warn_log_count}"])
+                print("g")
+                print(warn_info_raw)
+                warn_info_search = re.search(
+                    r"(.+) \| (\d{2}/\d{2}/\d{4} @ \d{2}:\d{2}:\d{2} [A,P]M UTC)", warn_info_raw,
+                    re.IGNORECASE)
+                print("h")
+                print(warn_info_search)
+                warn_info_reason = str(warn_info_search.group(1))
+                print("h2")
+                warn_info_time = str(warn_info_search.group(2))
+                print("i")
+                print(str(warn_info_search))
+                print(str(warn_info_reason))
+                print(str(warn_info_time))
+                print("j")  # To fix: Newlines ANYWHERE causes issues.
+                embed.add_field(name=f"Warn #{str(warn_log_count)}:", value=f"""{warn_info_reason}
+Warn issued at: {warn_info_time}.""", inline=False)
+                print("a121")
+                warn_log_count += 1
+                pass
             embed.set_thumbnail(url=url)
             await ctx.send(embed=embed)
             return
-
-
 
 
 # Owner Only
@@ -1720,6 +1742,16 @@ async def de(ctx, *args):
     else:
         await ctx.send(" ".join(args))
         await cmd.delete()
+        return
+
+
+@bot.command(pass_context=True, name="play")
+async def play(ctx):
+    """For when Phylus is being dumb."""
+    if ctx.author.id == 157298325014577152:
+        await ctx.send("Dummy.")
+        return
+    elif ctx.author.id != 157298325014577152:
         return
 
 
@@ -1833,6 +1865,8 @@ async def on_message(message):
     donotemote2 = re.search(r"^(\.)e", cnt)
     monka = "monka"
     pog = "pog"
+    # cock_detector = re.search(r"c.*o.*c.*k", cnt, re.IGNORECASE)
+    # Commenting this, probably months after the fact, I don't know what the fuck cockdetector is for
     if message.author.id != batty:
         out = ""
         if "fullmetal alchemist" in cnt:
@@ -1860,6 +1894,21 @@ async def on_message(message):
             await ctx.message.add_reaction("👍")
         if message.author.id == 461265486655520788 and message.channel.id != 414890945243512842:
             await ctx.message.delete()
+        # if message.guild.id == 348897377400258560:
+        #     if cock_detector is not None:
+        #         await ctx.send(""":rotating_light: Cock detected! :rotating_light:""")
+        #         with open("detector_log.json", "r+") as detector_log:
+        #             print("d")
+        #             data = json.load(detector_log)
+        #             print("e")
+        #             tz_utc = pytz.timezone("UTC")
+        #             old_cock_count = data["detector_log"][f"{ctx.guild.id}"]["cock_count"]
+        #             old_last_cock = data["detector_log"][f"{ctx.guild.id}"]["last_cock"]
+        #             new_cock_count = old_cock_count + 1
+        #             new_last_cock = datetime.now(tz_utc)
+        #             pass
+        #         return
+        # Why the fuck did I add a cockdetector function?? I'm so glad I never finished it
         await bot.process_commands(message)
 
 
@@ -1870,7 +1919,7 @@ async def on_message(message):
 # ZHU WISHLIST: Warn logging, temp muting/banning, case tracking per user, username/nick tracking, raid mode
 
 # GENERAL TODO:
-# FIgure out if you can get a list of EVERYBODY in a role
+# Figure out if you can get a list of EVERYBODY in a role
 # Create TempMuted role?
 # For unmute, like, do if member not in muted or temp muted do thing. If member muted or temp muted cannot mute
 
