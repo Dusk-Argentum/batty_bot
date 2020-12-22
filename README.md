@@ -1,5 +1,12 @@
 # Changelog
 
+## Batty Bot v1.3.9
+```diff
+~ Fixed join messages not working. Again. Stop breaking shit behind my back, Discord!
+```
+
+(Note: Pushed on 12/22/20 @ 4:46 AM EDT.)
+
 ## Batty Bot v1.3.8
 ```diff
 ~ Various small changes.
