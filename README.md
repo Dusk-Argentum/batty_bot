@@ -1,5 +1,15 @@
 # Changelog
 
+## Batty Bot v1.3.10
+```diff
++ Added a way to randomly select a PogChamp from the list of PogChamps, updated daily.
++ Added a way to grab the day's PogChamp once daily using twitchemotes.com's API. Thank you, twitchemotes.com!
+- Removed the old way of responding to messages containing `pog`.
+- Removed Herobrine.
+```
+(Note: I spent entirely too long on this. Pushed on 01/16/21 @ 3:09 PM EDT.)
+
+
 ## Batty Bot v1.3.9
 ```diff
 ~ Fixed join messages not working. Again. Stop breaking shit behind my back, Discord!

@@ -2,7 +2,7 @@ import os
 
 
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 from discord.ext.commands import CommandInvokeError
 from discord.ext.commands import CommandNotFound
 
@@ -21,9 +21,15 @@ from datetime import datetime
 import pytz
 
 
+import requests
+
+
 PREFIX = "."
 DESCRIPTION = "A bot made custom for Gazia's Bat Den. Just your typical chat bot! Made by Dusk Argentum#6530."
 TOKEN = os.environ.get("BattyBotToken")
+
+
+SHOULD_ACQUIRE_CHAMP = 0
 
 
 intents = discord.Intents.default()
@@ -53,6 +59,7 @@ async def on_ready():
     await bot.change_presence(status=discord.Status.online, activity=discord.Game("w/ batty friends! | .help"))
     # await bot.change_presence(status=discord.Status.online, activity=discord.CustomActivity("""Chatting with batty
     # friends! | .help""")) ## One day, this will work.
+    acquire_champ.start()
     print("Batty Bot online!")
 
 
@@ -142,6 +149,58 @@ async def on_raw_reaction_add(event):
             await member.add_roles(turnipchamps_role)
             await member.send(f"Here's your {str(turnipchamps_role)} role!")
         await turnipchamps_role_message.remove_reaction(emoji=turnipchamps_emoji, member=member)
+
+
+# ! BACKGROUND TASKS:  These tasks execute in the background at set intervals.
+
+
+@tasks.loop(seconds=86400.0)
+async def acquire_champ():
+    while SHOULD_ACQUIRE_CHAMP == 0:
+        tz_utc = pytz.timezone("UTC")
+        current_utc_time = datetime.now(tz_utc)
+        emotes_get = requests.get("https://api.twitchemotes.com/api/v4/channels/0")
+        emotes_content = str(emotes_get.content)
+        champ_pull = re.search(r"""\"code\":\"PogChamp\",\"emoticon_set\":0,\"id\":(\d{8,12})""", str(emotes_content),
+                               re.IGNORECASE)
+        if champ_pull is None:
+            print("I have failed to find my little PogChamp.")
+            return
+        elif champ_pull is not None:
+            pass
+        champ_get = requests.get(f"https://static-cdn.jtvnw.net/emoticons/v1/{str(champ_pull.group(1))}/2.0")
+        with open(str(f"""assets/pogchamp_{current_utc_time.strftime("%j")}.png"""), "wb") as champ_writer:
+            champ_writer.write(champ_get.content)
+        print("I have acquired a new Pogchamp.")
+        await asyncio.sleep(86400)
+
+
+# @bot.command(pass_context=True, name="get")
+# async def get(ctx):
+#     tz_utc = pytz.timezone("UTC")
+#     print("a")
+#     champ_get = requests.get("https://api.twitchemotes.com/api/v4/channels/0")
+#     champ_content = str(champ_get.content)
+#     print(str(champ_content))
+#     champ_pull = re.search(r"""\"code\":\"PogChamp\",\"emoticon_set\":0,\"id\":(\d{8,12})""", str(champ_content), re.IGNORECASE)
+#     print(str(champ_pull))
+#     if champ_pull is None:
+#         print("e")
+#         return
+#     elif champ_pull is not None:
+#         print("f")
+#         pass
+#     print("d")
+#     print(str(champ_pull.group(1)))
+#     return
+
+
+@acquire_champ.before_loop
+async def before_acquire_champ():
+    if SHOULD_ACQUIRE_CHAMP == 0:
+        pass
+    elif SHOULD_ACQUIRE_CHAMP == 1:  # Yes, I know these are out of order. Leave me alone.
+        return  # This entire block basically means nothing too. I just have it like this for reasons.
 
 
 # Help
@@ -1865,6 +1924,9 @@ async def on_message(message):
     donotemote2 = re.search(r"^(\.)e", cnt)
     monka = "monka"
     pog = "pog"
+    tz_utc = pytz.timezone("UTC")
+    current_utc_time = datetime.now(tz_utc)
+    champ_number = current_utc_time.strftime("%j").lstrip("0")
     # cock_detector = re.search(r"c.*o.*c.*k", cnt, re.IGNORECASE)
     # Commenting this, probably months after the fact, I don't know what the fuck cockdetector is for
     if message.author.id != batty:
@@ -1882,7 +1944,12 @@ async def on_message(message):
                 if monka in cnt:
                     await ctx.send("<:monkas:636575202217689099>")
                 if pog in cnt:
-                    await ctx.send("<:pogchamp:636572402054201368>")
+                    randchamp = []
+                    for x in range(1):
+                        randchamp = random.randint(15, int(champ_number))
+                    image = f"assets/pogchamp_0{randchamp}.png"
+                    await ctx.send(file=discord.File(image))
+                    # await ctx.send("<:pogchamp:636572402054201368>")
         if message.content.startswith(".."):
             return
         if two:
