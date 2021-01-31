@@ -1,5 +1,11 @@
 # Changelog
 
+## Batty Bot v1.3.11
+```diff
+~ Fixed a bug that resulted in Batty Bot not printing a pogchamp when invoked to if the current UTC date did not have a pogchamp assigned to it.
+```
+(Note: Happy birthday, Providence! Pushed on 01/30/21 @ 12:26 AM EDT.)
+
 ## Batty Bot v1.3.10
 ```diff
 + Added a way to randomly select a PogChamp from the list of PogChamps, updated daily.

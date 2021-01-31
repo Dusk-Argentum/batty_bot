@@ -1945,10 +1945,16 @@ async def on_message(message):
                     await ctx.send("<:monkas:636575202217689099>")
                 if pog in cnt:
                     randchamp = []
+                    image = []
                     for x in range(1):
                         randchamp = random.randint(15, int(champ_number))
-                    image = f"assets/pogchamp_0{randchamp}.png"
-                    await ctx.send(file=discord.File(image))
+                    try:
+                        image = f"assets/pogchamp_0{randchamp}.png"
+                        await ctx.send(file=discord.File(image))
+                    except FileNotFoundError:
+                        randchamp = random.randint(15, int(champ_number)-1)
+                        image = f"assets/pogchamp_0{randchamp}.png"
+                        await ctx.send(file=discord.File(image))
                     # await ctx.send("<:pogchamp:636572402054201368>")
         if message.content.startswith(".."):
             return
