@@ -89,7 +89,6 @@ Welcome to Gazia's Bat Den! Please read <#413876271865528320>, and enjoy your st
         await welcome_channel.send(file=discord.File(rielle))
         return
     if ctx.guild.id == 348897377400258560:  # Private
-
         welcome_channel = bot.get_channel(348897378062827520)
         await welcome_channel.send(f"""<@97153790897045504>, {ctx.mention} has joined the server.""")
         return
@@ -154,7 +153,7 @@ async def on_raw_reaction_add(event):
 # ! BACKGROUND TASKS:  These tasks execute in the background at set intervals.
 
 
-@tasks.loop(seconds=86400.0)
+@tasks.loop(seconds=900.0)
 async def acquire_champ():
     while SHOULD_ACQUIRE_CHAMP == 0:
         tz_utc = pytz.timezone("UTC")
@@ -165,34 +164,29 @@ async def acquire_champ():
                                re.IGNORECASE)
         if champ_pull is None:
             print("I have failed to find my little PogChamp.")
-            return
+            continue
         elif champ_pull is not None:
             pass
-        champ_get = requests.get(f"https://static-cdn.jtvnw.net/emoticons/v1/{str(champ_pull.group(1))}/2.0")
-        with open(str(f"""assets/pogchamp_{current_utc_time.strftime("%j")}.png"""), "wb") as champ_writer:
-            champ_writer.write(champ_get.content)
-        print("I have acquired a new Pogchamp.")
-        await asyncio.sleep(86400)
-
-
-# @bot.command(pass_context=True, name="get")
-# async def get(ctx):
-#     tz_utc = pytz.timezone("UTC")
-#     print("a")
-#     champ_get = requests.get("https://api.twitchemotes.com/api/v4/channels/0")
-#     champ_content = str(champ_get.content)
-#     print(str(champ_content))
-#     champ_pull = re.search(r"""\"code\":\"PogChamp\",\"emoticon_set\":0,\"id\":(\d{8,12})""", str(champ_content), re.IGNORECASE)
-#     print(str(champ_pull))
-#     if champ_pull is None:
-#         print("e")
-#         return
-#     elif champ_pull is not None:
-#         print("f")
-#         pass
-#     print("d")
-#     print(str(champ_pull.group(1)))
-#     return
+        with open("pogchamps/pogchamp_id.txt", "r") as champ_id_reader:
+            champ_id_read = champ_id_reader.read()
+            if str(champ_id_read) == str(champ_pull.group(1)):
+                champ_id_reader.close()
+                await asyncio.sleep(900)
+                continue
+            elif str(champ_id_read) != str(champ_pull.group(1)):
+                champ_id_reader.close()
+                champ_get = requests.get(f"https://static-cdn.jtvnw.net/emoticons/v1/{str(champ_pull.group(1))}/2.0")
+                with open(str(f"""pogchamps/pogchamp_{current_utc_time.strftime("%j")}.png"""), "wb") as champ_writer:
+                    champ_writer.write(champ_get.content)
+                    champ_writer.close()
+                    pass
+                with open("pogchamps/pogchamp_id.txt", "r+") as champ_id_writer:
+                    champ_id_writer.write(str(champ_pull.group(1)))
+                    champ_id_writer.close()
+                    pass
+                print("I have acquired an additional Pogchamp.")
+                await asyncio.sleep(900)
+                continue
 
 
 @acquire_champ.before_loop

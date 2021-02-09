@@ -1,5 +1,13 @@
 # Changelog
 
+## Batty Bot v1.3.12
+```diff
++ Added dedicated pogchamps folder, to keep pogchamps separate from other assets.
+~ Changed the interval at which Batty Bot searches for new pogchamps (from 1 day to 15 minutes).
+~ Changed the way Batty determines whether or not the pogchamp that Batty is acquiring is the previous day's pogchamp, to prevent duplicatechamps.
+```
+(Note: I cannot believe how much effort I have put into this one single function. The block that searches for and grabs new pogchamps from the twitchemotes.com API is the cleanest block of code in this entire bot. Why do I care so much? Pushed on 02/09/21 @ 8:24 AM EDT.)
+
 ## Batty Bot v1.3.11
 ```diff
 ~ Fixed a bug that resulted in Batty Bot not printing a pogchamp when invoked to if the current UTC date did not have a pogchamp assigned to it.
