@@ -1,3 +1,5 @@
+This repository is archived. This Discord bot is considered provided "as-is" and will no longer receive updates or support.
+
 # Changelog
 
 ## Batty Bot v1.3.12
